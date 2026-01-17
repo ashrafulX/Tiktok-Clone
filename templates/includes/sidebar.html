@@ -5,13 +5,13 @@
     <nav class="relative z-10 h-full">
         <div id="logo" class="pt-5 pl-4.5 mb-3 w-max">
         <a href="">
-            <div x-show="!darkMode" x-cloak>
-            <img class="hidden lg:block" :class="{ '!hidden': showDrawer }" src="{% static 'images/tikTok.png' %}" alt="" />
-            <img class="block lg:hidden" :class="{ '!block': showDrawer }" src="{% static 'images/icon.png' %}" alt="" />
+            <div x-show="!darkMode" >
+                <img class="hidden lg:block" :class="{ '!hidden': showDrawer }" src="{% static 'images/tikTok.png' %}" alt="" />
+                <img class="block lg:hidden" :class="{ '!block': showDrawer }" src="{% static 'images/icon.png' %}" alt="" />
             </div>
-            <div x-show="darkMode">
-            <img class="hidden lg:block" :class="{ '!hidden': showDrawer }" src="{% static 'images/tiktok_dark.png' %}" alt="" />
-            <img class="block lg:hidden" :class="{ '!block': showDrawer }" src="{% static 'images/icon_dark.png' %}" alt="" />
+            <div x-show="darkMode" x-cloak>
+                <img class="hidden lg:block" :class="{ '!hidden': showDrawer }" src="{% static 'images/tiktok_dark.png' %}" alt="" />
+                <img class="block lg:hidden" :class="{ '!block': showDrawer }" src="{% static 'images/icon_dark.png' %}" alt="" />
             </div>
         </a>
         </div>
@@ -27,24 +27,24 @@
             </span>
         </button>
         <div class="flex flex-col gap-1.5 py-3">
-            <button id="home" class="button-nav">
-            <div class="flex-shrink-0 size-8 fill-rose-500">
+            <button id="home" class="button-nav" @click="window.location.href = '{% url 'home' %}'">
+            <div class="flex-shrink-0 size-8 {% if page == 'Home' %} fill-rose-500 {% endif %}">
                 <svg viewBox="0 0 48 48">
                     <path d="M24.9505 7.84001C24.3975 7.38666 23.6014 7.38666 23.0485 7.84003L6.94846 21.04C6.45839 21.4418 6.2737 22.1083 6.48706 22.705C6.70041 23.3017 7.26576 23.7 7.89949 23.7H10.2311L11.4232 36.7278C11.5409 38.0149 12.6203 39 13.9128 39H21.5C22.0523 39 22.5 38.5523 22.5 38V28.3153C22.5 27.763 22.9477 27.3153 23.5 27.3153H24.5C25.0523 27.3153 25.5 27.763 25.5 28.3153V38C25.5 38.5523 25.9477 39 26.5 39H34.0874C35.3798 39 36.4592 38.0149 36.577 36.7278L37.7691 23.7H40.1001C40.7338 23.7 41.2992 23.3017 41.5125 22.705C41.7259 22.1082 41.5412 21.4418 41.0511 21.04L24.9505 7.84001Z"></path>
                 </svg>
             </div>
-            <span class="text-rose-500" :class="{ '!opacity-0 pointer-events-none': showDrawer }">
+            <span class=" {% if page == 'Home' %} text-rose-500 {% endif %}" :class="{ '!opacity-0 pointer-events-none': showDrawer }">
                 For You
             </span>
             </button>
-            <button id="explore" class="button-nav" @click="window.location.href = 'explore.html'">
-            <div class="flex-shrink-0 size-8">
+            <button id="explore" class="button-nav" @click="window.location.href = '{% url 'explore' %}'">
+            <div class="flex-shrink-0 size-8 {% if page == 'Explore' %} fill-rose-500 {% endif %}">
                 <svg viewBox="0 0 48 48">
                     <path d="M24 37.4a13.4 13.4 0 1 0 0-26.8 13.4 13.4 0 0 0 0 26.8ZM40.5 24a16.5 16.5 0 1 1-33 0 16.5 16.5 0 0 1 33 0Z"></path>
                     <path d="M27.13 27.18 19 32.1a.6.6 0 0 1-.9-.63l1.84-9.33a2 2 0 0 1 .92-1.32L29 15.9a.6.6 0 0 1 .9.63l-1.84 9.33a2 2 0 0 1-.93 1.32Zm-5.04-.45 3.11-1.89.7-3.57-3.1 1.89-.7 3.57Z"></path>
                 </svg>
             </div>
-            <span :class="{ '!opacity-0': showDrawer }">
+            <span class=" {% if page == 'Explore' %} text-rose-500 {% endif %}" :class="{ '!opacity-0': showDrawer }">
                 Explore
             </span>
             </button>

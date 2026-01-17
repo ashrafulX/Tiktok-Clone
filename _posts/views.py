@@ -1,7 +1,13 @@
 from django.shortcuts import render
 
 def home(request):
-    return render(request, '_posts/home.html')
+    context = {
+        'page' : 'Home',
+    }
+    return render(request, '_posts/home.html', context)
 
 def explore(request):
-    return render(request, '_posts/explore.html')
+    context = {
+        'page' : 'Explore',
+    }
+    return render(request, '_posts/explore.html', context)
