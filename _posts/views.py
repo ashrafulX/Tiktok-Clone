@@ -11,3 +11,9 @@ def explore(request):
         'page' : 'Explore',
     }
     return render(request, '_posts/explore.html', context)
+
+def upload(request):
+    context = {
+        'page' : 'Upload',
+    }
+    return render(request, '_posts/upload.html', context)
