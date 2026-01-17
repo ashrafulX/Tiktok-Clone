@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block layout %}
+  
+
+<div class="min-h-[100dvh]">
+
+  {% include 'includes/sidebar.html' %}
+
+  <main class="w-full h-screen">
+    
+    {% block content %}
+      
+    {% endblock %}
+
+  </main>
+</div>
+
+{% endblock %}
