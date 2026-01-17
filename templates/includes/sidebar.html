@@ -1,0 +1,243 @@
+{% load static %}
+<aside :class="{ 'dark': darkMode }" 
+        x-data="sidebarComponent()"
+        class="fixed z-20 h-screen transition-all duration-300 ease-in-out border-r dark:border-neutral-800 w-18 lg:w-60 border-neutral-200 lg:border-none" :class="{ '!w-18': showDrawer }">
+    <nav class="relative z-10 h-full">
+        <div id="logo" class="pt-5 pl-4.5 mb-3 w-max">
+        <a href="">
+            <div x-show="!darkMode" x-cloak>
+            <img class="hidden lg:block" :class="{ '!hidden': showDrawer }" src="{% static 'images/tikTok.png' %}" alt="" />
+            <img class="block lg:hidden" :class="{ '!block': showDrawer }" src="{% static 'images/icon.png' %}" alt="" />
+            </div>
+            <div x-show="darkMode">
+            <img class="hidden lg:block" :class="{ '!hidden': showDrawer }" src="{% static 'images/tiktok_dark.png' %}" alt="" />
+            <img class="block lg:hidden" :class="{ '!block': showDrawer }" src="{% static 'images/icon_dark.png' %}" alt="" />
+            </div>
+        </a>
+        </div>
+        <div class="px-4">
+        <button  @click="showDrawer = !showDrawer ; showSearch = true" id="search" class="flex items-center w-full h-10 rounded-full cursor-pointer bg-neutral-100 pl-2.5 dark:bg-neutral-800">
+            <div class="flex-shrink-0 size-5">
+            <svg viewBox="0 0 48 48">
+                <path d="M21.83 7.5a14.34 14.34 0 1 1 0 28.68 14.34 14.34 0 0 1 0-28.68Zm0-4a18.33 18.33 0 1 0 11.48 32.64l8.9 8.9a1 1 0 0 0 1.42 0l1.4-1.41a1 1 0 0 0 0-1.42l-8.89-8.9A18.34 18.34 0 0 0 21.83 3.5Z"></path>
+            </svg>
+            </div>
+            <span class="hidden ml-2 text-sm dark:text-neutral-500 text-neutral-400 lg:block" :class="{ '!hidden': showDrawer }">
+            Search
+            </span>
+        </button>
+        <div class="flex flex-col gap-1.5 py-3">
+            <button id="home" class="button-nav">
+            <div class="flex-shrink-0 size-8 fill-rose-500">
+                <svg viewBox="0 0 48 48">
+                    <path d="M24.9505 7.84001C24.3975 7.38666 23.6014 7.38666 23.0485 7.84003L6.94846 21.04C6.45839 21.4418 6.2737 22.1083 6.48706 22.705C6.70041 23.3017 7.26576 23.7 7.89949 23.7H10.2311L11.4232 36.7278C11.5409 38.0149 12.6203 39 13.9128 39H21.5C22.0523 39 22.5 38.5523 22.5 38V28.3153C22.5 27.763 22.9477 27.3153 23.5 27.3153H24.5C25.0523 27.3153 25.5 27.763 25.5 28.3153V38C25.5 38.5523 25.9477 39 26.5 39H34.0874C35.3798 39 36.4592 38.0149 36.577 36.7278L37.7691 23.7H40.1001C40.7338 23.7 41.2992 23.3017 41.5125 22.705C41.7259 22.1082 41.5412 21.4418 41.0511 21.04L24.9505 7.84001Z"></path>
+                </svg>
+            </div>
+            <span class="text-rose-500" :class="{ '!opacity-0 pointer-events-none': showDrawer }">
+                For You
+            </span>
+            </button>
+            <button id="explore" class="button-nav" @click="window.location.href = 'explore.html'">
+            <div class="flex-shrink-0 size-8">
+                <svg viewBox="0 0 48 48">
+                    <path d="M24 37.4a13.4 13.4 0 1 0 0-26.8 13.4 13.4 0 0 0 0 26.8ZM40.5 24a16.5 16.5 0 1 1-33 0 16.5 16.5 0 0 1 33 0Z"></path>
+                    <path d="M27.13 27.18 19 32.1a.6.6 0 0 1-.9-.63l1.84-9.33a2 2 0 0 1 .92-1.32L29 15.9a.6.6 0 0 1 .9.63l-1.84 9.33a2 2 0 0 1-.93 1.32Zm-5.04-.45 3.11-1.89.7-3.57-3.1 1.89-.7 3.57Z"></path>
+                </svg>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                Explore
+            </span>
+            </button>
+            <button id="following" class="button-nav">
+            <div class="flex-shrink-0 size-8">
+                <svg class="scale-75" viewBox="0 0 48 48">
+                    <path d="M18.99 3a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 4a6 6 0 1 0 0 12.00A6 6 0 0 0 19 7ZM18.99 26c2.96 0 5.6.58 7.87 1.65l-3.07 3.06a15.38 15.38 0 0 0-4.8-.71C10.9 30 6.3 35.16 6 43c-.02.55-.46 1-1.02 1h-2c-.55 0-1-.45-.98-1C2.33 32.99 8.7 26 19 26ZM35.7 41.88 31.82 38H45a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H31.82l3.88-3.88a1 1 0 0 0 0-1.41l-1.41-1.42a1 1 0 0 0-1.42 0l-7.3 7.3a2 2 0 0 0 0 2.82l7.3 7.3a1 1 0 0 0 1.42 0l1.41-1.42a1 1 0 0 0 0-1.41Z"></path>
+                </svg>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                Following
+            </span>
+            </button>
+            <button id="friends" class="button-nav">
+            <div class="flex-shrink-0 size-8">
+                <svg viewBox="0 0 48 48">
+                    <path d="M18 12.5C15.5897 12.5 13.5849 14.5018 13.5849 17.0345C13.5849 19.5672 15.5897 21.569 18 21.569C20.4103 21.569 22.4151 19.5672 22.4151 17.0345C22.4151 14.5018 20.4103 12.5 18 12.5ZM10.5849 17.0345C10.5849 12.9017 13.8766 9.5 18 9.5C22.1234 9.5 25.4151 12.9017 25.4151 17.0345C25.4151 21.1673 22.1234 24.569 18 24.569C13.8766 24.569 10.5849 21.1673 10.5849 17.0345ZM18 29.8793C14.0801 29.8793 10.7403 32.5616 9.69697 36.2673C9.5473 36.7989 9.03833 37.1708 8.49337 37.0811L7.50662 36.9189C6.96166 36.8292 6.58837 36.3131 6.72325 35.7776C8.00732 30.6788 12.5509 26.8793 18 26.8793C23.449 26.8793 27.9927 30.6788 29.2767 35.7776C29.4116 36.3131 29.0383 36.8292 28.4934 36.9189L27.5066 37.0811C26.9617 37.1708 26.4527 36.7989 26.303 36.2673C25.2597 32.5616 21.9199 29.8793 18 29.8793Z"></path>
+                    <path d="M33 31.5371C32.2445 31.5371 31.5198 31.668 30.8447 31.9093C30.3246 32.0951 29.7189 31.9243 29.4549 31.4392L28.9769 30.5608C28.713 30.0757 28.8907 29.463 29.4009 29.2516C30.513 28.791 31.7285 28.5371 33 28.5371C37.4554 28.5371 41.1594 31.6303 42.2706 35.7812C42.4135 36.3147 42.0386 36.8308 41.4935 36.9196L40.5065 37.0804C39.9614 37.1692 39.4546 36.7956 39.2894 36.2686C38.4217 33.5 35.91 31.5371 33 31.5371Z"></path>
+                    <path d="M33 18.5C31.6193 18.5 30.5 19.6193 30.5 21C30.5 22.3807 31.6193 23.5 33 23.5C34.3807 23.5 35.5 22.3807 35.5 21C35.5 19.6193 34.3807 18.5 33 18.5ZM27.5 21C27.5 17.9624 29.9624 15.5 33 15.5C36.0376 15.5 38.5 17.9624 38.5 21C38.5 24.0376 36.0376 26.5 33 26.5C29.9624 26.5 27.5 24.0376 27.5 21Z"></path>
+                </svg>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                Friends
+            </span>
+            </button>
+            <button id="upload" class="button-nav" @click="window.location.href = 'upload.html'">
+            <div class="flex-shrink-0 size-8">
+                <svg class="scale-75" viewBox="0 0 48 48">
+                    <path d="M25 15a1 1 0 0 1 1 1v6h6a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-6v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-6h-6a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h6v-6a1 1 0 0 1 1-1h2Z"></path>
+                    <path d="M33.58 4.5H14.42c-1.33 0-2.45 0-3.37.07-.95.08-1.86.25-2.73.7a7 7 0 0 0-3.06 3.05 7.14 7.14 0 0 0-.69 2.73 44.6 44.6 0 0 0-.07 3.37v19.16c0 1.33 0 2.45.07 3.37.08.95.25 1.86.7 2.73a7 7 0 0 0 3.05 3.06c.87.44 1.78.6 2.73.69.92.07 2.04.07 3.37.07h19.16c1.33 0 2.45 0 3.37-.07a7.14 7.14 0 0 0 2.73-.7 7 7 0 0 0 3.06-3.05c.44-.87.6-1.78.69-2.73.07-.92.07-2.04.07-3.37V14.42c0-1.33 0-2.45-.07-3.37a7.14 7.14 0 0 0-.7-2.73 7 7 0 0 0-3.05-3.06 7.14 7.14 0 0 0-2.73-.69 44.6 44.6 0 0 0-3.37-.07ZM10.14 8.83c.2-.1.53-.21 1.24-.27.73-.06 1.69-.06 3.12-.06h19c1.43 0 2.39 0 3.12.06a3.3 3.3 0 0 1 1.24.27 3 3 0 0 1 1.31 1.3c.1.21.21.54.27 1.25.06.73.06 1.69.06 3.12v19c0 1.43 0 2.39-.06 3.12a3.3 3.3 0 0 1-.27 1.24 3 3 0 0 1-1.3 1.31c-.21.1-.54.21-1.25.27-.73.06-1.69.06-3.12.06h-19c-1.43 0-2.39 0-3.12-.06a3.3 3.3 0 0 1-1.24-.27 3 3 0 0 1-1.31-1.3c-.1-.21-.21-.54-.27-1.25-.06-.73-.06-1.69-.06-3.12v-19c0-1.43 0-2.39.06-3.12a3.3 3.3 0 0 1 .27-1.24 3 3 0 0 1 1.3-1.31Z"></path>
+                </svg>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                Upload
+            </span>
+            </button>
+            <button id="activity" class="button-nav">
+            <div class="flex-shrink-0 size-8">
+                <svg viewBox="0 0 32 32">
+                    <path fill-rule="evenodd" d="M24.0362 21.3333H18.5243L15.9983 24.4208L13.4721 21.3333H7.96047L7.99557 8H24.0009L24.0362 21.3333ZM24.3705 23.3333H19.4721L17.2883 26.0026C16.6215 26.8176 15.3753 26.8176 14.7084 26.0026L12.5243 23.3333H7.62626C6.70407 23.3333 5.95717 22.5845 5.9596 21.6623L5.99646 7.66228C5.99887 6.74352 6.74435 6 7.66312 6H24.3333C25.2521 6 25.9975 6.7435 26 7.66224L26.0371 21.6622C26.0396 22.5844 25.2927 23.3333 24.3705 23.3333ZM12.6647 14C12.2965 14 11.998 14.2985 11.998 14.6667V15.3333C11.998 15.7015 12.2965 16 12.6647 16H19.3313C19.6995 16 19.998 15.7015 19.998 15.3333V14.6667C19.998 14.2985 19.6995 14 19.3313 14H12.6647Z"></path>
+                </svg>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                Activity
+            </span>
+            </button>
+            <button id="messages" class="button-nav">
+            <div class="flex-shrink-0 size-8">
+                <svg class="scale-75" viewBox="0 0 48 48">
+                    <path d="M2.18 9.67A2 2 0 0 1 4 8.5h40a2 2 0 0 1 1.74 3l-20 35a2 2 0 0 1-3.65-.4l-5.87-18.6L2.49 11.82a2 2 0 0 1-.31-2.15Zm18.2 17.72 4.15 13.15L40.55 12.5H8.41l9.98 11.41 11.71-7.2a1 1 0 0 1 1.38.32l1.04 1.7a1 1 0 0 1-.32 1.38L20.38 27.4Z"></path>
+                </svg>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                Messages
+            </span>
+            </button>
+            <button id="profile" class="button-nav" @click="window.location.href = 'profile.html'">
+            <div class="flex-shrink-0 size-8">
+                <div class="overflow-hidden rounded-full size-7">
+                <img src="../media/avatar.png" class="object-cover object-center w-full h-full" alt="">
+                </div>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                Profile
+            </span>
+            </button>
+            <button id="more" class="button-nav" @click="showDrawer = !showDrawer ; showMore = true">
+            <div class="flex-shrink-0 size-8">
+                <svg class="scale-75" viewBox="0 0 48 48">
+                    <path d="M5 24a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm15 0a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm15 0a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z"></path>
+                </svg>
+            </div>
+            <span :class="{ '!opacity-0': showDrawer }">
+                More
+            </span>
+            </button>
+        </div>
+        <div class="hidden py-4 border-t dark:border-neutral-800 !border-neutral-200 lg:block" :class="{ '!hidden' : showDrawer}">
+            <p class="text-sm dark:text-neutral-500 !text-neutral-400 whitespace-nowrap">© 2026 TikTok</p>
+        </div> 
+        </div>
+    </nav>
+
+    <side-drawer @click.outside="showDrawer = false; resetAll()" x-show="showDrawer" x-cloak class="fixed top-0 h-full bg-white border-l border-r dark:border-neutral-800 dark:bg-black left-18 w-80 border-neural-200"
+                    x-transition:enter="transition duration-300 ease-out"
+                    x-transition:enter-start="-translate-x-full opacity-0"
+                    x-transition:enter-end="transition-x-0 opacity-100"
+                    x-transition:leave="transition duration-200 ease-in"
+                    x-transition:leave-start="transition-x-0 opacity-100"
+                    x-transition:leave-end="-translate-x-full opacity-0"
+                    >
+        <div x-show="showSearch" class="relative px-2 py-5">
+        <button id="close-button" @click="showDrawer = false; resetAll()" class="absolute flex items-center justify-center rounded-full cursor-pointer dark:hover:bg-neutral-700 dark:bg-neutral-800 size-7 right-4 top-6 bg-neutral-100 hover:bg-neutral-200">
+            <div class="size-4">
+            <svg viewBox="0 0 48 48">
+                <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
+            </svg>
+            </div>
+        </button>  
+        <h2 class="pl-2 mb-7">Search</h2>
+        <div class="relative">
+            <input x-model="searchQuery" type="search" placeholder="Search" class="w-full h-10 pl-4 text-sm rounded-full dark:text-white dark:bg-neutral-800 dark:focus:outline-neutral-600 bg-neutral-100 text-neutral-700 focus:outline focus:outline-neutral-300">
+            <button x-show="searchQuery" @click="searchQuery = ''" class="absolute text-black cursor-pointer right-4 top-3 ">
+            <div class="size-4 fill-neutral-400 dark:fill-neutral-500">
+                <svg viewBox="0 0 48 48">
+                    <path d="M24 46C36.1503 46 46 36.1503 46 24C46 11.8497 36.1503 2 24 2C11.8497 2 2 11.8497 2 24C2 36.1503 11.8497 46 24 46ZM15.1466 30.7323L21.8788 24.0001L15.1466 17.2679C14.756 16.8774 14.756 16.2442 15.1466 15.8537L15.8537 15.1466C16.2442 14.756 16.8774 14.756 17.2679 15.1466L24.0001 21.8788L30.7323 15.1466C31.1229 14.756 31.756 14.756 32.1466 15.1466L32.8537 15.8537C33.2442 16.2442 33.2442 16.8774 32.8537 17.2679L26.1214 24.0001L32.8537 30.7323C33.2442 31.1229 33.2442 31.756 32.8537 32.1466L32.1466 32.8537C31.756 33.2442 31.1229 33.2442 30.7323 32.8537L24.0001 26.1214L17.2679 32.8537C16.8774 33.2442 16.2442 33.2442 15.8537 32.8537L15.1466 32.1466C14.756 31.756 14.756 31.1229 15.1466 30.7323Z"></path>
+                </svg>
+            </div>
+            </button>
+        </div>
+        </div>
+        <div x-show="showMore" class="relative px-2 py-5">
+        <button id="close-button" @click="showDrawer = false; resetAll()" class="absolute flex items-center justify-center rounded-full cursor-pointer dark:hover:bg-neutral-700 dark:bg-neutral-800 size-7 right-4 top-6 bg-neutral-100 hover:bg-neutral-200">
+            <div class="size-4">
+            <svg viewBox="0 0 48 48">
+                <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
+            </svg>
+            </div>
+        </button>  
+        <h2 class="pl-2 mb-7">More</h2>
+        <ul class="flex flex-col gap-1">
+            <li>
+            <button @click="resetAll(); showColorModes = true" class="button-rounded dark:hover:!bg-neutral-800">
+                <span class="font-medium">Dark mode</span>
+                <div class="size-4 fill-neutral-400">
+                <svg viewBox="0 0 48 48">
+                    <path d="M28.74 24 15.08 10.33a1 1 0 0 1 0-1.41l1.84-1.84a1 1 0 0 1 1.41 0L34.54 23.3a1 1 0 0 1 0 1.42l-16.2 16.21a1 1 0 0 1-1.42 0l-1.84-1.84a1 1 0 0 1 0-1.41L28.74 24Z"></path>
+                </svg>
+                </div>
+            </button>
+            </li>
+            <li>
+            <button class="button-rounded dark:hover:!bg-neutral-800">
+                <span class="font-medium">Settings</span>
+            </button>
+            </li>
+            <li>
+            <button class="button-rounded dark:hover:!bg-neutral-800">
+                <span class="font-medium">log out</span>
+            </button>
+            </li>
+        </ul>
+        </div>
+        <div x-show="showColorModes" class="relative px-2 py-5">
+        <div class="flex items-center pl-2 mb-7">
+            <button @click="resetAll(); showMore = true; " class="flex items-center justify-center rounded-full cursor-pointer dark:bg-neutral-800 dark:hover:bg-neutral-700 size-6 right-4 top-6 bg-neutral-100 hover:bg-neutral-200">
+            <div class="size-4 fill-neutral-700 dark:fill-white">
+                <svg viewBox="0 0 48 48">
+                <path d="m19.26 24 13.66-13.67a1 1 0 0 0 0-1.41l-1.84-1.84a1 1 0 0 0-1.41 0L13.46 23.3a1 1 0 0 0 0 1.42l16.2 16.21a1 1 0 0 0 1.42 0l1.84-1.84a1 1 0 0 0 0-1.41L19.26 24Z"></path>
+                </svg>
+            </div>
+            </button>
+            <h2 class="pl-2">Dark mode</h2>
+        </div>
+        <ul class="flex flex-col gap-1">
+            <li>
+            <button @click="darkMode = true" class="button-rounded dark:hover:!bg-neutral-800">
+                <span class="font-medium">Dark mode</span>
+                <div x-show="darkMode" class="size-3.5">
+                <svg viewBox="0 0 48 48">
+                    <path d="M43 6.08c.7.45 1.06.67 1.25.98.16.27.23.59.2.9-.03.36-.26.72-.7 1.43L23.06 42.14a3.5 3.5 0 0 1-5.63.39L4.89 27.62c-.54-.64-.81-.96-.9-1.32a1.5 1.5 0 0 1 .09-.92c.14-.33.46-.6 1.1-1.14l1.69-1.42c.64-.54.96-.81 1.31-.9.3-.06.63-.04.92.09.34.14.6.46 1.15 1.1l9.46 11.25 18.11-28.7c.45-.72.68-1.07.99-1.26.27-.16.59-.23.9-.2.36.03.71.25 1.43.7L43 6.08Z"></path>
+                </svg>
+                </div>
+            </button>
+            </li>
+            <li>
+            <button @click="darkMode = false" class="button-rounded dark:hover:!bg-neutral-800">
+                <span class="font-medium">Light mode</span>
+                <div x-show="!darkMode" class="size-3.5">
+                <svg viewBox="0 0 48 48">
+                    <path d="M43 6.08c.7.45 1.06.67 1.25.98.16.27.23.59.2.9-.03.36-.26.72-.7 1.43L23.06 42.14a3.5 3.5 0 0 1-5.63.39L4.89 27.62c-.54-.64-.81-.96-.9-1.32a1.5 1.5 0 0 1 .09-.92c.14-.33.46-.6 1.1-1.14l1.69-1.42c.64-.54.96-.81 1.31-.9.3-.06.63-.04.92.09.34.14.6.46 1.15 1.1l9.46 11.25 18.11-28.7c.45-.72.68-1.07.99-1.26.27-.16.59-.23.9-.2.36.03.71.25 1.43.7L43 6.08Z"></path>
+                </svg>
+                </div>
+            </button>
+            </li>
+        </ul>
+        </div>
+    </side-drawer>
+</aside>
+
+<script>
+    function sidebarComponent(){
+        return {
+            showDrawer: false,
+            searchQuery: '',
+            showSearch: false,
+            showMore: false,
+            showColorModes: false,
+            resetAll(){
+                this.showMore = false,
+                this.showSearch = false,
+                this.showColorModes = false
+            }
+        }
+    }
+</script>
