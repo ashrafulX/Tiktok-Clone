@@ -12,7 +12,7 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
 </head>
 
-<body class="dark:bg-black dark:text-white dark:fill-white" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+<body class="dark:bg-black dark:text-white dark:fill-white" :class="{ 'dark': darkMode }" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
 
     {% block layout %}
       
