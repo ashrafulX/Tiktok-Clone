@@ -1,13 +1,13 @@
 {% load static %}
 
-<div class="h-full px-18">
+<div class="h-full px-18 snap-mandatory snap-y overflow-y-scroll hide-scrollbar">
 
     
     {% for post in posts %} 
-        <article class="flex items-center justify-center h-screen px-2 py-2 mx-auto w-xl">
-                <div class="relative aspect-[9/16] max-h-full max-w-full lg:h-full rounded-2xl flex items-center justify-center">
+        <article class="flex items-center justify-center h-full px-4 py-2 mx-auto snap-center">
+            <div class="relative aspect-[9/16] max-h-full max-w-full lg:h-full rounded-2xl flex items-center justify-center">
 
-                <img src="{{ post.image.url }}" alt="" class="object-cover aspect-9/16 rounded-2xl">
+                <img src="{{ post.image.url }}" alt="" class="object-cover aspect-[9/16] rounded-2xl">
 
                 <article-info class="absolute bottom-0 left-0 right-0">
                     <div class="absolute bottom-0 z-10 p-5 text-white">
@@ -81,7 +81,7 @@
                     <p class="pt-1 text-sm font-bold dark:text-neutral-400 text-neutral-600">3</p>
                     </button>
                 </article-buttons>
-                </div>
+            </div>
         </article>
     {% endfor %}
     <scroll-bar class="fixed top-0 right-0 items-center hidden w-16 h-full md:flex">
