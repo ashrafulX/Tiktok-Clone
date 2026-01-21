@@ -1,10 +1,10 @@
 {% load static %}
 
-<div class="h-full px-18 snap-mandatory snap-y overflow-y-scroll hide-scrollbar">
+<div id="scrollContainer" class="h-full px-18 snap-mandatory snap-y overflow-y-scroll hide-scrollbar">
 
     
     {% for post in posts %} 
-        <article class="flex items-center justify-center h-full px-4 py-2 mx-auto snap-center">
+        <article data-index="{{ forloop.counter0 }}" class="flex items-center justify-center h-full px-4 py-2 mx-auto snap-center">
             <div class="relative aspect-[9/16] max-h-full max-w-full lg:h-full rounded-2xl flex items-center justify-center">
 
                 <img src="{{ post.image.url }}" alt="" class="object-cover aspect-[9/16] rounded-2xl">
@@ -86,14 +86,14 @@
     {% endfor %}
     <scroll-bar class="fixed top-0 right-0 items-center hidden w-16 h-full md:flex">
             <div class="flex flex-col gap-4">
-              <button class="flex items-center justify-center rounded-full cursor-not-allowed dark:fill-neutral-600 dark:bg-neutral-900 size-12 bg-neutral-100 fill-neutral-400">
+              <button id="scrollUp" @click="scrollButton('up')" class="flex items-center justify-center rounded-full size-12 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 opacity-0 pointer-events-none">
                 <div class="size-6">
                   <svg viewBox="0 0 48 48">
                       <path d="m24 20.24 13.17 13.17a1 1 0 0 0 1.42 0l2.82-2.82a1 1 0 0 0 0-1.42L25.06 12.82a1.5 1.5 0 0 0-2.12 0L6.59 29.17a1 1 0 0 0 0 1.42L9.4 33.4a1 1 0 0 0 1.42 0L24 20.24Z"></path>
                   </svg>
                 </div>
               </button>
-              <button class="flex items-center justify-center rounded-full cursor-pointer size-12 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700">
+              <button @click="scrollButton('down')" class="flex items-center justify-center rounded-full size-12 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700">
                 <div class="size-6">
                   <svg viewBox="0 0 48 48">
                       <path d="m24 27.76 13.17-13.17a1 1 0 0 1 1.42 0l2.82 2.82a1 1 0 0 1 0 1.42L25.06 35.18a1.5 1.5 0 0 1-2.12 0L6.59 18.83a1 1 0 0 1 0-1.42L9.4 14.6a1 1 0 0 1 1.42 0L24 27.76Z"></path>
@@ -103,6 +103,39 @@
             </div>
     </scroll-bar>
 </div>
+
+
+<script>
+
+    function scrollLogic(){
+        // hide and show first scrollup button
+        const scrollContainer = document.getElementById('scrollContainer');
+        const scrollButton = document.getElementById('scrollUp');
+
+        scrollContainer.addEventListener('scroll', () => {
+            if (scrollContainer.scrollTop > 10) {
+                scrollButton.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                scrollButton.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        // up & down button scroll
+        window.scrollButton = function(direction) {
+        let articles = [...document.querySelectorAll('article')];
+        const current = articles.find(el => el.getBoundingClientRect().top >= 0);
+        if (!current) return;
+        const index = +current.dataset.index;
+        const target = articles [direction === 'down' ? index + 1 : index - 1];
+        if (target) {
+         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        };
+    }
+
+    document.addEventListener('DOMContentLoaded', scrollLogic)
+
+</script>
 
 
 {% if request.htmx %}
