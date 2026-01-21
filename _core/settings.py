@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     
     # My apps
     '_posts',
+    '_users',
     
     # Third party apps
     "django_htmx",
@@ -145,3 +146,5 @@ if DEBUG:
     MIDDLEWARE += [
         "django_browser_reload.middleware.BrowserReloadMiddleware",
     ]
+    
+AUTH_USER_MODEL= '_users.CustomUser'
