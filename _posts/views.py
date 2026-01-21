@@ -14,8 +14,10 @@ def home(request):
     return render(request, '_posts/home.html', context)
 
 def explore(request):
+    posts = Post.objects.order_by('-created_at')
     context = {
         'page' : 'Explore',
+        'posts': posts
     }
     if request.htmx:
         return render(request, '_posts/partials/_explore.html', context)
