@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import PostForm
 from .models import Post
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     posts = Post.objects.all()
@@ -19,9 +21,21 @@ def explore(request):
         return render(request, '_posts/partials/_explore.html', context)
     return render(request, '_posts/explore.html', context)
 
+@login_required
 def upload(request):
+    form = PostForm()
+    
+    if request.method ==  'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('home')
+        
     context = {
         'page' : 'Upload',
+        'form' : form
     }
     
     if request.htmx:
