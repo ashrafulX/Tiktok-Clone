@@ -1,0 +1,197 @@
+{% load static %}
+
+<div class="px-4 xl:px-12 ml-18 lg:ml-60">
+    <div class="max-w-[1250px] mx-auto">
+            <profile-info class="flex flex-col items-center gap-6 py-6 md:flex-row">
+              <div class="overflow-hidden rounded-full shrink-0 size-52">
+                <img src="{{ profile_user.avatar }}" class="object-cover w-full h-full" alt="">
+              </div>
+              <div class="flex flex-col items-center gap-3 text-center md:items-start md:text-left">
+                <div class="items-end space-x-4">
+                  <span class="text-2xl font-bold">{{ profile_user.username }}</span>
+                  
+                  {% if profile_user.name %}
+                  <span class="text-lg font-medium">{{ profile_user.name }}</span>
+                  {% endif %}
+                    
+                </div>
+                <div class="flex gap-2 font-medium">
+                  {% if profile_user == user %}
+                  <button class="py-2 text-white rounded-md bg-rose-500 hover:bg-rose-600 px-7">
+                    Edit profile
+                  </button>
+                  <button class="py-2 rounded-md bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-700 dark:bg-neutral-800 px-7">
+                    <div class="size-6">
+                      <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                    </div>
+                  </button>
+                  {% else %}
+                  <button class="py-2 text-white rounded-md bg-rose-500 hover:bg-rose-600 px-7">
+                    Follow
+                  </button>
+                  <button class="py-2 rounded-md bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-700 dark:bg-neutral-800 px-7">
+                    Message
+                  </button>
+                  {% endif %}
+                  <button class="py-2 rounded-md bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-700 dark:bg-neutral-800 px-7">
+                    <div class="size-5">
+                      <svg viewBox="0 0 48 48">
+                          <path d="M21.68 3.18a2 2 0 0 1 2.14.32l21.5 19a2 2 0 0 1-.02 3.02l-21.5 18.5a2 2 0 0 1-3.3-1.52v-9.97c-5.68.28-11.95 1.75-16.09 5.88A2 2 0 0 1 1 37c0-11.68 7.7-21.05 19.5-21.94V5a2 2 0 0 1 1.18-1.82ZM24.5 30.5v7.64l16.46-14.16L24.5 9.44V17a2 2 0 0 1-2.05 2c-8.4-.21-15.62 5.34-17.09 13.66 4.47-2.7 9.8-3.87 14.98-4.13.68-.03 1.22-.04 1.6-.04 1.19 0 2.56.26 2.56 2.01Z"></path>
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+                <div class="flex gap-5">
+                  <div>
+                    <span class="mr-1 font-bold">3</span>Following
+                  </div>
+                  <div>
+                    <span class="mr-1 font-bold">3</span>Followers
+                  </div>
+                  <div>
+                    <span class="mr-1 font-bold">3</span>Likes
+                  </div>
+                </div>
+
+                
+                {% if profile_user.bio %}
+                <div class="leading-5">
+                  {{ profile_user.bio }}
+                </div>
+                {% endif %}
+                {% if profile_user.website %}
+                <div class="flex items-center gap-1">
+                  <div class="-ml-1 size-5 fill-neutral-700 dark:fill-white">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M23.5857 9.58571C27.6805 5.49096 34.3194 5.49096 38.4141 9.58571C42.5089 13.6805 42.5089 20.3194 38.4141 24.4141L37.1212 25.707C36.7307 26.0975 36.0975 26.0975 35.707 25.707L34.2928 24.2928C33.9023 23.9023 33.9023 23.2691 34.2928 22.8786L35.5857 21.5857C38.1184 19.0531 38.1184 14.9468 35.5857 12.4141C33.053 9.88149 28.9468 9.88148 26.4141 12.4141L22.4141 16.4141C20.121 18.7072 19.9041 22.2903 21.7634 24.8275C22.0899 25.2729 22.0976 25.9023 21.707 26.2928L20.2928 27.707C19.9023 28.0975 19.2646 28.1001 18.9126 27.6745C15.5048 23.5554 15.7292 17.4422 19.5857 13.5857L23.5857 9.58571ZM27.707 20.2928C28.0976 19.9023 28.7352 19.8997 29.0873 20.3253C32.495 24.4444 32.2706 30.5576 28.4141 34.4141L24.4141 38.4141C20.3194 42.5089 13.6805 42.5089 9.58571 38.4141C5.49096 34.3193 5.49096 27.6804 9.58573 23.5857L10.8786 22.2928C11.2691 21.9023 11.9023 21.9023 12.2928 22.2928L13.707 23.707C14.0976 24.0975 14.0975 24.7307 13.707 25.1212L12.4141 26.4141C9.88148 28.9468 9.88148 33.053 12.4141 35.5857C14.9468 38.1183 19.053 38.1183 21.5857 35.5857L25.5857 31.5857C27.8788 29.2926 28.0957 25.7095 26.2364 23.1724C25.9099 22.7269 25.9023 22.0975 26.2928 21.707L27.707 20.2928Z"></path>
+                    </svg>
+                  </div>
+                  <a href="{{ profile_user.website }}" target="_blank" class="font-medium truncate hover:underline w-60">
+                    {{ profile_user.website }}
+                  </a>
+                </div>
+                {% endif %}
+              </div>
+            </profile-info>
+            <profile-content class="block mt-2" x-data:="{ selectedTab: 'posts'}">
+              <tabs-head class="flex flex-col font-medium border-b md:flex-row md:justify-between border-neutral-300 dark:border-neutral-800">
+                <div class="grid grid-cols-4 md:flex text-md">
+                  <button @click="selectedTab = 'posts'" class="px-4 pb-2 border-b-2 xl:px-7" :class="selectedTab === 'posts' ? 'border-black dark:border-white' : 'border-transparent text-neutral-500 fill-neutral-500'" >
+                    <div class="flex items-center justify-center gap-2">
+                      <div class="size-5 shrink-0">
+                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                      </div>
+                      <span class="hidden sm:block">Posts</span>
+                    </div>
+                  </button>
+                  <button @click="selectedTab = 'reposts'" class="px-4 pb-2 border-b-2 xl:px-7" :class="selectedTab === 'reposts' ? 'border-black dark:border-white' : 'border-transparent text-neutral-500 fill-neutral-500'" >
+                    <div class="flex items-center justify-center gap-2">
+                      <div class="size-5 shrink-0">
+                        <svg viewBox="0 0 48 48" >
+                            <path d="M37.7 15v19.7l3.48-3.7a.7.7 0 0 1 .99-.03l1.46 1.37c.28.26.3.7.03.99l-6.26 6.66a2.3 2.3 0 0 1-3.34.01l-6.36-6.66a.7.7 0 0 1 .02-.99l1.45-1.38a.7.7 0 0 1 .99.02l4.14 4.34V15a4.3 4.3 0 0 0-4.3-4.3h-3.5a.7.7 0 0 1-.7-.7V8c0-.39.31-.7.7-.7H30a7.7 7.7 0 0 1 7.7 7.7ZM17.84 17.34 13.7 13v20a4.3 4.3 0 0 0 4.3 4.3h3.5c.39 0 .7.31.7.7v2a.7.7 0 0 1-.7.7H18a7.7 7.7 0 0 1-7.7-7.7V13.63l-3.48 3.7a.7.7 0 0 1-.99.03L4.37 16a.7.7 0 0 1-.03-.98l6.26-6.67a2.3 2.3 0 0 1 3.34-.01l6.36 6.66a.7.7 0 0 1-.02.99l-1.45 1.38a.7.7 0 0 1-.99-.02Z"></path>
+                        </svg>
+                      </div>
+                      <span class="hidden sm:block">Posts</span>
+                    </div>
+                  </button>
+                  <button @click="selectedTab = 'favorites'" class="px-4 pb-2 border-b-2 xl:px-7" :class="selectedTab === 'favorites' ? 'border-black dark:border-white' : 'border-transparent text-neutral-500 fill-neutral-500'" >
+                    <div class="flex items-center justify-center gap-2">
+                      <div class="size-5 shrink-0">
+                        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                        </svg>
+                      </div>
+                      <span class="hidden sm:block">Posts</span>
+                    </div>
+                  </button>
+                  <button @click="selectedTab = 'liked'" class="px-4 pb-2 border-b-2 xl:px-7" :class="selectedTab === 'liked' ? 'border-black dark:border-white' : 'border-transparent text-neutral-500 fill-neutral-500'" >
+                    <div class="flex items-center justify-center gap-2">
+                      <div class="size-6 shrink-0">
+                        <svg viewBox="0 0 48 48">
+                            <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                        </svg>
+                      </div>
+                      <span class="hidden sm:block">Liked</span>
+                    </div>
+                  </button>
+                </div>
+                <div class="py-3 mx-auto md:-mt-2 md:py-0 w-max md:mx-0" x-show="selectedTab === 'posts'">
+                  <div x-data="{selectedFilter : 'latest'}" class="flex text-xs bg-neutral-200 dark:bg-neutral-800 rounded-md p-0.5">
+                    <button @click="selectedFilter = 'latest'"
+                            hx-get="{% url 'profile' profile_user.username %}?sort=latest"
+                            hx-target="#posts-container"
+                            hx-swap="innerHTML"
+                            class="px-3 py-2 rounded-sm" :class="selectedFilter === 'latest' ? 'bg-white dark:bg-neutral-600' : 'text-neutral-500'">
+                      Latest
+                    </button>
+                    <button @click="selectedFilter = 'popular'" 
+                            class="px-3 py-2 rounded-sm" :class="selectedFilter === 'popular' ? 'bg-white dark:bg-neutral-600' : 'text-neutral-500'">
+                      Popular
+                    </button>
+                    <button @click="selectedFilter = 'oldest'"
+                            hx-get="{% url 'profile' profile_user.username %}?sort=oldest"
+                            hx-target="#posts-container"
+                            hx-swap="innerHTML"
+                            class="px-3 py-2 rounded-sm" :class="selectedFilter === 'oldest' ? 'bg-white dark:bg-neutral-600' : 'text-neutral-500'">
+                      Oldest
+                    </button>
+                  </div>
+                </div>
+              </tabs-head>
+              <tabs-content>
+                <div x-show="selectedTab === 'posts'">
+                  {% if profile_posts %}
+                    <div id="posts-container" class="grid grid-cols-2 gap-4 md:grid-cols-[repeat(auto-fill,_minmax(170px,_1fr))] py-4">          
+                      {% include '_users/partials/_profile_posts.html' %}
+                    </div>
+                  {% else %}
+                  <div class="py-32 text-center">
+                    <div class="text-2xl font-bold">No Reposts yet</div>
+                    {% if profile_user == user %}
+                      <div class="mt-2">Posts you reposted will appear here</div>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                </div>
+                <div x-show="selectedTab === 'reposts'" x-cloak>
+                  <div class="py-32 text-center">
+                    <div class="text-2xl font-bold">No Reposts yet</div>
+                    {% if profile_user == user %}
+                      <div class="mt-2">Posts you reposted will appear here</div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div x-show="selectedTab === 'favorites'">
+                  <div class="py-32 text-center">
+                    <div class="text-2xl font-bold">Favorite posts</div>
+                    {% if profile_user == user %}
+                      <div class="mt-2">your favorite posts will appear here</div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div x-show="selectedTab === 'liked'">
+                  <div class="py-32 text-center">
+                    <div class="text-2xl font-bold">No liked posts yet</div>
+                    {% if profile_user == user %}
+                      <div class="mt-2">Posts you liked will appear here</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </tabs-content>
+            </profile-content>
+    </div>
+</div>
+
+
+{% if request.htmx %}
+    <title hx-swap-oob="true">{{profile_user.username}} - Tiktok</title>
+
+    <div hx-swap-oob="innerHTML" id="navigation">
+        {% include 'includes/navigation.html' %}
+    </div>
+{% endif %}

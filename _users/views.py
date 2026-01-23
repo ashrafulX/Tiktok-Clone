@@ -1,3 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import get_user_model
 
-# Create your views here.
+User = get_user_model()
+
+def profile_view(request, username):
+    
+    profile_user = get_object_or_404(User, username=username)
+    
+    sort_order = request.GET.get('sort','')
+    
+    if sort_order == 'oldest':
+        profile_posts = profile_user.posts.order_by('created_at')
+    else:
+        profile_posts = profile_user.posts.order_by('-created_at')
+    
+    context = {
+        'page' : 'Profile',
+        'profile_user': profile_user,
+        'profile_posts': profile_posts,
+    }
+    
+    if request.GET.get('sort'):
+        return render(request, '_users/partials/_profile_posts.html', context)
+
+    if request.htmx:
+        return render(request, '_users/partials/_profile.html', context)
+    return render(request, '_users/profile.html', context)

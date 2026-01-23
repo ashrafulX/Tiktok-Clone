@@ -89,13 +89,27 @@
         Messages
     </span>
     </button>
-    <button id="profile" class="button-nav" @click="window.location.href = 'profile.html'">
-    <div class="flex-shrink-0 size-8">
+    <button id="profile"
+            class="button-nav"
+            hx-target="#main-content"
+            hx-swap="innerHTML transition:true"
+            hx-push-url="true"
+            {% if user.is_authenticated %}
+                hx-get="{% url 'profile' user.username %}"
+            {% else %}
+                hx-get="{% url 'home' %}"
+            {% endif %}
+            >
+    <div class="flex-shrink-0 size-8 {% if page == 'Profile' %} fill-rose-500 {% endif %}">
         <div class="overflow-hidden rounded-full size-7">
-        <img src="../media/avatar.png" class="object-cover object-center w-full h-full" alt="">
+            {% if user.is_authenticated %}
+                <img src="{{ user.avatar }}" class="object-cover object-center w-full h-full" alt="">
+            {% else %}
+                <img src="{% static 'images/avatar.svg' %}" class="object-cover object-center w-full h-full" alt="">
+            {% endif %}
         </div>
     </div>
-    <span :class="{ '!opacity-0': showDrawer }">
+    <span class=" {% if page == 'Profile' %} text-rose-500 {% endif %}" :class="{ '!opacity-0': showDrawer }">
         Profile
     </span>
     </button>
