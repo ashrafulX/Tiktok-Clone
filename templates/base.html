@@ -12,7 +12,9 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
 </head>
 
-<body class="dark:bg-black dark:text-white dark:fill-white" :class="{ 'dark': darkMode }" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+<body x-data="{ modalPage: false }" class="dark:bg-black dark:text-white dark:fill-white" :class="{ 'dark': darkMode }" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+
+    {% include 'includes/modal.html' %}
 
     {% block layout %}
       

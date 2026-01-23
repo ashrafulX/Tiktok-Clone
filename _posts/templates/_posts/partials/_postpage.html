@@ -1,0 +1,356 @@
+{% load static %}
+
+<div class="grid lg:grid-cols-[1fr_540px] h-screen">
+    <div class="relative flex items-center justify-center bg-black">
+            <img src="{{ post.image.url }}" alt="" class="object-contain max-h-screen">
+            <button id="close-button"
+                    x-show="modalPage"
+                    @click="modalPage= false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);" 
+                    class="absolute flex items-center justify-center transition duration-300 rounded-full top-5 left-5 size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
+                <div class="size-6 fill-white">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
+                    </svg>
+                </div>
+            </button>
+            <a href="/" x-show="!modalPage" class="absolute flex items-center justify-center transition duration-300 rounded-full top-5 left-5 size-10 hover:bg-rose-500">
+                <img src="{% static 'images/icon_dark.png' %}" alt="">
+            </a>
+            <scroll-bar class="absolute top-0 flex items-center h-full right-5">
+                <div class="flex flex-col gap-4">
+                    {% if prev_post %}
+                    <button @click="window.location.href = '{% url 'post_page' prev_post.uuid %}' " class="flex items-center justify-center transition duration-300 rounded-full size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
+                        <div class="size-6 fill-white">
+                            <svg viewBox="0 0 48 48">
+                                <path d="m24 20.24 13.17 13.17a1 1 0 0 0 1.42 0l2.82-2.82a1 1 0 0 0 0-1.42L25.06 12.82a1.5 1.5 0 0 0-2.12 0L6.59 29.17a1 1 0 0 0 0 1.42L9.4 33.4a1 1 0 0 0 1.42 0L24 20.24Z"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    {% else %}
+                        <div class="size-10"></div>
+                    {% endif %}
+                    {% if next_post %}
+                    <button @click="window.location.href = '{% url 'post_page' next_post.uuid %}'" class="flex items-center justify-center transition duration-300 rounded-full size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
+                        <div class="size-6 fill-white">
+                            <svg viewBox="0 0 48 48">
+                                <path d="m24 27.76 13.17-13.17a1 1 0 0 1 1.42 0l2.82 2.82a1 1 0 0 1 0 1.42L25.06 35.18a1.5 1.5 0 0 1-2.12 0L6.59 18.83a1 1 0 0 1 0-1.42L9.4 14.6a1 1 0 0 1 1.42 0L24 27.76Z"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    {% else %}
+                        <div class="size-10"></div>
+                    {% endif %}
+                </div>
+            </scroll-bar>
+    </div>
+    <div class="hidden bg-white dark:bg-black lg:block">
+            <div class="flex flex-col h-screen gap-5">
+                <article-info class="block mx-4 mt-4">
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-900 rounded-xl">
+                        
+                        {% if post.author %}
+                        <div class="flex items-center justify-between">
+                            <a href="" class="flex items-center gap-3">
+                                <div class="overflow-hidden rounded-full shrink-0 size-12">
+                                    <img src="{{ post.author.image.url }}" alt="" class="object-cover w-full h-full">
+                                </div>
+                                <div>
+                                    <div class="font-medium hover:underline">{{ post.author.username }}</div>
+                                    <div class="text-sm -mt-0.5">
+                                        <span>{{ post.author.name }}</span>
+                                        <span class="mx-1">.</span>
+                                        <span>{{ post.created_at|timesince }} ago</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <button class="px-6 py-2 text-white rounded-md bg-rose-500 hover:bg-rose-600">
+                                Follow
+                            </button>
+                        </div>
+                        {% endif %}
+                        {% if post.body %}
+                        <div class="mt-3">
+                            {{ post.body }}
+                        </div>
+                        {% endif %}
+                        {% if post.tags %}
+                        <div class="mt-3">
+                            
+                            {% for tag in post.tags.split %}
+                                <a href="" class="text-sm hover:underline mr-2">{{ tag }}</a>
+                            {% endfor %}
+                                
+                        </div>
+                        {% endif %}
+                    </div>
+                </article-info>
+                <article-buttons class="flex items-center gap-4 mx-8">
+                    <button id="like" class="flex items-center gap-1">
+                        <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
+                            <div class="size-5">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M7.5 2.25C10.5 2.25 12 4.25 12 4.25C12 4.25 13.5 2.25 16.5 2.25C20 2.25 22.5 4.99999 22.5 8.5C22.5 12.5 19.2311 16.0657 16.25 18.75C14.4095 20.4072 13 21.5 12 21.5C11 21.5 9.55051 20.3989 7.75 18.75C4.81949 16.0662 1.5 12.5 1.5 8.5C1.5 4.99999 4 2.25 7.5 2.25Z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-neutral-600 dark:text-neutral-400">42</div>
+                    </button>
+                    <button id="comments" class="flex items-center gap-1">
+                        <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
+                            <div class="size-5">
+                                <svg viewBox="0 0 48 48">
+                                    <path fill-rule="evenodd" d="M2 21.5c0-10.22 9.88-18 22-18s22 7.78 22 18c0 5.63-3.19 10.74-7.32 14.8a43.6 43.6 0 0 1-14.14 9.1A1.5 1.5 0 0 1 22.5 44v-5.04C11.13 38.4 2 31.34 2 21.5M14 25a3 3 0 1 0 0-6 3 3 0 0 0 0 6m10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6m13-3a3 3 0 1 1-6 0 3 3 0 0 1 6 0" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-neutral-600 dark:text-neutral-400">2</div>
+                    </button>
+                    <button id="bookmark" class="flex items-center gap-1">
+                        <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
+                            <div class="size-5">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M4 4.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15.13a1 1 0 0 1-1.555.831l-6.167-4.12a.5.5 0 0 0-.556 0l-6.167 4.12A1 1 0 0 1 4 19.63z"></path>                                                                                         
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-neutral-600 dark:text-neutral-400">8</div>
+                    </button>
+                    <button id="share" class="flex items-center gap-1 ml-auto">
+                        <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
+                            <div class="size-5">
+                                <svg viewBox="0 0 20 20">
+                                    <path d="M10.938 3.175a.674.674 0 0 1 1.138-.488l6.526 6.215c.574.547.554 1.47-.043 1.991l-6.505 5.676a.674.674 0 0 1-1.116-.508V13.49s-6.985-1.258-9.225 2.854c-.209.384-1.023.518-.857-1.395.692-3.52 2.106-9.017 10.082-9.017z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-neutral-600 dark:text-neutral-400"></div>
+                    </button>
+                </article-buttons>
+                <article-url x-data="{ copyLink() {navigator.clipboard.writeText($refs.urlLink.innerText); } }" class="flex items-center mx-8 text-sm border rounded-lg dark:border-neutral-800 border-neutral-200 bg-neutral-100 dark:bg-neutral-800">
+                    <span x-ref="urlLink" class="px-4 py-2 truncate grow text-neutral-500 dark:text-neutral-400">
+                        {{ request.scheme }}://{{ request.get_host }}{% url 'post_page' post.uuid %}
+                    </span>
+                    <button @click="copyLink" class="px-4 py-2 font-bold shrink-0 dark:hover:bg-neutral-900 hover:bg-neutral-50 active:bg-neutral-200 dark:active:bg-black transition-colors">Copy link</button>
+                </article-url>
+                <article-comments x-data="{ selectedTab: 'comments'}" class="relative flex flex-col mt-2 overflow-hidden grow">
+                    <div class="grid grid-cols-2 px-8 text-sm font-medium text-center border-b border-neutral-300 dark:border-neutral-700" x-cloak>
+                        <button @click="selectedTab = 'comments'" 
+                                :class="[
+                                'pb-2 border-b-2 transition-all duration-500 ease-in-out',
+                                selectedTab === 'comments' 
+                                    ? 'border-black dark:border-white text-black dark:text-white' 
+                                    : 'border-transparent text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
+                                ]">
+                            Comments (3)
+                        </button>
+                        <button @click="selectedTab = 'posts'" 
+                                :class="[
+                                'pb-2 border-b-2 transition-all duration-500 ease-in-out',
+                                selectedTab === 'posts' 
+                                    ? 'border-black dark:border-white text-black dark:text-white' 
+                                    : 'border-transparent text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
+                                ]">
+                            Creator posts
+                        </button>
+                    </div>
+                    <div x-show="selectedTab === 'comments'" class="px-8 py-6 mb-24 overflow-y-auto hide-scrollbar"
+                        x-transition:enter="transition-all transform duration-500 ease-in-out"
+                        x-transition:enter-start="opacity-0 -translate-x-2"
+                        x-transition:enter-end="opacity-100 translate-x-0"
+                        x-transition:leave="transition-all transform duration-200 ease-in-out"
+                        x-transition:leave-start="opacity-100 translate-x-0"
+                        x-transition:leave-end="opacity-0 -translate-x-2">
+                        <div class="flex flex-col gap-6">
+                            <comment-item class="flex w-full gap-3">
+                                <div class="overflow-hidden rounded-full shrink-0 size-12">
+                                    <img src="../media/avatar.png" alt="" class="object-cover w-full h-full">
+                                </div>
+                                <div class="flex justify-between grow">
+                                    <div>
+                                        <div class="font-medium">Mahdi</div>
+                                        <div class="leading-5">This is a comment</div>
+                                        <div class="flex gap-4 mt-1 text-sm text-neutral-400">
+                                            <span>2h ago</span>
+                                            <button>Reply</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="p-2">
+                                            <div class="size-5 fill-neutral-500">
+                                                <svg viewBox="0 0 48 48">
+                                                    <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-sm text-neutral-500">3</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </comment-item>
+                            <comment-item class="flex w-full gap-3">
+                                <div class="overflow-hidden rounded-full shrink-0 size-12">
+                                    <img src="../media/avatar.png" alt="" class="object-cover w-full h-full">
+                                </div>
+                                <div class="flex justify-between grow">
+                                    <div>
+                                        <div class="font-medium">Mahdi</div>
+                                        <div class="leading-5">This is a comment</div>
+                                        <div class="flex gap-4 mt-1 text-sm text-neutral-400">
+                                            <span>2h ago</span>
+                                            <button>Reply</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="p-2">
+                                            <div class="size-5 fill-neutral-500">
+                                                <svg viewBox="0 0 48 48">
+                                                    <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-sm text-neutral-500">3</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </comment-item>
+                            <comment-item class="flex w-full gap-3">
+                                <div class="overflow-hidden rounded-full shrink-0 size-12">
+                                    <img src="../media/avatar.png" alt="" class="object-cover w-full h-full">
+                                </div>
+                                <div class="flex justify-between grow">
+                                    <div>
+                                        <div class="font-medium">Mahdi</div>
+                                        <div class="leading-5">This is a comment</div>
+                                        <div class="flex gap-4 mt-1 text-sm text-neutral-400">
+                                            <span>2h ago</span>
+                                            <button>Reply</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="p-2">
+                                            <div class="size-5 fill-neutral-500">
+                                                <svg viewBox="0 0 48 48">
+                                                    <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-sm text-neutral-500">3</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </comment-item>
+                            <comment-item class="flex w-full gap-3">
+                                <div class="overflow-hidden rounded-full shrink-0 size-12">
+                                    <img src="../media/avatar.png" alt="" class="object-cover w-full h-full">
+                                </div>
+                                <div class="flex justify-between grow">
+                                    <div>
+                                        <div class="font-medium">Mahdi</div>
+                                        <div class="leading-5">This is a comment</div>
+                                        <div class="flex gap-4 mt-1 text-sm text-neutral-400">
+                                            <span>2h ago</span>
+                                            <button>Reply</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="p-2">
+                                            <div class="size-5 fill-neutral-500">
+                                                <svg viewBox="0 0 48 48">
+                                                    <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-sm text-neutral-500">3</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </comment-item>
+                            <comment-item class="flex w-full gap-3">
+                                <div class="overflow-hidden rounded-full shrink-0 size-12">
+                                    <img src="../media/avatar.png" alt="" class="object-cover w-full h-full">
+                                </div>
+                                <div class="flex justify-between grow">
+                                    <div>
+                                        <div class="font-medium">Mahdi</div>
+                                        <div class="leading-5">This is a comment</div>
+                                        <div class="flex gap-4 mt-1 text-sm text-neutral-400">
+                                            <span>2h ago</span>
+                                            <button>Reply</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="p-2">
+                                            <div class="size-5 fill-neutral-500">
+                                                <svg viewBox="0 0 48 48">
+                                                    <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-sm text-neutral-500">3</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </comment-item>
+                            <comment-item class="flex w-full gap-3">
+                                <div class="overflow-hidden rounded-full shrink-0 size-12">
+                                    <img src="../media/avatar.png" alt="" class="object-cover w-full h-full">
+                                </div>
+                                <div class="flex justify-between grow">
+                                    <div>
+                                        <div class="font-medium">Mahdi</div>
+                                        <div class="leading-5">This is a comment</div>
+                                        <div class="flex gap-4 mt-1 text-sm text-neutral-400">
+                                            <span>2h ago</span>
+                                            <button>Reply</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="p-2">
+                                            <div class="size-5 fill-neutral-500">
+                                                <svg viewBox="0 0 48 48">
+                                                    <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-sm text-neutral-500">3</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </comment-item>
+                        </div>
+                    </div>
+                    <div x-show="selectedTab === 'posts'" class="px-8 py-6 overflow-y-auto hide-scrollbar" x-cloak
+                        x-transition:enter="transition-all transform duration-500 ease-in-out"
+                        x-transition:enter-start="opacity-0 translate-x-2"
+                        x-transition:enter-end="opacity-100 translate-x-0"
+                        x-transition:leave="transition-all transform duration-200 ease-in-out"
+                        x-transition:leave-start="opacity-100 translate-x-0"
+                        x-transition:leave-end="opacity-0 translate-x-2">
+                        <div class="grid grid-cols-3 gap-2">
+                            
+                            {% for post in author_posts %}
+                                <article>
+                                    <a href="{% url 'post_page' post.uuid %}">
+                                        <div class="relative bg-black w-full aspect-[3/4] rounded-lg overflow-hidden">
+                                            <img src="{{ post.image.url }}" alt="" class="object-cover w-full h-full">
+                                            <article-ingo class="absolute bottom-0 left-0 right-0">
+                                                <div class="w-full rounded-b-lg h-30 bg-gradient-to-t from-black to-transparent opacity-30"></div>
+                                                <div class="absolute bottom-0 z-10 flex items-center gap-1 p-3">
+                                                    <div class="size-5 fill-white">
+                                                        <svg viewBox="0 0 48 48">
+                                                            <path d="M40.96 24.15c1.83-4.8 1.05-8.61-.8-11.33a10.87 10.87 0 0 0-6.34-4.49 9.43 9.43 0 0 0-6.83 1.17c-1.08.65-2.1 1.53-2.99 2.66-.9-1.13-1.9-2.01-3-2.66a9.43 9.43 0 0 0-6.82-1.17 10.87 10.87 0 0 0-6.34 4.49c-1.85 2.72-2.63 6.54-.8 11.33 1.43 3.74 4.5 7.23 7.6 9.98a46.31 46.31 0 0 0 8.6 6.12l.76.4.76-.4a46.31 46.31 0 0 0 8.6-6.12c3.1-2.75 6.17-6.24 7.6-9.98ZM24 17.58c2.3-2.88 4.7-6.2 9.03-5.33a6.95 6.95 0 0 1 3.82 2.81c1.07 1.58 1.76 4.02.37 7.66-1.09 2.86-3.6 5.82-6.51 8.43A44.84 44.84 0 0 1 24 36.09a44.84 44.84 0 0 1-6.7-4.94c-2.93-2.6-5.43-5.57-6.52-8.43-1.4-3.64-.7-6.08.37-7.66a6.95 6.95 0 0 1 3.82-2.8c4.33-.88 6.73 2.44 9.03 5.32Z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <span class="text-white">12</span>
+                                                </div>
+                                            </article-ingo>
+                                        </div>
+                                    </a>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <add-comment x-show="selectedTab === 'comments'" class="absolute bottom-0 z-10 w-full px-8 py-6 bg-white border-t dark:bg-black border-neutral-300 dark:border-neutral-700">
+                        <form x-data="{input : ''}" action="" class="flex">
+                            <input x-model="input" type="text" name="comment" placeholder="Add comment..." class="px-4 py-2 text-sm border border-transparent rounded-lg outline-none grow bg-neutral-100 dark:bg-neutral-800 placeholder-neutral-500 focus:border-neutral-300 dark:focus:border-neutral-800">
+                            <button :type="input ? 'submit' : 'button'" class="px-4 ml-2 font-medium shrink-0" :class="input ? 'text-red-500' : 'text-neutral-400 !cursor-not-allowed'">Post</button>
+                        </form>
+                    </add-comment>
+                </article-comments>
+            </div>
+    </div>
+</div>

@@ -4,7 +4,13 @@
 <article data-index="{{ forloop.counter0|add:page_start_index }}" class="flex items-center justify-center h-full px-4 py-2 mx-auto snap-center">
     <div class="relative aspect-[9/16] max-h-full max-w-full lg:h-full rounded-2xl flex items-center justify-center">
 
-        <a href="{% url 'post_page' post.uuid %}" class="absolute h-full w-full z-10"></a>
+        <button @click="modalPage = true;returnUrl = window.location.pathname;"
+                hx-get="{% url 'post_page' post.uuid %}"
+                hx-target="#modalpage-content"
+                hx-swap="innerHTML"
+                hx-push-url="true"
+                class="absolute h-full w-full z-10">
+        </button>
         <img src="{{ post.image.url }}" alt="" class="object-cover aspect-[9/16] rounded-2xl">
         <article-info class="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
             <div class="absolute bottom-0 z-10 p-5 text-white">
@@ -48,7 +54,7 @@
             </div>
             <p class="pt-1 text-sm font-bold dark:text-neutral-400 text-neutral-600">3</p>
             </button>
-            <button id="comments" class="cursor-pointer" @click="window.location.href = 'postpage.html'">
+            <button id="comments" class="cursor-pointer">
             <div class="button-article dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
                 <div class="size-6">
                 <svg viewBox="0 0 48 48">

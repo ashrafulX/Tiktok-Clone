@@ -1,0 +1,9 @@
+<div class="fixed inset-0 z-100" 
+    x-show="modalPage"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 scale-60"
+    x-transition:enter-end="opacity-100 scale-100"
+    @keydown.escape.window="modalPage= false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);" 
+    >
+  <div id="modalpage-content" class="h-full w-full bg-white"></div>
+</div>
