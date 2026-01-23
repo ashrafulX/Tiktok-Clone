@@ -65,7 +65,18 @@ def post_page_view(request, pk=None):
         return redirect('home')
     post = get_object_or_404(Post, uuid=pk)
     
+    if post.author:
+        author_posts = Post.objects.filter(author=post.author).order_by('-created_at')
+        prev_post = author_posts.filter(created_at__gt=post.created_at).last()
+        next_post = author_posts.filter(created_at__lt=post.created_at).first()
+    else:
+        author_posts = [ post ]
+        prev_post = next_post = None 
+    
     context = {
         'post' : post,
+        'author_posts': author_posts,
+        'prev_post': prev_post,
+        'next_post': next_post,
     }
     return render(request, '_posts/postpage.html', context)
