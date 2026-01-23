@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostForm
 from .models import Post
 from django.contrib.auth.decorators import login_required
@@ -57,3 +57,15 @@ def upload(request):
     if request.htmx:
         return render(request, '_posts/partials/_upload.html', context)
     return render(request, '_posts/upload.html', context)
+
+
+def post_page_view(request, pk=None):
+    
+    if not pk:
+        return redirect('home')
+    post = get_object_or_404(Post, uuid=pk)
+    
+    context = {
+        'post' : post,
+    }
+    return render(request, '_posts/postpage.html', context)
