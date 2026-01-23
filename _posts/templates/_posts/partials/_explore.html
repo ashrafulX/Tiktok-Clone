@@ -49,10 +49,10 @@
                     </article-ingo>
                 </div>
             </button>
-            <a href="" class="block my-3">
+            <a href="{% url 'profile' post.author.username %}" class="block my-3">
                 <div class="flex items-center gap-1">
                     <div class="flex items-center justify-center overflow-hidden rounded-full size-6">
-                        <img src="{{ post.author.image.url }}" alt="" class="object-cover w-full h-full">
+                        <img src="{{ post.author.avatar }}" alt="" class="object-cover w-full h-full">
                     </div>
                     <span class="hover:underline">
                         {{ post.author }}

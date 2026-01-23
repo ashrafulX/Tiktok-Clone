@@ -45,9 +45,9 @@
                         
                         {% if post.author %}
                         <div class="flex items-center justify-between">
-                            <a href="" class="flex items-center gap-3">
+                            <a href="{% url 'profile' post.author.username %}" class="flex items-center gap-3">
                                 <div class="overflow-hidden rounded-full shrink-0 size-12">
-                                    <img src="{{ post.author.image.url }}" alt="" class="object-cover w-full h-full">
+                                    <img src="{{ post.author.avatar }}" alt="" class="object-cover w-full h-full">
                                 </div>
                                 <div>
                                     <div class="font-medium hover:underline">{{ post.author.username }}</div>

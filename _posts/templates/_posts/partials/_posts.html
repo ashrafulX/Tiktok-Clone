@@ -16,7 +16,7 @@
             <div class="absolute bottom-0 z-10 p-5 text-white">
             
             {% if post.author %}
-                <a href="" class="hover:underline pointer-events-auto">{{ post.author }}</a>
+                <a href="{% url 'profile' post.author.username %}" class="hover:underline pointer-events-auto">{{ post.author }}</a>
             {% endif %}
             {% if post.tags %}
                 <div class="mt-1">
@@ -32,9 +32,9 @@
             
             {% if post.author %}
             <button id="author" class="relative flex justify-center mb-4 cursor-pointer">
-                <div class="overflow-hidden rounded-full size-13 bg-neutral-100">
-                    <img src="{{ post.author.image.url }}" alt="" class="object-cover object-center w-full h-full">
-                </div>
+                <a href="{% url 'profile' post.author.username %}" class="overflow-hidden rounded-full size-13 bg-neutral-100">
+                    <img src="{{ post.author.avatar }}" alt="" class="object-cover object-center w-full h-full">
+                </a>
                 <div class="absolute flex items-center justify-center rounded-full bg-rose-500 hover:bg-rose-600 size-6 top-10">
                     <div class="size-3.5 fill-white">
                     <svg viewBox="0 0 48 48">
