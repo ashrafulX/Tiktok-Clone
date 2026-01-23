@@ -54,7 +54,13 @@
             </div>
             <p class="pt-1 text-sm font-bold dark:text-neutral-400 text-neutral-600">3</p>
             </button>
-            <button id="comments" class="cursor-pointer">
+            <button 
+                id="comments" 
+                @click="modalPage = true;returnUrl = window.location.pathname;"
+                hx-get="{% url 'post_page' post.uuid %}"
+                hx-target="#modalpage-content"
+                hx-swap="innerHTML"
+                hx-push-url="true">
             <div class="button-article dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
                 <div class="size-6">
                 <svg viewBox="0 0 48 48">
