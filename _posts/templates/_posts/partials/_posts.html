@@ -3,16 +3,20 @@
 {% for post in posts %} 
 <article data-index="{{ forloop.counter0|add:page_start_index }}" class="flex items-center justify-center h-full px-4 py-2 mx-auto snap-center">
     <div class="relative aspect-[9/16] max-h-full max-w-full lg:h-full rounded-2xl flex items-center justify-center">
+
+        <a href="{% url 'post_page' post.uuid %}" class="absolute h-full w-full z-10"></a>
         <img src="{{ post.image.url }}" alt="" class="object-cover aspect-[9/16] rounded-2xl">
-        <article-info class="absolute bottom-0 left-0 right-0">
+        <article-info class="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
             <div class="absolute bottom-0 z-10 p-5 text-white">
             
             {% if post.author %}
-                <a href="" class="hover:underline">{{ post.author }}</a>
+                <a href="" class="hover:underline pointer-events-auto">{{ post.author }}</a>
             {% endif %}
             {% if post.tags %}
                 <div class="mt-1">
-                <a href="" class="hover:underline">{{ post.tags }}</a>
+                {% for tag in post.tags.split %}
+                    <a href="" class="hover:underline pointer-events-auto mr-2">{{ tag }}</a>
+                {% endfor %}
             </div>
             {% endif %}
             </div>
