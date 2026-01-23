@@ -1,25 +1,16 @@
 {% load static %}
 
-<div class="grid lg:grid-cols-[1fr_540px] h-screen">
+<div id="postpage-content" class="grid lg:grid-cols-[1fr_540px] h-screen">
     <div class="relative flex items-center justify-center bg-black">
             <img src="{{ post.image.url }}" alt="" class="object-contain max-h-screen">
-            <button id="close-button"
-                    x-show="modalPage"
-                    @click="modalPage= false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);" 
-                    class="absolute flex items-center justify-center transition duration-300 rounded-full top-5 left-5 size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
-                <div class="size-6 fill-white">
-                    <svg viewBox="0 0 48 48">
-                        <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
-                    </svg>
-                </div>
-            </button>
-            <a href="/" x-show="!modalPage" class="absolute flex items-center justify-center transition duration-300 rounded-full top-5 left-5 size-10 hover:bg-rose-500">
-                <img src="{% static 'images/icon_dark.png' %}" alt="">
-            </a>
             <scroll-bar class="absolute top-0 flex items-center h-full right-5">
                 <div class="flex flex-col gap-4">
                     {% if prev_post %}
-                    <button @click="window.location.href = '{% url 'post_page' prev_post.uuid %}' " class="flex items-center justify-center transition duration-300 rounded-full size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
+                    <button hx-get="{% url 'post_page' prev_post.uuid %}"
+                            hx-target="#postpage-content"
+                            hx-swap="outerHTML transition:true"
+                            hx-push-url="true"
+                            class="flex items-center justify-center transition duration-300 rounded-full size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
                         <div class="size-6 fill-white">
                             <svg viewBox="0 0 48 48">
                                 <path d="m24 20.24 13.17 13.17a1 1 0 0 0 1.42 0l2.82-2.82a1 1 0 0 0 0-1.42L25.06 12.82a1.5 1.5 0 0 0-2.12 0L6.59 29.17a1 1 0 0 0 0 1.42L9.4 33.4a1 1 0 0 0 1.42 0L24 20.24Z"></path>
@@ -30,7 +21,11 @@
                         <div class="size-10"></div>
                     {% endif %}
                     {% if next_post %}
-                    <button @click="window.location.href = '{% url 'post_page' next_post.uuid %}'" class="flex items-center justify-center transition duration-300 rounded-full size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
+                    <button hx-get="{% url 'post_page' next_post.uuid %}"
+                            hx-target="#postpage-content"
+                            hx-swap="outerHTML transition:true"
+                            hx-push-url="true"
+                            class="flex items-center justify-center transition duration-300 rounded-full size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
                         <div class="size-6 fill-white">
                             <svg viewBox="0 0 48 48">
                                 <path d="m24 27.76 13.17-13.17a1 1 0 0 1 1.42 0l2.82 2.82a1 1 0 0 1 0 1.42L25.06 35.18a1.5 1.5 0 0 1-2.12 0L6.59 18.83a1 1 0 0 1 0-1.42L9.4 14.6a1 1 0 0 1 1.42 0L24 27.76Z"></path>

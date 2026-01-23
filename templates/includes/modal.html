@@ -3,7 +3,15 @@
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0 scale-60"
     x-transition:enter-end="opacity-100 scale-100"
-    @keydown.escape.window="modalPage= false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);" 
-    >
-  <div id="modalpage-content" class="h-full w-full bg-white"></div>
+    @keydown.escape.window="modalPage= false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);">
+        <button id="close-button"
+                @click="modalPage = false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);" 
+                class="z-100 absolute flex items-center justify-center transition duration-300 rounded-full top-5 left-5 size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
+            <div class="size-6 fill-white">
+                <svg viewBox="0 0 48 48">
+                    <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
+                </svg>
+            </div>
+        </button>
+        <div id="modalpage-content" class="h-full w-full bg-white"></div>
 </div>
