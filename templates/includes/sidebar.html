@@ -91,9 +91,12 @@
             </button>
             </li>
             <li>
-            <button class="button-rounded dark:hover:!bg-neutral-800">
-                <span class="font-medium">log out</span>
-            </button>
+                <form method="post" action="{% url 'account_logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button-rounded dark:hover:!bg-neutral-800">
+                        <span class="font-medium">log out</span>
+                    </button>
+                </form>
             </li>
         </ul>
         </div>

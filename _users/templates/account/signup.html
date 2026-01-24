@@ -1,0 +1,245 @@
+{% extends 'layouts/account-layout.html' %}
+{% load static %}
+
+{% block title %}
+  log in -
+{% endblock title %}
+
+{% block attrs %}
+{% endblock %}
+
+
+{% block content %}
+<div class="mx-auto max-w-[360px]">
+  <h1 class="pb-4 text-center">Sign up</h1>
+
+  <div class="mb-10">
+    <form method="post"
+          action="{% url 'account_signup' %}" 
+          x-data="signUpComponent()">
+
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+              {{ form.non_field_errors }}
+            {% endif %}
+
+            <p class="mb-1 text-sm font-medium">When’s your birthday?</p>
+
+            <birthday-selector class="mb-1 grid grid-cols-[1.5fr_1fr_1fr] gap-2">
+                <div @click.outside="selectMonth = false" class="relative">
+                  <div @click="selectMonth = !selectMonth" class="flex items-center justify-between px-3 rounded-sm cursor-pointer h-11 bg-neutral-100">
+                    <p class="select-none"
+                      :class="month ? 'text-black' : 'text-neutral-400'"
+                      x-text="month || 'Month'"
+                    ></p>
+                    <div x-bind:class="selectMonth ? 'rotate-180' : 'rotate-0' " class="w-4 h-4 transition-transform duration-300">
+                      <svg viewBox="0 0 48 48">
+                        <path d="M25.5187 35.2284C24.7205 36.1596 23.2798 36.1596 22.4816 35.2284L8.83008 19.3016C7.71807 18.0042 8.63988 16 10.3486 16H37.6517C39.3604 16 40.2822 18.0042 39.1702 19.3016L25.5187 35.2284Z"></path>
+                      </svg>
+                    </div>
+                    <div x-show="selectMonth" x-cloak class="absolute left-0 w-full bg-white rounded-sm top-12 drop-shadow-lg z-10">
+                      <ul class="overflow-y-auto max-h-48">
+                        <template x-for="m in months" :key="m">
+                          <li
+                            @click.stop="month = m; selectMonth = false"
+                            class="px-3 py-1.5 cursor-pointer hover:bg-neutral-100"
+                            x-text="m"
+                          ></li>
+                        </template>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div @click.outside="selectDay = false" class="relative">
+                  <div @click="selectDay = !selectDay" class="flex items-center justify-between px-3 rounded-sm cursor-pointer h-11 bg-neutral-100">
+                    <p class="select-none"
+                      :class="day ? 'text-black' : 'text-neutral-400'"
+                      x-text="day || 'Day'"
+                    ></p>
+                    <div x-bind:class="selectDay ? 'rotate-180' : 'rotate-0' " class="w-4 h-4 transition-transform duration-300">
+                      <svg viewBox="0 0 48 48">
+                        <path d="M25.5187 35.2284C24.7205 36.1596 23.2798 36.1596 22.4816 35.2284L8.83008 19.3016C7.71807 18.0042 8.63988 16 10.3486 16H37.6517C39.3604 16 40.2822 18.0042 39.1702 19.3016L25.5187 35.2284Z"></path>
+                      </svg>
+                    </div>
+                    <div x-show="selectDay" x-cloak class="absolute left-0 w-full bg-white rounded-sm top-12 drop-shadow-lg z-10">
+                      <ul class="overflow-y-auto max-h-48">
+                        <template x-for="d in days" :key="d">
+                          <li
+                            @click.stop="day = d; selectDay = false"
+                            class="px-3 py-1.5 cursor-pointer hover:bg-neutral-100"
+                            x-text="d"
+                          ></li>
+                        </template>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div @click.outside="selectYear = false" class="relative">
+                  <div @click="selectYear = !selectYear" class="flex items-center justify-between px-3 rounded-sm cursor-pointer h-11 bg-neutral-100">
+                    <p class="select-none"
+                      :class="year ? 'text-black' : 'text-neutral-400'"
+                      x-text="year || 'Year'"
+                    ></p>
+                    <div x-bind:class="selectYear ? 'rotate-180' : 'rotate-0' " class="w-4 h-4 transition-transform duration-300">
+                      <svg viewBox="0 0 48 48">
+                        <path d="M25.5187 35.2284C24.7205 36.1596 23.2798 36.1596 22.4816 35.2284L8.83008 19.3016C7.71807 18.0042 8.63988 16 10.3486 16H37.6517C39.3604 16 40.2822 18.0042 39.1702 19.3016L25.5187 35.2284Z"></path>
+                      </svg>
+                    </div>
+                    <div x-show="selectYear" x-cloak class="absolute left-0 w-full bg-white rounded-sm top-12 drop-shadow-lg z-10">
+                      <ul class="overflow-y-auto max-h-68">
+                        <template x-for="y in years" :key="y">
+                          <li
+                            @click.stop="year = y; selectYear = false"
+                            class="px-3 py-1.5 cursor-pointer hover:bg-neutral-100"
+                            x-text="y"
+                          ></li>
+                        </template>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+            </birthday-selector>
+            <input type="hidden" name="birthday" :value="birthday">
+
+            <p class="mb-4 text-sm text-neutral-400">Your birthday won't be shown publicly.</p>
+
+            <p class="mb-1 text-sm font-medium">Email</p>
+            <div class="flex flex-col gap-2 mb-2">
+                <input x-model="email" name="email" type="text" placeholder="Email" value="" class="input-field" />
+                
+                {% if form.email.errors %}
+                  {{ form.email.errors }}
+                {% endif %}
+
+                <password-one x-data="{ password_show: false }" class="relative grid w-full">
+                  <input x-model="password1" name="password1" x-bind:type="password_show ? 'text' : 'password' " placeholder="Password" value="" class="input-field" />
+                  {% if form.password1.errors %}
+                    {{ form.password1.errors }}
+                  {% endif %}
+                  <a @click="password_show = !password_show" type="button" class="absolute top-3 right-3.5 h-5 w-5 cursor-pointer fill-neutral-500">
+                    <svg x-show="!password_show" viewBox="0 0 48 48">
+                      <path d="M38.88 41.7a1 1 0 0 0 1.41 0l1.42-1.4a1 1 0 0 0 0-1.42l-3.86-3.86a24.57 24.57 0 0 0 6.27-9.69 1 1 0 0 0 0-.66C41 15.8 32.66 9 23 9c-3.27 0-6.35.73-9.12 2.05L9.12 6.29a1 1 0 0 0-1.41 0L6.29 7.71a1 1 0 0 0 0 1.41l32.59 32.59Zm-22-27.66A17.8 17.8 0 0 1 23 13c12.75 0 17 12 17 12s-1.38 3.9-4.93 7.25l-4.54-4.55A7.99 7.99 0 0 0 23 17c-.95 0-1.86.16-2.7.47l-3.43-3.43ZM1.87 24.67a24.64 24.64 0 0 1 5.8-9.23l2.77 2.78C7.25 21.46 6 25 6 25s4.25 12 17 12a18 18 0 0 0 5.42-.8l3.05 3.05A21.2 21.2 0 0 1 23 41c-9.83 0-17.93-6.63-21.13-15.67a1 1 0 0 1 0-.66Z"></path>
+                      <path d="M15 25c0-.68.08-1.35.24-1.98l9.74 9.73A8.02 8.02 0 0 1 15 25Z"></path>
+                    </svg>
+                    <svg x-show="password_show" x-cloak viewBox="0 0 48 48" >
+                        <path d="M41.4 23.71a.9.9 0 0 1 0 .58c-.63 1.92-2.2 4.89-4.82 7.51A17.35 17.35 0 0 1 24 37.11c-5.42 0-9.55-2.28-12.58-5.3a20.44 20.44 0 0 1-4.82-7.52.9.9 0 0 1 0-.58c.63-1.92 2.2-4.89 4.82-7.51A17.35 17.35 0 0 1 24 10.89c5.42 0 9.55 2.28 12.58 5.3a20.44 20.44 0 0 1 4.82 7.52ZM24 41c13.83 0 20.82-11.7 21.96-16.81a.85.85 0 0 0 0-.38C44.82 18.71 37.83 7 24 7S3.18 18.7 2.04 23.81a.85.85 0 0 0 0 .38C3.18 29.29 10.17 41 24 41Z"></path>
+                        <path d="M24 27.21a3.21 3.21 0 1 1 0-6.42 3.21 3.21 0 0 1 0 6.42Zm0 4.29a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z"></path>
+                    </svg>
+                  </a>
+                </password-one>
+                <password-two x-data="{ password_show: false }" class="relative grid w-full">
+                  <input x-model="password2" name="password2" x-bind:type="password_show ? 'text' : 'password' " placeholder="Password (again)" value="" class="input-field" />
+                  {% if form.password2.errors %}
+                    {{ form.password2.errors }}
+                  {% endif %}
+                  <a @click="password_show = !password_show" type="button" class="absolute top-3 right-3.5 h-5 w-5 cursor-pointer fill-neutral-500">
+                    <svg x-show="!password_show" viewBox="0 0 48 48">
+                      <path d="M38.88 41.7a1 1 0 0 0 1.41 0l1.42-1.4a1 1 0 0 0 0-1.42l-3.86-3.86a24.57 24.57 0 0 0 6.27-9.69 1 1 0 0 0 0-.66C41 15.8 32.66 9 23 9c-3.27 0-6.35.73-9.12 2.05L9.12 6.29a1 1 0 0 0-1.41 0L6.29 7.71a1 1 0 0 0 0 1.41l32.59 32.59Zm-22-27.66A17.8 17.8 0 0 1 23 13c12.75 0 17 12 17 12s-1.38 3.9-4.93 7.25l-4.54-4.55A7.99 7.99 0 0 0 23 17c-.95 0-1.86.16-2.7.47l-3.43-3.43ZM1.87 24.67a24.64 24.64 0 0 1 5.8-9.23l2.77 2.78C7.25 21.46 6 25 6 25s4.25 12 17 12a18 18 0 0 0 5.42-.8l3.05 3.05A21.2 21.2 0 0 1 23 41c-9.83 0-17.93-6.63-21.13-15.67a1 1 0 0 1 0-.66Z"></path>
+                      <path d="M15 25c0-.68.08-1.35.24-1.98l9.74 9.73A8.02 8.02 0 0 1 15 25Z"></path>
+                    </svg>
+                    <svg x-show="password_show" x-cloak viewBox="0 0 48 48" >
+                        <path d="M41.4 23.71a.9.9 0 0 1 0 .58c-.63 1.92-2.2 4.89-4.82 7.51A17.35 17.35 0 0 1 24 37.11c-5.42 0-9.55-2.28-12.58-5.3a20.44 20.44 0 0 1-4.82-7.52.9.9 0 0 1 0-.58c.63-1.92 2.2-4.89 4.82-7.51A17.35 17.35 0 0 1 24 10.89c5.42 0 9.55 2.28 12.58 5.3a20.44 20.44 0 0 1 4.82 7.52ZM24 41c13.83 0 20.82-11.7 21.96-16.81a.85.85 0 0 0 0-.38C44.82 18.71 37.83 7 24 7S3.18 18.7 2.04 23.81a.85.85 0 0 0 0 .38C3.18 29.29 10.17 41 24 41Z"></path>
+                        <path d="M24 27.21a3.21 3.21 0 1 1 0-6.42 3.21 3.21 0 0 1 0 6.42Zm0 4.29a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z"></path>
+                    </svg>
+                  </a>
+                </password-two>
+
+                <verification-code class="flex">
+                  <input x-model="code" name="code" type="text" placeholder="Enter 6-digit code" value="" class="input-field !w-2/3 !rounded-none !rounded-l-sm" />
+                  <button type="button" 
+                          hx-get="{% url 'verification_code' %}"
+                          hx-include="input[name='email']"
+                          hx-target="#code-message"
+                          hx-swap="innerHTML"
+                          class="input-field !w-1/3 text-center medium-font select-none text-neutral-400 !rounded-none !rounded-r-sm"
+                          x-bind:class="email ? 'cursor-pointer !bg-neutral-200 hover:!bg-neutral-300 !text-neutral-500' : '!cursor-not-allowed'">
+                    Send code
+                  </button>
+                </verification-code>
+                <div id="code-message" class="pb-3 text-sm"></div>
+                {% if form.code.errors %}
+                    {{ form.code.errors }}
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <p class="mb-1 text-sm font-medium">Create username</p>
+                <input x-model="username" name="username" type="text" placeholder="Username" class="input-field"></input>
+                {% if form.username.errors %}
+                  {{ form.username.errors }}
+                {% endif %}
+            </div>
+            
+            <div class="grid grid-cols-[auto_1fr] gap-2 mb-6">
+                <input type="checkbox" class="size-5.5 mt-0.5 checked:accent-rose-500 cursor-pointer">
+                <p class="text-xs leading-4 text-neutral-600">Get trending content, newsletters, promotions, recommendations, and account updates sent to your email</p>
+            </div>
+            
+            <button x-bind:type="buttonActive ? 'submit' : 'button' "
+                    x-bind:class="{'button-active' : buttonActive }" 
+                    class="button">
+                    Sign Up
+            </button>
+    </form>
+  </div>
+  <div class="flex justify-center">
+    <a href="{% url 'index' %}"  class="flex items-center">
+      <div class="h-3.5 w-3.5">
+        <svg viewBox="0 0 48 48">
+          <path d="M4.58579 22.5858L20.8787 6.29289C21.2692 5.90237 21.9024 5.90237 22.2929 6.29289L23.7071 7.70711C24.0976 8.09763 24.0976 8.7308 23.7071 9.12132L8.82843 24L23.7071 38.8787C24.0976 39.2692 24.0976 39.9024 23.7071 40.2929L22.2929 41.7071C21.9024 42.0976 21.2692 42.0976 20.8787 41.7071L4.58579 25.4142C3.80474 24.6332 3.80474 23.3668 4.58579 22.5858Z"></path>
+        </svg>
+      </div>
+      <p class="text-sm font-medium">Go back</p>
+    </a>
+  </div>
+</div>
+      
+
+<script>
+
+function signUpComponent(){
+  const months = Array.from({ length: 12 }, (_, i) =>
+    new Date(0, i).toLocaleString('en', { month: 'long' })
+  );
+
+  return {
+          selectMonth: false,
+          selectDay: false,
+          selectYear: false,
+          month: '',
+          day: '',
+          year: '',
+          email: '', password1: '', password2: '', code: '', username: '',
+          password_show: false,
+          months: months,
+          days: Array.from({ length: 31 }, (_, i) => i + 1),
+          years: Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i),
+
+          get birthday () {
+            const monthsMap = months.reduce((accumulator, month, index) => {
+              accumulator [month] = String (index + 1).padStart(2, '0');
+              return accumulator; I
+            }, {});
+            return `${this.year}-${monthsMap[this.month]}-${String(this.day).padStart(2, '0')}`;
+          },
+
+          get buttonActive(){
+            return this.month && this.day && this.year 
+            && this.email && this.password1 && this.password2 && this.code && this.username
+          }
+
+  }
+}
+
+</script>
+
+{% endblock %}
+
+{% block terms %}
+{% include 'includes/account_terms.html' %}
+{% endblock %}
+
+{% block has_account %}
+{% include 'includes/account_login.html' %}
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'layouts/account-layout.html' %}
+{% load static %}
+
+{% block title %}
+  log in -
+{% endblock title %}
+
+{% block attrs %}
+{% endblock %}
+
+
+{% block content %}
+<div class="mx-auto max-w-[360px]">
+  <h1 class="pb-4 text-center">Log in</h1>
+
+  <div class="mb-10">
+    <form method="post"
+          action="{% url 'account_login' %}"
+          x-data="signinComponent()">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+              {{ form.non_field_errors }}
+            {% endif %}
+              
+            <p class="mb-1 text-sm font-medium">Email or username</p>
+            <div class="flex flex-col gap-2 mb-2">
+                <input x-model="email" name="login" type="text" placeholder="Email or username" value="" class="input-field" />
+                <div class="relative grid w-full">
+                  <input x-model="password" name="password" x-bind:type="password_show ? 'text' : 'password' " placeholder="password" value="" class="input-field" />
+                  <button @click="password_show = !password_show" type="button" class="absolute top-3 right-3.5 h-5 w-5 cursor-pointer fill-neutral-500">
+                    <svg x-show="!password_show" viewBox="0 0 48 48">
+                      <path d="M38.88 41.7a1 1 0 0 0 1.41 0l1.42-1.4a1 1 0 0 0 0-1.42l-3.86-3.86a24.57 24.57 0 0 0 6.27-9.69 1 1 0 0 0 0-.66C41 15.8 32.66 9 23 9c-3.27 0-6.35.73-9.12 2.05L9.12 6.29a1 1 0 0 0-1.41 0L6.29 7.71a1 1 0 0 0 0 1.41l32.59 32.59Zm-22-27.66A17.8 17.8 0 0 1 23 13c12.75 0 17 12 17 12s-1.38 3.9-4.93 7.25l-4.54-4.55A7.99 7.99 0 0 0 23 17c-.95 0-1.86.16-2.7.47l-3.43-3.43ZM1.87 24.67a24.64 24.64 0 0 1 5.8-9.23l2.77 2.78C7.25 21.46 6 25 6 25s4.25 12 17 12a18 18 0 0 0 5.42-.8l3.05 3.05A21.2 21.2 0 0 1 23 41c-9.83 0-17.93-6.63-21.13-15.67a1 1 0 0 1 0-.66Z"></path>
+                      <path d="M15 25c0-.68.08-1.35.24-1.98l9.74 9.73A8.02 8.02 0 0 1 15 25Z"></path>
+                    </svg>
+                    <svg x-show="password_show" x-cloak viewBox="0 0 48 48" >
+                        <path d="M41.4 23.71a.9.9 0 0 1 0 .58c-.63 1.92-2.2 4.89-4.82 7.51A17.35 17.35 0 0 1 24 37.11c-5.42 0-9.55-2.28-12.58-5.3a20.44 20.44 0 0 1-4.82-7.52.9.9 0 0 1 0-.58c.63-1.92 2.2-4.89 4.82-7.51A17.35 17.35 0 0 1 24 10.89c5.42 0 9.55 2.28 12.58 5.3a20.44 20.44 0 0 1 4.82 7.52ZM24 41c13.83 0 20.82-11.7 21.96-16.81a.85.85 0 0 0 0-.38C44.82 18.71 37.83 7 24 7S3.18 18.7 2.04 23.81a.85.85 0 0 0 0 .38C3.18 29.29 10.17 41 24 41Z"></path>
+                        <path d="M24 27.21a3.21 3.21 0 1 1 0-6.42 3.21 3.21 0 0 1 0 6.42Zm0 4.29a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z"></path>
+                    </svg>
+                  </button>
+                </div>
+            </div>
+            <a href="{% url 'account_reset_password' %}" class="block mb-6 text-xs font-medium text-neutral-500 hover:text-black hover:underline">
+              Forgot Password?
+            </a>
+            <button x-bind:type="buttonActive ? 'submit' : 'button' "
+                    x-bind:class="{'button-active' : buttonActive }" 
+                    class="button">
+                log in
+            </button>
+    </form>
+  </div>
+  <div class="flex justify-center">
+    <a href="{% url 'index' %}" class="flex items-center">
+        <div class="w-3.5 h-3.5 ">
+            <svg viewBox="0 0 48 48">
+                <path d="M4.58579 22.5858L20.8787 6.29289C21.2692 5.90237 21.9024 5.90237 22.2929 6.29289L23.7071 7.70711C24.0976 8.09763 24.0976 8.7308 23.7071 9.12132L8.82843 24L23.7071 38.8787C24.0976 39.2692 24.0976 39.9024 23.7071 40.2929L22.2929 41.7071C21.9024 42.0976 21.2692 42.0976 20.8787 41.7071L4.58579 25.4142C3.80474 24.6332 3.80474 23.3668 4.58579 22.5858Z"></path>
+            </svg>
+        </div>
+        <p class="text-sm font-medium">Go back</p>
+    </a>
+  </div>
+</div>
+
+
+<script>
+
+function signinComponent(){
+  return { email: '', 
+           password: '',
+           password_show: false,
+           get buttonActive(){
+               return this.email && this.password
+           }
+  }
+}
+
+</script>
+
+{% endblock %}
+
+{% block has_account %}
+{% include 'includes/account_signup.html' %}
+{% endblock %}

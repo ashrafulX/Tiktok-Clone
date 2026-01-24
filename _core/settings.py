@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     
     # Third party apps
     "django_htmx",
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +61,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_htmx.middleware.HtmxMiddleware",
+    "allauth.account.middleware.AccountMiddleware"
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 ROOT_URLCONF = '_core.urls'
@@ -148,3 +156,10 @@ if DEBUG:
     ]
     
 AUTH_USER_MODEL= '_users.CustomUser'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+ACCOUNT_FORMS = {'signup': '_users.forms.CustomSignupForm'}

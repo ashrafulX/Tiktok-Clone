@@ -1,9 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from .forms import PostForm
 from .models import Post
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.core.validators import validate_email
+import secrets
+import threading
+from django.core.cache import cache
+from django.core.mail import EmailMessage
 
+@login_required
 def home(request):
     posts = Post.objects.order_by('-created_at')
     
@@ -27,6 +34,7 @@ def home(request):
         return render(request, '_posts/partials/_home.html', context)
     return render(request, '_posts/home.html', context)
 
+@login_required
 def explore(request):
     posts = Post.objects.order_by('-created_at')
     context = {
@@ -58,7 +66,6 @@ def upload(request):
         return render(request, '_posts/partials/_upload.html', context)
     return render(request, '_posts/upload.html', context)
 
-
 def post_page_view(request, pk=None):
     
     if not pk:
@@ -83,3 +90,29 @@ def post_page_view(request, pk=None):
     if request.htmx:
         return render(request, '_posts/partials/_postpage.html', context)
     return render(request, '_posts/postpage.html', context)
+
+def verification_code(request):
+    email = request.GET.get("email")
+    if not email:
+        return HttpResponse('<p class="error">Email is required.</p>')
+    
+    try:
+        validate_email(email)
+    except:
+        return HttpResponse('<p class="error">Invalid email address provided.</p>')
+    
+    code = str(secrets.randbelow(900000) + 100000)
+    cache.set(f"verification_code_{email}", code, timeout=300)
+    subject = "Your TikTok Verification Code"
+    message = f"Use this code to sign up: {code}. It expires in 5 minutes."
+    sender = "no-reply@tiktok-clone.com"
+    recipients = [email]
+
+    email_thread = threading.Thread(target=send_mail_async, args=(subject, message, sender, recipients))
+    email_thread.start()
+    
+    return HttpResponse('<p class="success">Verification code sent to your email!</p>')
+
+def send_mail_async(subject, message, sender, recipients):
+    email = EmailMessage(subject, message, sender, recipients)
+    email.send()
