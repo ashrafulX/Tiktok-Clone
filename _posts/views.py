@@ -9,6 +9,11 @@ import secrets
 import threading
 from django.core.cache import cache
 from django.core.mail import EmailMessage
+from allauth.account.models import EmailAddress
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 @login_required
 def home(request):
@@ -100,6 +105,11 @@ def verification_code(request):
         validate_email(email)
     except:
         return HttpResponse('<p class="error">Invalid email address provided.</p>')
+    
+    
+    if EmailAddress.objects.filter(email__iexact=email).exists() or \
+       User.objects.filter(email__iexact=email).exists():
+        return HttpResponse('<p class="error">This email is already in use.</p>')
     
     code = str(secrets.randbelow(900000) + 100000)
     cache.set(f"verification_code_{email}", code, timeout=300)

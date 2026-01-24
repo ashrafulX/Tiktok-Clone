@@ -2,10 +2,22 @@ from allauth.account.forms import SignupForm
 from django import forms
 from django.core.cache import cache
 from allauth.account.models import EmailAddress
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class CustomSignupForm(SignupForm):
     birthday = forms.DateField()
     code = forms.CharField()
+    
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+
+        if EmailAddress.objects.filter(email__iexact=email).exists() or \
+           User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("This email is already in use.")
+
+        return email
     
     def clean_code(self):
         code = self.cleaned_data.get('code', '').strip()

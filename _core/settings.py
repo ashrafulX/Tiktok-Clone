@@ -163,3 +163,5 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 ACCOUNT_FORMS = {'signup': '_users.forms.CustomSignupForm'}
+
+ACCOUNT_UNIQUE_EMAIL = True
