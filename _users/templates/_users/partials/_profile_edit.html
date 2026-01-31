@@ -1,0 +1,81 @@
+<div class="pb-4 border-b border-neutral-200">
+    <p class="font-medium text-2xl">
+        Edit profile
+    </p>
+</div>
+
+<form action="{% url 'profile_edit' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="flex border-b ■ border-neutral-200 py-4">
+        <div class="w-30 font-medium text-md">Profile photo</div>
+        <div class="grow flex justify-center">
+            <div x-data class="relative inline-block">
+                <img id="avatar" class="h-32 w-32 rounded-full object-cover" src="{{ user.avatar }}" />
+                <button type="button"
+                        @click="$refs.avatarUpload.click()"
+                        class="size-10 absolute bottom-0 right-0 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition duration-300 border-2 border-neutral-300">
+                        <div class="size-6">
+                            <svg viewBox="0 0 48 48" fill="currentColor" >
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M26.5858 5.08579C27.3479 4.32371 28.5767 4.30253 29.3646 5.03789L36.8646 12.0379C37.2612 12.408 37.4904 12.9232 37.4997 13.4655C37.5091 14.0078 37.2977 14.5307 36.9142 14.9142L16.9142 34.9142C16.5391 35.2893 16.0304 35.5 15.5 35.5H8.5C7.39543 35.5 6.5 34.6046 6.5 33.5V26C6.5 25.4696 6.71071 24.9609 7.08579 24.5858L26.5858 5.08579ZM28.0479 9.2805L10.5 26.8284V31.5H14.6716L32.622 13.5496L28.0479 9.2805Z"></path>
+                                <path d="M7 41C7 40.4477 7.44772 40 8 40H41C41.5523 40 42 40.4477 42 41V43C42 43.5523 41.5523 44 41 44H8C7.44772 44 7 43.5523 7 43V41Z"></path>
+                            </svg>
+                        </div>
+                </button>
+                <input id="avatar_upload" type="file" name="image" accept="image/*" class="hidden" x-ref="avatarUpload">
+            </div>
+        </div>
+        <div class="w-0 sm: w-27"></div>
+    </div> 
+
+    <div class="flex items-center border-b border-neutral-200 py-4">
+        <div class="w-30 font-medium text-md">Username</div>
+        <div class="grow">{{ form.username }}</div>
+        <div class="w-0 sm: w-27"></div>
+    </div>
+
+    <div class="flex items-center border-b border-neutral-200 py-4">
+        <div class="w-30 font-medium text-md">Name</div>
+        <div class="grow">{{ form.name }}</div>
+        <div class="w-0 sm: w-27"></div>
+    </div> 
+
+    <div class="flex border-b border-neutral-200 py-4">
+        <div class="w-30 font-medium text-md shrink-0">Bio</div>
+        <div class="grow">{{ form.bio }}</div>
+        <div class="w-0 sm: w-27 shrink-0"></div>
+    </div>
+
+    <div class="flex items-center border-b border-neutral-200 py-4">
+        <div class="w-30 font-medium text-md">Website</div>
+        <div class="grow">{{ form.website }}</div>
+        <div class="w-0 sm: w-27"></div>
+    </div> 
+
+    <div class="flex pt-4">
+        <div class="flex gap-4 ml-auto">
+            <button type="button"
+                    class="bg-white hover:bg-neutral-100 border border-neutral-300 rounded-md px-7 py-2"
+                    @click="modalBox = false; document.getElementById('modalbox-content').innerHTML = '';">
+                Cancel
+            </button>
+            <button type="submit"
+                    class="rounded-md px-7 py-2 text-white bg-rose-500 hover:bg-rose-600">
+                Save
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    // Update the avatar
+    const fileInput = document.getElementById('avatar_upload');
+    const image = document.getElementById('avatar');
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file && file.type. includes('image')) {
+            const url = URL.createObjectURL(file);
+            image.src = url;
+        }
+    });
+</script>

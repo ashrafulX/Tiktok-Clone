@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from .forms import ProfileForm
 
 User = get_user_model()
 
@@ -9,7 +10,9 @@ def index_view(request):
 
 
 @login_required
-def profile_view(request, username):
+def profile_view(request, username=None):
+    if not username:
+        return redirect('profile', request.user.username)
     
     profile_user = get_object_or_404(User, username=username)
     
@@ -32,3 +35,21 @@ def profile_view(request, username):
     if request.htmx:
         return render(request, '_users/partials/_profile.html', context)
     return render(request, '_users/profile.html', context)
+
+@login_required
+def profile_edit(request):
+    form = ProfileForm(instance=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', request.user.username)
+        
+    context = {
+        'form': form
+    }
+    
+    if request.htmx:
+        return render(request, '_users/partials/_profile_edit.html', context=context)
+    return redirect('profile', request.user.username)
