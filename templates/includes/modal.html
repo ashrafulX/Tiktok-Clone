@@ -6,29 +6,29 @@
     @keydown.escape.window="modalPage= false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);">
         <button id="close-button"
                 @click="modalPage = false; document.getElementById('modalpage-content').innerHTML = ''; window.history.replaceState({}, '', returnUrl);" 
-                class="z-100 absolute flex items-center justify-center transition duration-300 rounded-full top-5 left-5 size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
+                class="absolute flex items-center justify-center transition duration-300 rounded-full z-100 top-5 left-5 size-10 bg-neutral-700/70 hover:bg-neutral-800/70">
             <div class="size-6 fill-white">
                 <svg viewBox="0 0 48 48">
                     <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
                 </svg>
             </div>
         </button>
-        <div id="modalpage-content" class="h-full w-full bg-white"></div>
+        <div id="modalpage-content" class="w-full h-full bg-white"></div>
 </div>
 
 
 <div x-show="modalBox" x-cloak
-    class="fixed inset-0 z-100 bg-black/50 flex items-center justify-center p-4" 
+    class="fixed inset-0 flex items-center justify-center p-4 z-100 bg-black/50" 
     @keydown.escape.window="modalBox = false; document.getElementById('modalbox-content').innerHTML = '';"
     x-transition:enter="transition-opacity duration-200"
     x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100">
 
     <div @click.away="modalBox = false; document.getElementById('modalbox-content').innerHTML = '';"
-        class="scale-in p-6 bg-white rounded-lg shadow-xl max-w-2xl w-full min-h-40 relative dark:text-black">
+        class="relative w-full max-w-2xl p-6 bg-white rounded-lg shadow-xl scale-in min-h-40 dark:text-black">
         <button class="absolute right-8 top-8"
                 @click="modalBox = false; document.getElementById('modalbox-content').innerHTML = '';">
-            <div class="size-6">
+            <div class="size-6 fill-black">
                 <svg viewBox="0 0 48 48">
                     <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
                 </svg>

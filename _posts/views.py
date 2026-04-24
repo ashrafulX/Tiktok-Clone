@@ -106,10 +106,10 @@ def verification_code(request):
     except:
         return HttpResponse('<p class="error">Invalid email address provided.</p>')
     
-    
-    if EmailAddress.objects.filter(email__iexact=email).exists() or \
-       User.objects.filter(email__iexact=email).exists():
-        return HttpResponse('<p class="error">This email is already in use.</p>')
+    if not request.user.is_authenticated:
+        if EmailAddress.objects.filter(email__iexact=email).exists() or \
+        User.objects.filter(email__iexact=email).exists():
+            return HttpResponse('<p class="error">This email is already in use.</p>')
     
     code = str(secrets.randbelow(900000) + 100000)
     cache.set(f"verification_code_{email}", code, timeout=300)

@@ -1,0 +1,112 @@
+<div class="pb-4 border-b border-neutral-200">
+    <p class="font-medium text-2xl">
+        Settings
+    </p>
+</div>
+
+<div id="email_block" class="md:flex gap-2 pt-4">
+  <div class="w-32 text-md font-medium">Email address</div>
+  <div class="grow">
+    <span>{{ user.email }}</span>
+    
+    {% if form.email.errors %}
+      {{ form.email.errors }}
+    {% endif %}
+      
+  </div>
+  <div class="ml-auto w-18 md:!w-27">
+    <button hx-get="{% url 'settings' %}?email=true"
+            hx-target="#email_block"
+            hx-swap="innerHTML"
+            class="font-medium text-blue-600 hover:underline">
+      Change
+    </button>
+  </div>
+</div>
+
+<div id="verify_block" class="md:flex gap-2 pt-2 pb-4 border-b border-neutral-200">
+  <div class="w-32 text-md font-medium"></div>
+  <div class="grow">
+    
+    {% if user.emailaddress_set.first.verified %}
+      <span class="text-green-500">Verified</span>
+    {% else %}
+      <span class="text-amber-500">Not verified</span>
+    {% endif %}
+      
+  </div>
+  <div class="ml-auto w-18 md:!w-27">
+    {% if not user.emailaddress_set.first.verified %}
+    <input type="hidden" name="email" value="{{ user.email }}">
+      <button hx-get="{% url 'verification_code' %}"
+              hx-include="input[name='email']"
+              hx-target="#verify-trigger"
+              hx-swap="none"
+              class="font-medium text-blue-600 hover:underline">
+        Verify
+      </button>
+      <div  id="verify-trigger" 
+            hx-trigger="htmx:afterSwap"
+            hx-get="{% url 'settings' %}?verification=true"
+            hx-target="#verify_block"
+            hx-swap="innerHTML"
+            class="hidden"></div>
+    {% endif %}
+  </div>
+</div>
+
+
+<div id="birth_block" class="md:flex gap-2 py-4 border-b border-neutral-200">
+  <div class="w-32 text-md font-medium">Birthday</div>
+  <div class="grow">
+    <span>{{ user.birthday }}</span>
+  </div>
+  <div class="ml-auto w-18 md:!w-27">
+    <button hx-get="{% url 'settings' %}?birthday=true"
+            hx-target="#birth_block"
+            hx-swap="innerHTML"
+            class="font-medium text-blue-600 hover:underline">
+        Change
+    </button>
+  </div>
+</div>
+
+<div id="notification_block" class="md:flex gap-2 py-4 border-b border-neutral-200">
+  <div class="w-32 text-md font-medium">Notification</div>
+
+  <div class="grow">
+    <span>Enable or disable email notifications</span>
+  </div>
+
+  <div class="ml-auto w-18 md:!w-27">
+    <form hx-post="{% url 'settings' %}"
+          hx-trigger="change"
+          hx-swap="none">
+          {% csrf_token %}
+      <label class="block w-15 h-8 relative cursor-pointer">
+        <input type="hidden" name="notifications" value="off">
+        <input type="checkbox" name="notifications" class="peer sr-only" 
+        {% if user.notifications %}
+          checked
+        {% endif %}
+          />
+
+        <span class="absolute inset-0 rounded-full bg-neutral-200 dark:bg-neutral-700 peer-checked:bg-green-500 transition-colors duration-200"></span>
+
+        <span class="absolute left-1 top-1 w-6 h-6 rounded-full bg-white transition-all duration-200 peer-checked:left-8"></span>
+      </label>
+    </form>
+  </div>
+</div>
+
+<div id="account_delete_block" class="md:flex gap-2 py-4">
+  <div class="w-32 text-md font-medium">Account</div>
+
+  <div class="grow">
+    <span>Once deleted, account is gone. Forever.</span>
+  </div>
+
+  <div class="ml-auto w-18 md:!w-27">
+    <a href="" class="font-medium text-red-600 hover:underline">Delete</a>
+  </div>
+</div>

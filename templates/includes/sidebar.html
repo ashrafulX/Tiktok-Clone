@@ -86,9 +86,9 @@
             </button>
             </li>
             <li>
-            <button class="button-rounded dark:hover:!bg-neutral-800">
-                <span class="font-medium">Settings</span>
-            </button>
+                <a href="{% url 'settings' %}" class="button-rounded dark:hover:!bg-neutral-800">
+                    <span class="font-medium">Settings</span>
+                </a>
             </li>
             <li>
                 <form method="post" action="{% url 'account_logout' %}">
@@ -113,7 +113,10 @@
         </div>
         <ul class="flex flex-col gap-1">
             <li>
-            <button @click="darkMode = true" class="button-rounded dark:hover:!bg-neutral-800">
+            <button @click="darkMode = true" 
+                    hx-get="{% url 'settings' %}?darkmode=true"
+                    hx-swap="none"
+                    class="button-rounded dark:hover:!bg-neutral-800">
                 <span class="font-medium">Dark mode</span>
                 <div x-show="darkMode" class="size-3.5">
                 <svg viewBox="0 0 48 48">
@@ -123,7 +126,10 @@
             </button>
             </li>
             <li>
-            <button @click="darkMode = false" class="button-rounded dark:hover:!bg-neutral-800">
+            <button @click="darkMode = false" 
+                    hx-get="{% url 'settings' %}?darkmode=false"
+                    hx-swap="none"
+                    class="button-rounded dark:hover:!bg-neutral-800">
                 <span class="font-medium">Light mode</span>
                 <div x-show="!darkMode" class="size-3.5">
                 <svg viewBox="0 0 48 48">

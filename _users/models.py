@@ -9,6 +9,8 @@ class CustomUser(AbstractUser):
     bio = models.TextField(blank=True, null=True)
     website = models.CharField(max_length=150, null=True, blank=True)
     birthday = models.DateField(blank=True, null=True)
+    notifications = models.BooleanField(default=True)
+    darkmode = models.BooleanField(default=False)
     
     def __str__(self):
         return self.username
