@@ -1,0 +1,35 @@
+<div class="pb-4 border-b border-neutral-200">
+  <p class="text-2xl font-medium">Edit Post</p>
+</div>
+
+<div class="pt-4 pb-8 border-b border-neutral-200">
+  <form method="POST" action="{% url 'post_edit' post.uuid %}">
+    {% csrf_token %}
+    <div class="py-2">
+      <label class="block pb-1 font-bold text-neutral-600">Caption</label>
+      {{ form.body }}
+    </div>
+    <div class="py-2">
+      <label class="block pb-1 font-bold text-neutral-600">HashTags</label>
+      {{ form.tags }}
+    </div>
+    <div class="flex justify-end mt-2">
+      <button
+        type="submit"
+        class="py-2 font-medium text-white rounded-md bg-rose-500 hover:bg-rose-600 px-7"
+      >
+        Change
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="pt-8 pb-4 text-center">
+   <form method="POST" action="{% url 'post_edit' post.uuid %}">
+        {% csrf_token %}
+        <input type="hidden" name="delete" value="1">
+        <button type="submit" class="font-medium text-red-600 hover:underline">
+            Delete Post
+        </button>
+    </form>
+</div>

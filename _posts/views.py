@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .forms import PostForm
+from .forms import PostForm, PostEditForm
 from .models import Post
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -126,3 +126,33 @@ def verification_code(request):
 def send_mail_async(subject, message, sender, recipients):
     email = EmailMessage(subject, message, sender, recipients)
     email.send()
+
+@login_required
+def post_edit(request, pk):
+    post = get_object_or_404(Post, uuid=pk)
+    form = PostEditForm(instance=post)
+    
+    if post.author != request.user:
+        return redirect('home')
+    
+    if request.method == "POST" and "delete" in request.POST:
+        post.delete()
+        return redirect('profile', request.user.username)
+
+    # EDIT
+    if request.method == "POST":
+        form = PostEditForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_page', pk)
+    else:
+        form = PostEditForm(instance=post)
+        
+    context = {
+        'post': post,
+        'form': form
+    }
+    
+    if request.htmx:
+        return render(request, '_posts/partials/_post_edit.html', context)
+    return redirect('post_page', pk)
