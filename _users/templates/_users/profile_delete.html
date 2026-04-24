@@ -1,0 +1,28 @@
+{% extends 'layouts/main-layout.html' %}
+
+{% block title %}
+    Delete Account - 
+{% endblock title %}
+  
+
+{% block content %}
+
+<div class="flex justify-center px-12 ml-18 lg:ml-60">
+    <div class="mt-48 text-center">
+        <h1>Delete Account</h1>
+        <p>Are you sure you want to delete your account?</p>
+        <form action="" method="POST" class="mt-5">
+            {% csrf_token %}
+            <button type="submit" class="py-4 font-bold text-white bg-red-600 rounded-md px-7">
+                Yes, I want to delete my account
+            </button>
+        </form>
+        <div class="mt-4">
+            <a href="{% url 'profile' user.username %}" class="font-medium text-neutral-400 hover:underline">
+                Cancel
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

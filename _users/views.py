@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, EmailForm, BirthdayForm
 from allauth.account.models import EmailAddress
@@ -123,3 +123,13 @@ def settings_view(request):
     if request.htmx:
         return render(request, '_users/partials/_settings.html', {'form':form})
     return render(request, '_users/settings.html', {'form':form})
+
+@login_required
+def delete_account(request):
+    user = request.user 
+    if request.method == "POST":
+        logout(request)
+        user.delete()
+        return redirect('home')
+        
+    return render(request, '_users/profile_delete.html')

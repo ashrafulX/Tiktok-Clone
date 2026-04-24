@@ -49,6 +49,8 @@
                     </article-ingo>
                 </div>
             </button>
+            
+            {% if post.author %}
             <a href="{% url 'profile' post.author.username %}" class="block my-3">
                 <div class="flex items-center gap-1">
                     <div class="flex items-center justify-center overflow-hidden rounded-full size-6">
@@ -59,6 +61,7 @@
                     </span>
                 </div>
             </a>
+            {% endif %}
         </article>
         {% endfor %}
     </div>

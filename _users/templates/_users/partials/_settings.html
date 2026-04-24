@@ -1,11 +1,11 @@
 <div class="pb-4 border-b border-neutral-200">
-    <p class="font-medium text-2xl">
+    <p class="text-2xl font-medium">
         Settings
     </p>
 </div>
 
-<div id="email_block" class="md:flex gap-2 pt-4">
-  <div class="w-32 text-md font-medium">Email address</div>
+<div id="email_block" class="gap-2 pt-4 md:flex">
+  <div class="w-32 font-medium text-md">Email address</div>
   <div class="grow">
     <span>{{ user.email }}</span>
     
@@ -24,8 +24,8 @@
   </div>
 </div>
 
-<div id="verify_block" class="md:flex gap-2 pt-2 pb-4 border-b border-neutral-200">
-  <div class="w-32 text-md font-medium"></div>
+<div id="verify_block" class="gap-2 pt-2 pb-4 border-b md:flex border-neutral-200">
+  <div class="w-32 font-medium text-md"></div>
   <div class="grow">
     
     {% if user.emailaddress_set.first.verified %}
@@ -56,8 +56,8 @@
 </div>
 
 
-<div id="birth_block" class="md:flex gap-2 py-4 border-b border-neutral-200">
-  <div class="w-32 text-md font-medium">Birthday</div>
+<div id="birth_block" class="gap-2 py-4 border-b md:flex border-neutral-200">
+  <div class="w-32 font-medium text-md">Birthday</div>
   <div class="grow">
     <span>{{ user.birthday }}</span>
   </div>
@@ -71,8 +71,8 @@
   </div>
 </div>
 
-<div id="notification_block" class="md:flex gap-2 py-4 border-b border-neutral-200">
-  <div class="w-32 text-md font-medium">Notification</div>
+<div id="notification_block" class="gap-2 py-4 border-b md:flex border-neutral-200">
+  <div class="w-32 font-medium text-md">Notification</div>
 
   <div class="grow">
     <span>Enable or disable email notifications</span>
@@ -83,30 +83,30 @@
           hx-trigger="change"
           hx-swap="none">
           {% csrf_token %}
-      <label class="block w-15 h-8 relative cursor-pointer">
+      <label class="relative block h-8 cursor-pointer w-15">
         <input type="hidden" name="notifications" value="off">
-        <input type="checkbox" name="notifications" class="peer sr-only" 
+        <input type="checkbox" name="notifications" class="sr-only peer" 
         {% if user.notifications %}
           checked
         {% endif %}
           />
 
-        <span class="absolute inset-0 rounded-full bg-neutral-200 dark:bg-neutral-700 peer-checked:bg-green-500 transition-colors duration-200"></span>
+        <span class="absolute inset-0 transition-colors duration-200 rounded-full bg-neutral-200 dark:bg-neutral-700 peer-checked:bg-green-500"></span>
 
-        <span class="absolute left-1 top-1 w-6 h-6 rounded-full bg-white transition-all duration-200 peer-checked:left-8"></span>
+        <span class="absolute w-6 h-6 transition-all duration-200 bg-white rounded-full left-1 top-1 peer-checked:left-8"></span>
       </label>
     </form>
   </div>
 </div>
 
-<div id="account_delete_block" class="md:flex gap-2 py-4">
-  <div class="w-32 text-md font-medium">Account</div>
+<div id="account_delete_block" class="gap-2 py-4 md:flex">
+  <div class="w-32 font-medium text-md">Account</div>
 
   <div class="grow">
     <span>Once deleted, account is gone. Forever.</span>
   </div>
 
   <div class="ml-auto w-18 md:!w-27">
-    <a href="" class="font-medium text-red-600 hover:underline">Delete</a>
+    <a href="{% url 'delete_account' %}" class="font-medium text-red-600 hover:underline">Delete</a>
   </div>
 </div>
