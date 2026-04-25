@@ -108,16 +108,9 @@
                         </div>
                         <div class="text-xs font-bold text-neutral-600 dark:text-neutral-400">2</div>
                     </button>
-                    <button id="bookmark" class="flex items-center gap-1">
-                        <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
-                            <div class="size-5">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M4 4.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15.13a1 1 0 0 1-1.555.831l-6.167-4.12a.5.5 0 0 0-.556 0l-6.167 4.12A1 1 0 0 1 4 19.63z"></path>                                                                                         
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="text-xs font-bold text-neutral-600 dark:text-neutral-400">8</div>
-                    </button>
+
+                    {% include '_posts/partials/_bookmark_postpage.html' %}
+                    
                     <button id="share" class="flex items-center gap-1 ml-auto">
                         <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
                             <div class="size-5">

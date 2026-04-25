@@ -1,7 +1,7 @@
 <button 
     hx-get="{% url 'like_post' post.uuid %}?postpage=true"
     hx-swap="outerHTML"
-    id="like" class="flex items-center gap-1">
+    class="flex items-center gap-1">
     <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
         <div class="size-5 {% if user in post.likes.all %} fill-rose-500{% endif %}">
             <svg viewBox="0 0 24 24">

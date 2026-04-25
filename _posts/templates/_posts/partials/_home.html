@@ -1,13 +1,13 @@
 {% load static %}
 
-<div id="scrollContainer" class="h-full px-18 snap-mandatory snap-y overflow-y-scroll hide-scrollbar">
+<div id="scrollContainer" class="h-full overflow-y-scroll px-18 snap-mandatory snap-y hide-scrollbar">
 
     
     {% include '_posts/partials/_posts.html' %}
 
     <scroll-bar class="fixed top-0 right-0 items-center hidden w-16 h-full md:flex">
             <div class="flex flex-col gap-4">
-              <button id="scrollUp" @click="scrollButton('up')" class="flex items-center justify-center rounded-full size-12 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 opacity-0 pointer-events-none">
+              <button id="scrollUp" @click="scrollButton('up')" class="flex items-center justify-center rounded-full opacity-0 pointer-events-none size-12 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700">
                 <div class="size-6">
                   <svg viewBox="0 0 48 48">
                       <path d="m24 20.24 13.17 13.17a1 1 0 0 0 1.42 0l2.82-2.82a1 1 0 0 0 0-1.42L25.06 12.82a1.5 1.5 0 0 0-2.12 0L6.59 29.17a1 1 0 0 0 0 1.42L9.4 33.4a1 1 0 0 0 1.42 0L24 20.24Z"></path>

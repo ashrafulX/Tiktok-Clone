@@ -12,6 +12,7 @@ class Post(models.Model):
         related_name='posts'
     )
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', through='LikedPost')
+    bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='bookmarkedposts', through='BookmarkedPost')
     image = models.ImageField(upload_to='posts/')
     body = models.CharField(max_length=80, null=True, blank=True)
     tags = models.CharField(max_length=80, null=True, blank=True)
@@ -24,6 +25,15 @@ class Post(models.Model):
         return str(self.uuid)
     
 class LikedPost(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('post', 'user')
+        
+class BookmarkedPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
