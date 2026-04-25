@@ -9,19 +9,19 @@
                 hx-target="#modalpage-content"
                 hx-swap="innerHTML"
                 hx-push-url="true"
-                class="absolute h-full w-full z-10">
+                class="absolute z-10 w-full h-full">
         </button>
         <img src="{{ post.image.url }}" alt="" class="object-cover aspect-[9/16] rounded-2xl">
         <article-info class="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
             <div class="absolute bottom-0 z-10 p-5 text-white">
             
             {% if post.author %}
-                <a href="{% url 'profile' post.author.username %}" class="hover:underline pointer-events-auto">{{ post.author }}</a>
+                <a href="{% url 'profile' post.author.username %}" class="pointer-events-auto hover:underline">{{ post.author }}</a>
             {% endif %}
             {% if post.tags %}
                 <div class="mt-1">
                 {% for tag in post.tags.split %}
-                    <a href="" class="hover:underline pointer-events-auto mr-2">{{ tag }}</a>
+                    <a href="" class="mr-2 pointer-events-auto hover:underline">{{ tag }}</a>
                 {% endfor %}
             </div>
             {% endif %}
@@ -44,16 +44,11 @@
                 </div>
             </button>
             {% endif %}
-            <button id="like" class="cursor-pointer">
-            <div class="button-article dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
-                <div class="size-6">
-                <svg viewBox="0 0 24 24">
-                    <path d="M7.5 2.25C10.5 2.25 12 4.25 12 4.25C12 4.25 13.5 2.25 16.5 2.25C20 2.25 22.5 4.99999 22.5 8.5C22.5 12.5 19.2311 16.0657 16.25 18.75C14.4095 20.4072 13 21.5 12 21.5C11 21.5 9.55051 20.3989 7.75 18.75C4.81949 16.0662 1.5 12.5 1.5 8.5C1.5 4.99999 4 2.25 7.5 2.25Z"></path>
-                </svg>
-                </div>
+            
+            <div id="like_home_{{ post.uuid }}">
+            {% include '_posts/partials/_like_home.html' %}
             </div>
-            <p class="pt-1 text-sm font-bold dark:text-neutral-400 text-neutral-600">3</p>
-            </button>
+
             <button 
                 id="comments" 
                 @click="modalPage = true;returnUrl = window.location.pathname;"

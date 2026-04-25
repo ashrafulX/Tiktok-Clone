@@ -1,0 +1,29 @@
+<button 
+    hx-get="{% url 'like_post' post.uuid %}?postpage=true"
+    hx-swap="outerHTML"
+    id="like" class="flex items-center gap-1">
+    <div class="button-article !size-8 dark:!bg-neutral-800 hover:dark:!bg-neutral-900">
+        <div class="size-5 {% if user in post.likes.all %} fill-rose-500{% endif %}">
+            <svg viewBox="0 0 24 24">
+                <path d="M7.5 2.25C10.5 2.25 12 4.25 12 4.25C12 4.25 13.5 2.25 16.5 2.25C20 2.25 22.5 4.99999 22.5 8.5C22.5 12.5 19.2311 16.0657 16.25 18.75C14.4095 20.4072 13 21.5 12 21.5C11 21.5 9.55051 20.3989 7.75 18.75C4.81949 16.0662 1.5 12.5 1.5 8.5C1.5 4.99999 4 2.25 7.5 2.25Z"></path>
+            </svg>
+        </div>
+    </div>
+    <div class="text-xs font-bold text-neutral-600 dark:text-neutral-400 tabular-nums">
+        {{ post.likes.count }}
+    </div>
+</button>
+
+{% if request.htmx %}
+
+<!-- Update like count on home post -->
+<div hx-swap-oob="innerHTML" id="like_home_{{ post.uuid }}">
+{% include '_posts/partials/_like_home.html' %}
+</div>
+
+<!-- Update like count on post likes -->
+<span hx-swap-oob="innerHTML" id="post_like_{{ post.uuid }}">
+    {{ post.likes.count }}
+</span>
+
+{% endif %}

@@ -156,3 +156,25 @@ def post_edit(request, pk):
     if request.htmx:
         return render(request, '_posts/partials/_post_edit.html', context)
     return redirect('post_page', pk)
+
+@login_required
+def like_post(request, pk=None):
+    post = get_object_or_404(Post, uuid=pk)
+    
+    if request.htmx:
+        if post.likes.filter(id=request.user.id).exists():
+            post.likes.remove(request.user)
+        else:
+            post.likes.add(request.user)
+    
+    context = {
+        'post': post
+    }
+    
+    if request.GET.get('home'):
+        return render(request, '_posts/partials/_like_home.html', context)
+    
+    if request.GET.get('postpage'):
+        return render(request, '_posts/partials/_like_postpage.html', context)
+    
+    return redirect('post_page', pk)
