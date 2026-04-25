@@ -15,7 +15,7 @@
 
   <div class="mb-10">
     <form method="post"
-          action="{% url 'account_signup' %}" 
+          action="{% url 'account_signup' %}?next={{ request.GET.next|urlencode }}" 
           x-data="signUpComponent()">
 
             {% csrf_token %}
@@ -38,7 +38,7 @@
                         <path d="M25.5187 35.2284C24.7205 36.1596 23.2798 36.1596 22.4816 35.2284L8.83008 19.3016C7.71807 18.0042 8.63988 16 10.3486 16H37.6517C39.3604 16 40.2822 18.0042 39.1702 19.3016L25.5187 35.2284Z"></path>
                       </svg>
                     </div>
-                    <div x-show="selectMonth" x-cloak class="absolute left-0 w-full bg-white rounded-sm top-12 drop-shadow-lg z-10">
+                    <div x-show="selectMonth" x-cloak class="absolute left-0 z-10 w-full bg-white rounded-sm top-12 drop-shadow-lg">
                       <ul class="overflow-y-auto max-h-48">
                         <template x-for="m in months" :key="m">
                           <li
@@ -62,7 +62,7 @@
                         <path d="M25.5187 35.2284C24.7205 36.1596 23.2798 36.1596 22.4816 35.2284L8.83008 19.3016C7.71807 18.0042 8.63988 16 10.3486 16H37.6517C39.3604 16 40.2822 18.0042 39.1702 19.3016L25.5187 35.2284Z"></path>
                       </svg>
                     </div>
-                    <div x-show="selectDay" x-cloak class="absolute left-0 w-full bg-white rounded-sm top-12 drop-shadow-lg z-10">
+                    <div x-show="selectDay" x-cloak class="absolute left-0 z-10 w-full bg-white rounded-sm top-12 drop-shadow-lg">
                       <ul class="overflow-y-auto max-h-48">
                         <template x-for="d in days" :key="d">
                           <li
@@ -86,7 +86,7 @@
                         <path d="M25.5187 35.2284C24.7205 36.1596 23.2798 36.1596 22.4816 35.2284L8.83008 19.3016C7.71807 18.0042 8.63988 16 10.3486 16H37.6517C39.3604 16 40.2822 18.0042 39.1702 19.3016L25.5187 35.2284Z"></path>
                       </svg>
                     </div>
-                    <div x-show="selectYear" x-cloak class="absolute left-0 w-full bg-white rounded-sm top-12 drop-shadow-lg z-10">
+                    <div x-show="selectYear" x-cloak class="absolute left-0 z-10 w-full bg-white rounded-sm top-12 drop-shadow-lg">
                       <ul class="overflow-y-auto max-h-68">
                         <template x-for="y in years" :key="y">
                           <li

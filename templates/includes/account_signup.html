@@ -1,3 +1,3 @@
 <div class="p-5 text-center border-t border-neutral-300">
-  <p>Don't have an account? <a href="{% url 'account_signup' %}" class="font-medium text-rose-500 hover:underline">Sign up</a></p>
+  <p>Don't have an account? <a href="{% url 'account_signup' %}?next={{ request.GET.next|urlencode }}" class="font-medium text-rose-500 hover:underline">Sign up</a></p>
 </div>

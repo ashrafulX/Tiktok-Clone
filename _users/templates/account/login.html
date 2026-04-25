@@ -15,7 +15,7 @@
 
   <div class="mb-10">
     <form method="post"
-          action="{% url 'account_login' %}"
+          action="{% url 'account_login' %}?next={{ request.GET.next|urlencode }}"
           x-data="signinComponent()">
             {% csrf_token %}
             
