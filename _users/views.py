@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, logout
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .forms import ProfileForm, EmailForm, BirthdayForm
 from allauth.account.models import EmailAddress
 from django.core.cache import cache
@@ -17,6 +18,10 @@ def index_view(request):
 def profile_view(request, username=None):
     if not username:
         return redirect('profile', request.user.username)
+    
+    if request.GET.get('link'):
+        urlpath = reverse('profile', kwargs={'username': username})
+        return render(request, '_users/partials/_profile_link.html', {'urlpath': urlpath})
     
     profile_user = get_object_or_404(User, username=username)
     

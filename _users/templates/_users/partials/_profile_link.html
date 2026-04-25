@@ -1,0 +1,12 @@
+<div class="pb-6">
+    <p class="text-2xl font-medium">
+        Profile Link
+    </p>
+</div>
+
+<profile-url x-data="{ copyLink() {navigator.clipboard.writeText($refs.urlLink.innerText); } }" class="flex items-center text-sm border rounded-lg border-neutral-200 bg-neutral-100">
+    <span x-ref="urlLink" class="px-4 py-2 truncate grow text-neutral-500 dark:text-neutral-400">
+        {{ request.scheme }}://{{ request.get_host }}{{ urlpath }}
+    </span>
+    <button @click="copyLink" class="px-4 py-2 font-bold transition-colors shrink- hover:bg-neutral-50 active:bg-neutral-200">Copy link</button>
+</profile-url>
