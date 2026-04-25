@@ -31,4 +31,9 @@
 <div hx-swap-oob="outerHTML" id="liked_post_{{ post.uuid }}" class="hidden"></div>
 {% endif %}
 
+<!-- Update user likes on profile page -->
+<span hx-swap-oob="innerHTML" id="post_user_likes">
+  {{ profile_user_likes }}
+</span>
+
 {% endif %}

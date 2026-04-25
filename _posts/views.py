@@ -11,6 +11,7 @@ from django.core.cache import cache
 from django.core.mail import EmailMessage
 from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
+from django.db.models import Count
 
 User = get_user_model()
 
@@ -166,9 +167,12 @@ def like_post(request, pk=None):
             post.likes.remove(request.user)
         else:
             post.likes.add(request.user)
+            
+    profile_user_likes = post.author.posts.aggregate(total_likes=Count('likes'))['total_likes']
     
     context = {
-        'post': post
+        'post': post,
+        'profile_user_likes': profile_user_likes
     }
     
     if request.GET.get('home'):

@@ -37,9 +37,12 @@ def profile_view(request, username=None):
     
     profile_posts_liked = profile_user.liked_posts.all().order_by('-likedpost__created_at')
     
+    profile_user_likes = profile_user.posts.aggregate(total_likes=Count('likes'))['total_likes']
+    
     context = {
         'page' : 'Profile',
         'profile_user': profile_user,
+        'profile_user_likes': profile_user_likes,
         'profile_posts': profile_posts,
         'profile_posts_liked': profile_posts_liked,
     }
