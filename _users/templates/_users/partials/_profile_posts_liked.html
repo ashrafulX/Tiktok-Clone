@@ -1,0 +1,18 @@
+{% if profile_posts_liked %}
+<div class="grid grid-cols-2 gap-4 md:grid-cols-[repeat(auto-fill,_minmax(170px,_1fr))] py-4">
+  
+  {% for post in profile_posts_liked %}
+  <div id="liked_post_{{ post.uuid }}">
+    {% include '_users/partials/_profile_post.html' %}
+  </div>
+  {% endfor %}
+     
+</div>
+{% else %}
+<div class="py-32 text-center">
+  <div class="text-2xl font-bold">No liked posts yet</div>
+  {% if profile_user == user %}
+    <div class="mt-2">Posts you liked will appear here</div>
+  {% endif %}
+</div>
+{% endif %}

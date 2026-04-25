@@ -26,4 +26,9 @@
     {{ post.likes.count }}
 </span>
 
+<!-- Hide un-liked post on profile page -->
+{% if user not in post.likes.all %}
+<div hx-swap-oob="outerHTML" id="liked_post_{{ post.uuid }}" class="hidden"></div>
+{% endif %}
+
 {% endif %}

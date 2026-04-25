@@ -35,11 +35,17 @@ def profile_view(request, username=None):
     else:
         profile_posts = profile_user.posts.order_by('-created_at')
     
+    profile_posts_liked = profile_user.liked_posts.all().order_by('-likedpost__created_at')
+    
     context = {
         'page' : 'Profile',
         'profile_user': profile_user,
         'profile_posts': profile_posts,
+        'profile_posts_liked': profile_posts_liked,
     }
+    
+    if request.GET.get('liked'):
+        return render(request, '_users/partials/_profile_posts_liked.html', context)
     
     if request.GET.get('sort'):
         return render(request, '_users/partials/_profile_posts.html', context)
