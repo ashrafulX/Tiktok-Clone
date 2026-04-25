@@ -6,6 +6,7 @@ from .forms import ProfileForm, EmailForm, BirthdayForm
 from allauth.account.models import EmailAddress
 from django.core.cache import cache
 from django.http import HttpResponse
+from django.db.models import Count
 
 User = get_user_model()
 
@@ -29,6 +30,8 @@ def profile_view(request, username=None):
     
     if sort_order == 'oldest':
         profile_posts = profile_user.posts.order_by('created_at')
+    elif sort_order == 'popular':
+        profile_posts = profile_user.posts.annotate(likes_count=Count('likes')).order_by('-likes_count', '-created_at')
     else:
         profile_posts = profile_user.posts.order_by('-created_at')
     

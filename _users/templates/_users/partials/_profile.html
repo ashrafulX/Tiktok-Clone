@@ -143,6 +143,9 @@
                       Latest
                     </button>
                     <button @click="selectedFilter = 'popular'" 
+                            hx-get="{% url 'profile' profile_user.username %}?sort=popular"
+                            hx-target="#posts-container"
+                            hx-swap="innerHTML"
                             class="px-3 py-2 rounded-sm" :class="selectedFilter === 'popular' ? 'bg-white dark:bg-neutral-600' : 'text-neutral-500'">
                       Popular
                     </button>
