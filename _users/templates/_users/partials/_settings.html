@@ -56,6 +56,38 @@
 </div>
 
 
+<div id="password_reset_block" class="gap-2 py-4 border-b md:flex border-neutral-200">
+  <div class="w-32 font-medium text-md">Password</div>
+  <div class="grow">
+    {% if messages %}
+      
+      {% for message in messages %}
+        {% if forloop.last %}
+          <div x-data="{ message: '{{ message }}'}">
+            <template x-if="message.includes('Password')">
+              <span class="{% if message.tags == 'success' %}text-green-500{% endif %}">
+                {{ message }}
+              </span>
+            </template>
+            <template x-if="!message.includes('Password')">
+              <span>Change Password</span>
+            </template>
+          </div>
+        {% endif %}
+      {% endfor %}
+        
+    {% else %}
+      <span>Change Password</span>
+    {% endif %}
+  </div>
+  <div class="ml-auto w-18 md:!w-27">
+    <a href="{% url 'account_change_password' %}"
+            class="font-medium text-blue-600 hover:underline">
+        Change
+    </a>
+  </div>
+</div>
+
 <div id="birth_block" class="gap-2 py-4 border-b md:flex border-neutral-200">
   <div class="w-32 font-medium text-md">Birthday</div>
   <div class="grow">

@@ -16,11 +16,13 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
 from django.conf.urls.static import static
+from allauth.account.views import PasswordChangeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/password/change/', PasswordChangeView.as_view(success_url = reverse_lazy('settings')),name="account_change_password"),
     path('accounts/', include('allauth.urls')),
     path('',include('_posts.urls')),
     path('',include('_users.urls')),

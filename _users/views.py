@@ -9,8 +9,9 @@ from django.http import HttpResponse
 User = get_user_model()
 
 def index_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     return render(request, '_users/index.html')
-
 
 @login_required
 def profile_view(request, username=None):
