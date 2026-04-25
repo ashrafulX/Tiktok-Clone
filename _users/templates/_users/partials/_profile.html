@@ -115,16 +115,22 @@
                       <span class="hidden sm:block">Posts</span>
                     </div>
                   </button>
-                  <button @click="selectedTab = 'favorites'" class="px-4 pb-2 border-b-2 xl:px-7" :class="selectedTab === 'favorites' ? 'border-black dark:border-white' : 'border-transparent text-neutral-500 fill-neutral-500'" >
-                    <div class="flex items-center justify-center gap-2">
-                      <div class="size-5 shrink-0">
-                        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                        </svg>
-                      </div>
-                      <span class="hidden sm:block">Posts</span>
-                    </div>
+                  {% if user == profile_user %}
+                  <button @click="selectedTab = 'favorites'" 
+                          hx-get="{% url 'profile' profile_user.username %}?bookmarked=true"
+                          hx-target="#bookmarked-container"
+                          hx-swap="innerHTML"
+                          class="px-4 pb-2 border-b-2 xl:px-7" :class="selectedTab === 'favorites' ? 'border-black dark:border-white' : 'border-transparent text-neutral-500 fill-neutral-500'" >
+                          <div class="flex items-center justify-center gap-2">
+                            <div class="size-5 shrink-0">
+                              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                              </svg>
+                            </div>
+                            <span class="hidden sm:block">Favorites</span>
+                          </div>
                   </button>
+                  {% endif %}
                   <button @click="selectedTab = 'liked'"
                           hx-get="{% url 'profile' profile_user.username %}?liked=true"
                           hx-target="#liked-container"
@@ -189,17 +195,12 @@
                     {% endif %}
                   </div>
                 </div>
-                <div x-show="selectedTab === 'favorites'">
-                  <div class="py-32 text-center">
-                    <div class="text-2xl font-bold">Favorite posts</div>
-                    {% if profile_user == user %}
-                      <div class="mt-2">your favorite posts will appear here</div>
-                    {% endif %}
+                <div x-show="selectedTab === 'favorites'" x-cloak>
+                  <div id="bookmarked-container">
                   </div>
                 </div>
                 <div x-show="selectedTab === 'liked'" x-cloak>
                   <div id="liked-container">
-
                   </div>
                 </div>
               </tabs-content>
