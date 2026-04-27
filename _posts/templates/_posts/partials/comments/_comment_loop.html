@@ -1,0 +1,19 @@
+{% for comment in post.parent_comments %}
+    {% include '_posts/partials/comments/_comment.html' %}
+{% empty %}
+<div class="text-sm text-center text-neutral-400">
+    Be the first to comment!
+</div>
+{% endfor %}
+
+{% if request.htmx %}
+
+<!-- Swap with new add comment form -->
+<div hx-swap-oob="innerHTML" id="add_comment">
+    {% include '_posts/partials/comments/_form_add_comment.html' %}
+</div>
+
+<!-- Update comment count -->
+<div hx-swap-oob="innerHTML" id="comment_count">{{ post.comments.count }}</div>
+
+{% endif %}

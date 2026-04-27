@@ -1,0 +1,15 @@
+{% if comment.replies.count %}
+<button 
+    hx-get="{% url 'comment' comment.uuid %}"
+    hx-swap="outerHTML"
+    class="flex items-center gap-2 mt-3 text-gray-500 hover:text-gray-400">
+    <span class="text-sm font-medium">
+        View {{ comment.replies.count }} repl{{ comment.replies.count|pluralize:"y,ies" }}
+    </span>
+    <div class="size-3.5">
+        <svg fill="currentColor" viewBox="0 0 48 48">
+            <path d="m24 27.76 13.17-13.17a1 1 0 0 1 1.42 0l2.82 2.82a1 1 0 0 1 0 1.42L25.06 35.18a1.5 1.5 0 0 1-2.12 0L6.59 18.83a1 1 0 0 1 0-1.42L9.4 14.6a1 1 0 0 1 1.42 0L24 27.76Z"></path>
+        </svg>
+    </div>
+</button>
+{% endif %}

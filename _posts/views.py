@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import PostForm, PostEditForm
-from .models import Post
+from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
@@ -77,6 +77,16 @@ def post_page_view(request, pk=None):
     if not pk:
         return redirect('home')
     post = get_object_or_404(Post, uuid=pk)
+    
+    if request.method == "POST":
+        body = request.POST.get('comment')
+        if body:
+            Comment.objects.create(body=body, post=post, author=request.user)
+            
+        context = {
+            'post' : post,
+        }
+        return render(request, '_posts/partials/comments/_comment_loop.html', context)
     
     if post.author:
         author_posts = Post.objects.filter(author=post.author).order_by('-created_at')
@@ -204,3 +214,18 @@ def bookmark_post(request, pk=None):
         return render(request, '_posts/partials/_bookmark_postpage.html', context)
     
     return redirect('post_page', pk)
+
+def comment(request, pk=None):
+    if not request.htmx:
+        return redirect('home')
+    
+    comment = get_object_or_404(Comment, uuid=pk)
+    
+    context = {
+        'comment': comment
+    }
+    
+    if request.GET.get('hide_replies'):
+        return render(request, '_posts/partials/comments/_button_view_replies.html', context)
+    
+    return render(request, '_posts/partials/comments/_reply_loop.html', context)

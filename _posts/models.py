@@ -18,6 +18,10 @@ class Post(models.Model):
     tags = models.CharField(max_length=80, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
+    @property
+    def parent_comments(self):
+        return self.comments.filter(parent_comment__isnull=True)
+    
     class Meta:
         ordering = ['-created_at']
     
@@ -41,3 +45,27 @@ class BookmarkedPost(models.Model):
     class Meta:
         ordering = ['-created_at']
         unique_together = ('post', 'user')
+        
+class Comment(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    body = models.TextField(max_length=250)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likedcomments', through='LikedComment')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"Comment by {self.author} | {self.created_at.strftime('%b %d %Y')} | {self.uuid}"
+        
+class LikedComment(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('comment', 'user')

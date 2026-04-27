@@ -63,7 +63,9 @@
                 </svg>
                 </div>
             </div>
-            <p class="pt-1 text-sm font-bold dark:text-neutral-400 text-neutral-600">3</p>
+            <p class="pt-1 text-sm font-bold dark:text-neutral-400 text-neutral-600">
+                {{ post.comments.count }}
+            </p>
             </button>
             
             <div id="bookmark_home_{{ post.uuid }}">

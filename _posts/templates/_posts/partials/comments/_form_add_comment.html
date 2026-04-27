@@ -1,0 +1,8 @@
+<form x-data="{input : ''}" class="flex"
+    hx-post="{% url 'post_page' post.uuid %}"
+    hx-target="#comments_container"
+    hx-swap="innerHTML">
+    {% csrf_token %}
+    <input x-model="input" type="text" name="comment" placeholder="Add comment..." class="px-4 py-2 text-sm border border-transparent rounded-lg outline-none grow bg-neutral-100 dark:bg-neutral-800 placeholder-neutral-500 focus:border-neutral-300 dark:focus:border-neutral-800">
+    <button :type="input ? 'submit' : 'button'" class="px-4 ml-2 font-medium shrink-0" :class="input ? 'text-red-500' : 'text-neutral-400 !cursor-not-allowed'">Post</button>
+</form>
