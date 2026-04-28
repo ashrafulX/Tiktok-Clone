@@ -248,3 +248,25 @@ def comment(request, pk=None):
         return render(request, '_posts/partials/comments/_form_add_reply.html', context)
     
     return render(request, '_posts/partials/comments/_reply_loop.html', context)
+
+@login_required
+def comment_delete(request, pk=None):
+    if not request.htmx:
+        return redirect('home')
+    
+    comment = get_object_or_404(Comment, uuid=pk)
+    if comment.author != request.user:
+        return HttpResponse()
+    
+    if request.method == 'POST':
+        post = comment.post
+        comment.delete()
+        comment_count = post.comments.count()
+        response = f"<div hx-swap-oob='innerHTML' id='comment_count'>{comment_count}</div>"
+        return HttpResponse(response)
+    
+    context = {
+        'comment': comment
+    }
+    
+    return render(request, '_posts/partials/comments/_from_comment_delete.html', context)

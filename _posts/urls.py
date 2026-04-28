@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import home, explore, upload, post_page_view, verification_code, post_edit, like_post, bookmark_post, comment
+from .views import *
 
 urlpatterns = [
     path('', home,name= "home"),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('like/<pk>/', like_post, name='like_post'),
     path('bookmark/<pk>/', bookmark_post, name='bookmark_post'),
     path('comment/<pk>/', comment, name='comment'),
+    path('comment_delete/<pk>/', comment_delete, name='comment_delete'),
 ]

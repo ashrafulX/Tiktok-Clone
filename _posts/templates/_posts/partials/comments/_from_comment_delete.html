@@ -1,0 +1,11 @@
+<form action="" class="pt-6 text-center"
+    hx-post="{% url 'comment_delete' comment.uuid %}"
+    hx-target="#comment_{{ comment.uuid }}"
+    hx-swap="delete">
+    {% csrf_token %}
+    <div class="pb-4">{{ comment.body }}</div>
+    <button @click="setTimeout(() => { modalBox = false; $refs.modalContent.innerHTML='' } , 100)" 
+        type="submit" class="font-medium text-red-600 hover:underline">
+        Delete Comment
+    </button>
+</form>
