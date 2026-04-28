@@ -14,4 +14,5 @@ urlpatterns = [
     path('bookmark/<pk>/', bookmark_post, name='bookmark_post'),
     path('comment/<pk>/', comment, name='comment'),
     path('comment_delete/<pk>/', comment_delete, name='comment_delete'),
+    path('comment_like/<pk>/', comment_like, name='comment_like'),
 ]

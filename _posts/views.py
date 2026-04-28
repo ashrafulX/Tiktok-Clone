@@ -270,3 +270,20 @@ def comment_delete(request, pk=None):
     }
     
     return render(request, '_posts/partials/comments/_from_comment_delete.html', context)
+
+@login_required
+def comment_like(request, pk=None):
+    
+    comment = get_object_or_404(Comment, uuid=pk)
+    
+    if request.htmx:
+        if comment.likes.filter(id=request.user.id).exists():
+            comment.likes.remove(request.user)
+        else:
+            comment.likes.add(request.user)
+            
+    context = {
+        'comment': comment
+    }
+    
+    return render(request, '_posts/partials/comments/_button_like_comment.html', context)
