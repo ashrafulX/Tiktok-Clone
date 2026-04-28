@@ -10,7 +10,12 @@
             <div class="leading-5">{{ comment.body }}</div>
             <div class="flex gap-4 mt-1 text-sm text-neutral-400">
                 <span>{{ comment.created_at|timesince }} ago</span>
-                <button>Reply</button>
+                <button
+                    hx-get="{% url 'comment' comment.uuid %}?reply_form=true"
+                    hx-target="#reply_form_{{ comment.uuid }}"
+                    hx-swap="innerHTML">
+                    Reply
+                </button>
             </div>
         </div>
         <div>
@@ -29,6 +34,7 @@
 </comment-item>
 
 <div class="pl-15">
+    <div id="reply_form_{{ comment.uuid }}"></div>
     <div id="replies_container_{{ comment.uuid }}">
         {% include '_posts/partials/comments/_button_view_replies.html' %}
     </div>

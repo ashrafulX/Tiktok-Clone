@@ -215,17 +215,36 @@ def bookmark_post(request, pk=None):
     
     return redirect('post_page', pk)
 
+@login_required
 def comment(request, pk=None):
     if not request.htmx:
         return redirect('home')
     
     comment = get_object_or_404(Comment, uuid=pk)
     
+    parent_comment = comment
+    while parent_comment.parent_comment is not None:
+        parent_comment = parent_comment.parent_comment
+    
+    print(request)
+    if request.method == 'POST':
+        print(request.POST)
+        body = request.POST.get('reply')
+        if body:
+            Comment.objects.create(body=body, 
+                                   author=request.user,
+                                   post=comment.post,
+                                   parent_comment=parent_comment)
+            return redirect('comment', comment.uuid)
+    
     context = {
-        'comment': comment
+        'comment': parent_comment
     }
     
     if request.GET.get('hide_replies'):
         return render(request, '_posts/partials/comments/_button_view_replies.html', context)
+    
+    if request.GET.get('reply_form'):
+        return render(request, '_posts/partials/comments/_form_add_reply.html', context)
     
     return render(request, '_posts/partials/comments/_reply_loop.html', context)

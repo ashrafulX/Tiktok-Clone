@@ -17,4 +17,13 @@
         </svg>
     </div>
 </button>
-    
+
+<!-- Remove reply form -->
+<div hx-swap-oob="outerHTML" id="reply_form_{{ comment.uuid }}"> 
+</div>    
+
+
+<!-- Update comment count -->
+<div hx-swap-oob="innerHTML" id="comment_count">
+    {{ comment.post.comments.count }}
+</div> 
