@@ -14,7 +14,14 @@
     <div class="flex justify-between grow">
         <div class="grow">
             <div class="font-medium">{% if comment.author %}{{ comment.author.username }}{% else %} Anonymous {% endif %}</div>
-            <div class="leading-5">{{ comment.body }}</div>
+            <div class="leading-5">
+                {% if comment.parent_reply %}
+                <a href="{% url 'profile' comment.parent_reply.author.username %}" class="mr-1 text-blue-600 hover:underline">
+                    @{{ comment.parent_reply.author.username }}
+                </a>
+                {% endif %}
+                {{ comment.body }}
+            </div>
             <div class="flex gap-4 mt-1 text-sm text-neutral-400">
                 <span>{{ comment.created_at|timesince }} ago</span>
                 <button hx-post="{% url 'comment' comment.uuid %}?reply_form=true"

@@ -225,6 +225,8 @@ def comment(request, pk=None):
     parent_comment = comment
     while parent_comment.parent_comment is not None:
         parent_comment = parent_comment.parent_comment
+        
+    parent_reply = comment if comment.parent_comment else None
     
     print(request)
     if request.method == 'POST':
@@ -234,11 +236,13 @@ def comment(request, pk=None):
             Comment.objects.create(body=body, 
                                    author=request.user,
                                    post=comment.post,
+                                   parent_reply=parent_reply,
                                    parent_comment=parent_comment)
             return redirect('comment', comment.uuid)
     
     context = {
-        'comment': parent_comment
+        'comment': parent_comment,
+        'current_comment': comment
     }
     
     if request.GET.get('hide_replies'):

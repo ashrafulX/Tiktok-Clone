@@ -51,6 +51,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    parent_reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     body = models.TextField(max_length=250)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likedcomments', through='LikedComment')
     created_at = models.DateTimeField(auto_now_add=True)

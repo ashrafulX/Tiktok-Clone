@@ -1,9 +1,9 @@
 <form x-data="{input : ''}" class="flex mt-3"
-    hx-post="{% url 'comment' comment.uuid %}"
+    hx-post="{% url 'comment' current_comment.uuid %}"
     hx-target="#replies_container_{{ comment.uuid }}"
     hx-swap="innerHTML">
     {% csrf_token %}
-    <input x-model="input" type="text" name="reply" placeholder="Add comment..." class="px-4 py-2 text-sm border border-transparent rounded-lg outline-none grow bg-neutral-100 dark:bg-neutral-800 placeholder-neutral-500 focus:border-neutral-300 dark:focus:border-neutral-800">
+    <input x-model="input" type="text" name="reply" placeholder="Add a reply..." class="px-4 py-2 text-sm border border-transparent rounded-lg outline-none grow bg-neutral-100 dark:bg-neutral-800 placeholder-neutral-500 focus:border-neutral-300 dark:focus:border-neutral-800">
     <button :type="input ? 'submit' : 'button'" class="px-4 ml-2 font-medium shrink-0" :class="input ? 'text-red-500' : 'text-neutral-400 !cursor-not-allowed'">Post</button>
     <button @click="$el.closest('form').remove()" type="button" class="mr-2">
         <div class="size-6 hover:fill-neutral-400">
