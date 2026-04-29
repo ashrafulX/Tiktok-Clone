@@ -15,4 +15,5 @@ urlpatterns = [
     path('comment/<pk>/', comment, name='comment'),
     path('comment_delete/<pk>/', comment_delete, name='comment_delete'),
     path('comment_like/<pk>/', comment_like, name='comment_like'),
+    path('share_post/<pk>/', share_post, name='share_post'),
 ]
