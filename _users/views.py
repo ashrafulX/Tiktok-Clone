@@ -20,46 +20,46 @@ def profile_view(request, username=None):
     if not username:
         return redirect('profile', request.user.username)
     
+    profile_user = get_object_or_404(User, username=username)
+    
     if request.GET.get('link'):
         urlpath = reverse('profile', kwargs={'username': username})
         return render(request, '_users/partials/_profile_link.html', {'urlpath': urlpath})
     
-    profile_user = get_object_or_404(User, username=username)
+    if request.GET.get('reposted'):
+        profile_posts_reposted = profile_user.repostedposts.all().order_by('-repost__created_at')
+        return render(request, '_users/partials/_profile_posts_reposted.html', {"profile_posts_reposted": profile_posts_reposted})
     
-    sort_order = request.GET.get('sort','')
+    if request.GET.get('liked'):
+        profile_posts_liked = profile_user.liked_posts.all().order_by('-likedpost__created_at')
+        return render(request, '_users/partials/_profile_posts_liked.html', {"profile_posts_liked": profile_posts_liked})
     
-    if sort_order == 'oldest':
-        profile_posts = profile_user.posts.order_by('created_at')
-    elif sort_order == 'popular':
-        profile_posts = profile_user.posts.annotate(likes_count=Count('likes')).order_by('-likes_count', '-created_at')
-    else:
-        profile_posts = profile_user.posts.order_by('-created_at')
+    profile_posts = profile_user.posts.order_by('-created_at')
+    if request.GET.get('sort'):
+        sort_order = request.GET.get('sort','')
+        if sort_order == 'oldest':
+            profile_posts = profile_user.posts.order_by('created_at')
+        elif sort_order == 'popular':
+            profile_posts = profile_user.posts.annotate(likes_count=Count('likes')).order_by('-likes_count', '-created_at')
+        else:
+            profile_posts = profile_user.posts.order_by('-created_at')
+        return render(request, '_users/partials/_profile_posts.html', {"profile_posts": profile_posts})
     
-    profile_posts_liked = profile_user.liked_posts.all().order_by('-likedpost__created_at')
-    profile_posts_bookmarked = {}
-    if request.user == profile_user:
-        profile_posts_bookmarked = profile_user.bookmarkedposts.all().order_by('-bookmarkedpost__created_at')
-    
+    if request.GET.get('bookmarked'):
+        profile_posts_bookmarked = {}
+        if request.user == profile_user:
+            profile_posts_bookmarked = profile_user.bookmarkedposts.all().order_by('-bookmarkedpost__created_at')
+        return render(request, '_users/partials/_profile_posts_bookmarked.html', {"profile_posts_bookmarked": profile_posts_bookmarked})
+        
     profile_user_likes = profile_user.posts.aggregate(total_likes=Count('likes'))['total_likes']
     
     context = {
         'page' : 'Profile',
         'profile_user': profile_user,
         'profile_user_likes': profile_user_likes,
-        'profile_posts': profile_posts,
-        'profile_posts_liked': profile_posts_liked,
-        'profile_posts_bookmarked': profile_posts_bookmarked
+        'profile_posts': profile_posts
     }
     
-    if request.GET.get('liked'):
-        return render(request, '_users/partials/_profile_posts_liked.html', context)
-    
-    if request.GET.get('bookmarked'):
-        return render(request, '_users/partials/_profile_posts_bookmarked.html', context)
-    
-    if request.GET.get('sort'):
-        return render(request, '_users/partials/_profile_posts.html', context)
-
     if request.htmx:
         return render(request, '_users/partials/_profile.html', context)
     return render(request, '_users/profile.html', context)
