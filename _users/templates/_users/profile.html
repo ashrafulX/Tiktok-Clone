@@ -1,6 +1,17 @@
 {% extends 'layouts/main-layout.html' %}
 {% load static %}
 
+{% block meta_tags %}
+  <meta property="og:title" content="{{ profile_user.username }}'s profile page">
+  <meta property="og:description" content="Check out {{ profile_user.username }}'s latest posts!">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ profile_user.avatar }}">
+  <meta property="og:type" content="profile">
+  <meta property="twitter:card" content="summary">
+  <meta property="twitter:title" content="{{ profile_user.username }}'s profile page"">
+  <meta property="twitter:description" content="Check out {{ profile_user.username }}'s latest posts!">
+  <meta property="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ profile_user.avatar }}">
+{% endblock %}
+
 {% block title %}
   {{ profile_user.username }} -
 {% endblock title %}
