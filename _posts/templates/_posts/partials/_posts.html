@@ -29,37 +29,10 @@
             <div class="w-full h-64 opacity-30 bg-linear-to-t from-black to-transparent rounded-b-2xl"></div>
         </article-info>
         <article-buttons class="absolute bottom-0 flex flex-col gap-2 -right-17">
-            {% if not post.is_repost %}
-                {% if post.author %}
-                <button id="author" class="relative flex justify-center mb-4 cursor-pointer">
-                    <a href="{% url 'profile' post.author.username %}" class="overflow-hidden rounded-full size-13 bg-neutral-100">
-                        <img src="{{ post.author.avatar }}" alt="" class="object-cover object-center w-full h-full">
-                    </a>
-                    <div class="absolute flex items-center justify-center rounded-full bg-rose-500 hover:bg-rose-600 size-6 top-10">
-                        <div class="size-3.5 fill-white">
-                        <svg viewBox="0 0 48 48">
-                            <path d="M26 7a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v15H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h15v15a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V26h15a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H26V7Z"></path>
-                        </svg>
-                        </div>
-                    </div>
-                </button>
-                {% endif %}
-            {% else %}
-                {% if post.repost_author %}
-                    <button id="repost_author" class="relative flex justify-center mb-4 cursor-pointer">
-                        <a href="{% url 'profile' post.repost_author.username %}" class="overflow-hidden rounded-full size-13 bg-neutral-100">
-                            <img src="{{ post.repost_author.avatar }}" alt="" class="object-cover object-center w-full h-full">
-                        </a>
-                        <div class="absolute flex items-center justify-center rounded-full bg-rose-500 hover:bg-rose-600 size-6 top-10">
-                            <div class="size-3.5 fill-white">
-                            <svg viewBox="0 0 48 48">
-                                <path d="M26 7a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v15H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h15v15a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V26h15a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H26V7Z"></path>
-                            </svg>
-                            </div>
-                        </div>
-                    </button>
-                {% endif %}
-            {% endif %}
+            
+            <div id="author_home_{{ post.uuid }}">
+            {% include '_posts/partials/_author_home.html' %}
+            </div>
             
             <div id="like_home_{{ post.uuid }}">
             {% include '_posts/partials/_like_home.html' %}

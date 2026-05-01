@@ -1,0 +1,31 @@
+{% if not post.is_repost %}
+    {% if post.author %}
+    <div id="author" class="relative flex justify-center mb-4 cursor-pointer">
+        <a href="{% url 'profile' post.author.username %}" class="overflow-hidden rounded-full size-13 bg-neutral-100">
+            <img src="{{ post.author.avatar }}" alt="" class="object-cover object-center w-full h-full">
+        </a>
+        {% if post.author != user %}
+        
+            {% with post.author as this_user %}
+            {% include '_network/partials/_follow_round.html' %}
+            {% endwith %}
+
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    {% if post.repost_author %}
+        <div id="repost_author" class="relative flex justify-center mb-4 cursor-pointer">
+            <a href="{% url 'profile' post.repost_author.username %}" class="overflow-hidden rounded-full size-13 bg-neutral-100">
+                <img src="{{ post.repost_author.avatar }}" alt="" class="object-cover object-center w-full h-full">
+            </a>
+            {% if post.repost_author != user %}
+        
+                {% with post.repost_author as this_user %}
+                {% include '_network/partials/_follow_round.html' %}
+                {% endwith %}
+
+            {% endif %}
+        </div>
+    {% endif %}
+{% endif %}

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # My apps
     '_posts',
     '_users',
+    '_network',
     
     # Third party apps
     "django_htmx",

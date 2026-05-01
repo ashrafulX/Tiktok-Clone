@@ -72,9 +72,11 @@
                                 </div>
                             </button>
                             {% else %}
-                            <button class="px-6 py-2 text-white rounded-md bg-rose-500 hover:bg-rose-600">
-                                Follow
-                            </button>
+
+                            {% with post.author as this_user %}
+                                {% include '_network/partials/_follow_button.html' %}
+                            {% endwith %}
+                            
                             {% endif %}
                         </div>
                         {% endif %}
