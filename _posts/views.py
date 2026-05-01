@@ -20,8 +20,10 @@ User = get_user_model()
 
 @login_required
 def home(request):
-    posts = Post.objects.order_by('-created_at')
-    reposts = Repost.objects.select_related('post', 'user')
+    following_user_ids = request.user.is_follower.values_list('following', flat=True)
+    user_ids = list(following_user_ids) + [request.user.id]
+    posts = Post.objects.filter(author__in=user_ids).order_by('-created_at')
+    reposts = Repost.objects.filter(user__in=user_ids).select_related('post', 'user')
     
     reposted_posts = []
     for repost in reposts:

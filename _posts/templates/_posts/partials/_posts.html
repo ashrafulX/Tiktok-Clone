@@ -1,4 +1,5 @@
 {% load static %}
+{% if posts %}
 
 {% for post in posts %} 
 <article data-index="{{ forloop.counter0|add:page_start_index }}" class="flex items-center justify-center h-full px-4 py-2 mx-auto snap-center">
@@ -88,7 +89,13 @@
     </div>
 </article>
 {% endfor %}
-
+{% else %}
+<div class="flex items-center justify-center h-full mx-auto lg:mr-60">
+    <a href="{% url 'explore' %}" class="text-sm font-medium hover:underline text-neutral-400">
+        Explore accounts to follow
+    </a>
+</div>
+{% endif %}
 
 {% if next_page %}
     
