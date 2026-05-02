@@ -1,0 +1,38 @@
+<div class="px-4 ml-18 lg:ml-60 xl:px-12">
+    <div class="max-w-5xl py-8 mx-auto">
+        {% if following_users %}
+            <div class="grid grid-cols-[repeat(auto-fill,_minmax(180px,_1fr))] gap-4">
+            
+                {% for this_user in following_users %}
+                    {% include '_network/partials/_user_card.html' %}
+                {% endfor %}
+                
+            </div>
+        {% else %}
+            <div class="py-12 text-sm font-medium text-center text-neutral-400 lg:mr-60">
+                No accounts following
+            </div>
+        {% endif %}
+
+        {% if suggested_users %}
+            <p class="pt-12 pb-4 text-sm font-medium text-neutral-400">
+                Suggested accounts
+            </p>
+            <div class="grid grid-cols-[repeat(auto-fill,_minmax(180px,_1fr))] gap-4">
+            
+                {% for this_user in suggested_users %}
+                    {% include '_network/partials/_user_card.html' %}
+                {% endfor %}
+                
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if request.htmx %}
+    <title hx-swap-oob="true">Following - Tiktok</title>
+
+    <div hx-swap-oob="innerHTML" id="navigation">
+        {% include 'includes/navigation.html' %}
+    </div>
+{% endif %}

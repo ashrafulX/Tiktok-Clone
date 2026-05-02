@@ -1,0 +1,11 @@
+<article class="flex flex-col items-center gap-4 p-4 bg-neutral-100/80 hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700/70 rounded-xl">
+    <a href="{% url 'profile' this_user.username %}" class="overflow-hidden rounded-full size-22">
+        <img src="{{ this_user.avatar }}" alt="" class="object-cover w-full h-full">
+    </a>
+    <p class="font-medium">
+        {{ this_user.username }}
+    </p>
+    
+    {% include '_network/partials/_follow_rounded.html' %}
+    
+</article>
