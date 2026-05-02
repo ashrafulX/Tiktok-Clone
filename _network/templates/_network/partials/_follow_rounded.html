@@ -1,10 +1,10 @@
 {% load network_tags %}
 
 <button id="follow_rounded_{{ this_user.username }}"
-        hx-get="{% url 'follow' this_user.username %}?follow_rounded=true"
+        hx-get="{% url 'follow' this_user.username %}?follow_rounded=true{% if modal %}&modal=True{% endif %}"
         {% if not follow_clicked %}hx-swap="none"{% else %}hx-swap-oob="outerHTML"{% endif %}>
         {% if user|is_following:this_user %}
-        <div class="px-5 py-1 font-medium rounded-full bg-neutral-200/70 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600">
+        <div class="px-5 py-1 font-medium rounded-full bg-neutral-200/70 hover:bg-neutral-200 {% if not modal %}dark:bg-neutral-700 dark:hover:bg-neutral-600{% endif %}">
             Following
         </div>
         {% else %}

@@ -62,18 +62,26 @@
                   </button>
                 </div>
                 <div class="flex gap-5">
-                  <div>
-                    <span id="following_count_{{ profile_user.username }}" class="mr-1 font-bold tabular-nums">
-                      {{ profile_user.is_follower.count }}
-                    </span>
-                    Following
-                  </div>
-                  <div>
+                  <button @click="modalBox = true"
+                          class="hover:underline"
+                          hx-get="{% url 'profile' profile_user.username %}?following=true"
+                          hx-target="#modalbox-content"
+                          hx-swap="innerHTML">
+                      <span id="following_count_{{ profile_user.username }}" class="mr-1 font-bold tabular-nums">
+                        {{ profile_user.is_follower.count }}
+                      </span>
+                      Following
+                  </button>
+                  <button
+                          @click="modalBox = true"
+                          class="hover:underline"
+                          hx-get="{% url 'profile' profile_user.username %}?followers=true"
+                          hx-target="#modalbox-content">
                     <span id="followers_count_{{ profile_user.username }}" class="mr-1 font-bold tabular-nums">
                       {{ profile_user.is_followed.count }}
                     </span>
                     Followers
-                  </div>
+                  </button>
                   <div>
                     <span id="post_user_likes" class="mr-1 font-bold">
                       {{ profile_user_likes }}

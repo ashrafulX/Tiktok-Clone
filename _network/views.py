@@ -61,7 +61,8 @@ def follow(request, username=None):
 
     context = {
         'this_user': this_user,
-        'follow_clicked': True
+        'follow_clicked': True,
+        'modal': request.GET.get('modal', False),
     }
     
     if request.GET.get('follow_round'):

@@ -26,6 +26,14 @@ def profile_view(request, username=None):
         urlpath = reverse('profile', kwargs={'username': username})
         return render(request, '_users/partials/_profile_link.html', {'urlpath': urlpath})
     
+    if request.GET.get('following'):
+        accounts = User.objects.filter(is_followed__follower=profile_user)
+        return render(request, '_users/partials/_profile_following.html', {"accounts": accounts})
+    
+    if request.GET.get('followers'):
+        accounts = User.objects.filter(is_follower__following=profile_user)
+        return render(request, '_users/partials/_profile_following.html', {"accounts": accounts, 'followers': True})
+    
     if request.GET.get('reposted'):
         profile_posts_reposted = profile_user.repostedposts.all().order_by('-repost__created_at')
         return render(request, '_users/partials/_profile_posts_reposted.html', {"profile_posts_reposted": profile_posts_reposted})

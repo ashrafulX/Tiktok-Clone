@@ -1,0 +1,38 @@
+<div class="py-1 mb-6 text-xl font-medium text-center">
+    {% if followers %}
+        Followers
+    {% else %}
+        Following
+    {% endif %} 
+</div>
+
+{% if accounts %}
+    {% for this_user in accounts %}
+        <article class="flex items-center justify-between p-4 mx-4 mb-4 bg-neutral-100 rounded-xl">
+            <a href="{% url 'profile' this_user.username %}" class="flex items-center gap-3">
+                <div class="overflow-hidden rounded-full size-12">
+                    <img src="{{ this_user.avatar }}" alt="" class="object-cover w-full h-full">
+                </div>
+                <div>
+                    <div class="font-medium hover:underline">
+                        {{ this_user.username }}
+                    </div>
+                    <div class="text-sm">
+                        {{ this_user.name }}
+                    </div>
+                </div>
+            </a>
+            {% if this_user != user %}
+                {% include "_network/partials/_follow_rounded.html" with modal=True %}
+            {% endif %}
+        </article>
+    {% endfor %}
+{% else %}
+    <p class="flex items-center justify-center text-sm font-medium text-neutral-400">
+        {% if followers %}
+            No followers yet. Be the first one!
+        {% else %}
+            No accounts following
+        {% endif %} 
+    </p>
+{% endif %}
