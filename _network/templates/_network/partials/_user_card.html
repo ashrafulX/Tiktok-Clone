@@ -5,7 +5,13 @@
     <p class="font-medium">
         {{ this_user.username }}
     </p>
+
+    <p class="w-full -mt-4 text-center truncate font-sm">
+        {{ this_user.name }}
+    </p>
     
+    {% if this_user != user %}
     {% include '_network/partials/_follow_rounded.html' %}
+    {% endif %}
     
 </article>

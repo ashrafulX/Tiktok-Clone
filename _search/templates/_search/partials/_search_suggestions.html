@@ -1,0 +1,26 @@
+{% if user_suggestions %}
+    <p class="mt-6 ml-2 text-sm font-medium text-neutral-400">
+        Accounts
+    </p>
+    <ul>
+        
+        {% for this_user in user_suggestions %}
+            <li>
+                <a href="{% url 'profile' this_user.username %}" class="flex items-center gap-2 px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-900 ">
+                    <div class="overflow-hidden rounded-full size-9">
+                        <img src="{{ this_user.avatar }}" class="object-cover w-full h-full">
+                    </div>
+                    <div>
+                        <p class="font-medium">
+                            {{ this_user.username }}
+                        </p>
+                        <p class="text-sm">
+                            {{ this_user.name}}
+                        </p>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+            
+    </ul>
+{% endif %}

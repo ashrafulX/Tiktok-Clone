@@ -27,6 +27,7 @@ urlpatterns = [
     path('',include('_posts.urls')),
     path('',include('_users.urls')),
     path('following/',include('_network.urls')),
+    path('search/',include('_search.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,23 @@
+<h2 class="pl-2 mb-7">Search</h2>
+<div class="relative">
+    <form hx-get="{% url 'search' %}"
+          hx-trigger="submit"
+          hx-target="#main-content"
+          hx-push-url="true"
+          @keydown.enter="setTimeout(() => { showDrawer = false }, 50)">
+        <input name="q" x-model="searchQuery" type="search" placeholder="Search"
+            hx-get="{% url 'search_suggestions' %}"
+            hx-trigger="input delay:300ms"
+            hx-target="#search_suggestions"
+            class="w-full h-10 pl-4 text-sm rounded-full dark:text-white dark:bg-neutral-800 dark:focus:outline-neutral-600 bg-neutral-100 text-neutral-700 focus:outline focus:outline-neutral-300">
+        <button type="button" x-show="searchQuery" @click="searchQuery = ''" class="absolute text-black cursor-pointer right-4 top-3 ">
+            <div class="size-4 fill-neutral-400 dark:fill-neutral-500">
+                <svg viewBox="0 0 48 48">
+                    <path d="M24 46C36.1503 46 46 36.1503 46 24C46 11.8497 36.1503 2 24 2C11.8497 2 2 11.8497 2 24C2 36.1503 11.8497 46 24 46ZM15.1466 30.7323L21.8788 24.0001L15.1466 17.2679C14.756 16.8774 14.756 16.2442 15.1466 15.8537L15.8537 15.1466C16.2442 14.756 16.8774 14.756 17.2679 15.1466L24.0001 21.8788L30.7323 15.1466C31.1229 14.756 31.756 14.756 32.1466 15.1466L32.8537 15.8537C33.2442 16.2442 33.2442 16.8774 32.8537 17.2679L26.1214 24.0001L32.8537 30.7323C33.2442 31.1229 33.2442 31.756 32.8537 32.1466L32.1466 32.8537C31.756 33.2442 31.1229 33.2442 30.7323 32.8537L24.0001 26.1214L17.2679 32.8537C16.8774 33.2442 16.2442 33.2442 15.8537 32.8537L15.1466 32.1466C14.756 31.756 14.756 31.1229 15.1466 30.7323Z"></path>
+                </svg>
+            </div>
+        </button>
+    </form>
+</div>
+
+<div id="search_suggestions" x-show="searchQuery"></div>
