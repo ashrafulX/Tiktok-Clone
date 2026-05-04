@@ -19,10 +19,10 @@
             {% if post.author %}
                 <a href="{% url 'profile' post.author.username %}" class="pointer-events-auto hover:underline">{{ post.author }}</a>
             {% endif %}
-            {% if post.tags %}
+            {% if post.tags.exists %}
                 <div class="mt-1">
-                {% for tag in post.tags.split %}
-                    <a href="" class="mr-2 pointer-events-auto hover:underline">{{ tag }}</a>
+                {% for tag in post.tags.all %}
+                    <a href="{% url 'search' %}?q={{ tag.name }}" class="mr-2 pointer-events-auto hover:underline">{{ tag }}</a>
                 {% endfor %}
             </div>
             {% endif %}

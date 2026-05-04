@@ -14,6 +14,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count
 from itertools import chain
 from operator import attrgetter
+from .utils import process_tags
 
 User = get_user_model()
 
@@ -80,6 +81,8 @@ def upload(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            input_tags = request.POST.get('tags','')
+            process_tags(post, input_tags)
             return redirect('home')
         
     context = {
@@ -166,6 +169,7 @@ def post_edit(request, pk):
         return redirect('home')
     
     if request.method == "POST" and "delete" in request.POST:
+        process_tags(post)
         post.delete()
         return redirect('profile', request.user.username)
 
@@ -173,7 +177,9 @@ def post_edit(request, pk):
     if request.method == "POST":
         form = PostEditForm(request.POST, instance=post)
         if form.is_valid():
-            form.save()
+            post = form.save()
+            input_tags = form.cleaned_data.get('tags','')
+            process_tags(post, input_tags)
             return redirect('post_page', pk)
     else:
         form = PostEditForm(instance=post)

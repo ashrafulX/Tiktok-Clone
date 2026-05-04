@@ -17,7 +17,7 @@ class Post(models.Model):
     reposts = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='repostedposts', through='Repost')
     image = models.ImageField(upload_to='posts/')
     body = models.CharField(max_length=80, null=True, blank=True)
-    tags = models.CharField(max_length=80, null=True, blank=True)
+    tags = models.ManyToManyField('Tag', blank=True, null=True, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
     
     @property
@@ -32,6 +32,16 @@ class Post(models.Model):
     
     def get_absolute_url(self):
         return reverse('post_page', kwargs={'pk': self.uuid})
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    count = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        ordering = ['-count', 'name']
+        
+    def __str__(self):
+        return f"#{self.name}"
     
 class LikedPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
