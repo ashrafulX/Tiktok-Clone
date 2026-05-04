@@ -1,12 +1,36 @@
 <div class="px-4 ml-18 lg:ml-60 xl:px-12">
     <div class="max-w-5xl py-8 mx-auto">
-        {% if users %}
-            <div class="grid grid-cols-[repeat(auto-fill,_minmax(180px,_1fr))] gap-4">
-            
-                {% for this_user in users %}
-                    {% include '_network/partials/_user_card.html' %}
-                {% endfor %}
-                
+        {% if posts or users %}
+            <div x-data="{ selectedTab: {{ posts|length }} === 0 ? 'users' : 'posts' }">
+
+                <div class="flex gap-12 mb-5 font-medium border-b text-md border-neutral-300 dark:border-neutral-800">
+                    <button @click="selectedTab = 'posts'" class="pb-3 border-b-2" :class="selectedTab === 'posts' ? 'border-black dark:border-white' : 'text-neutral-400 border-transparent' ">
+                        Posts ({{ posts|length }})
+                    </button>
+                    <button @click="selectedTab = 'users'" class="pb-3 border-b-2" :class="selectedTab === 'users' ? 'border-black dark:border-white' : 'text-neutral-400 border-transparent' ">
+                        Users ({{ users|length }})
+                    </button>
+                </div>
+
+                <div x-show="selectedTab === 'posts'" x-cloak>
+                    <div class="grid grid-cols-[repeat(auto-fill,_minmax(180px,_1fr))] gap-4">
+                    
+                        {% for post in posts %}
+                            {% include '_posts/partials/_post_card.html' %}
+                        {% endfor %}
+                        
+                    </div>
+                </div>
+
+                <div x-show="selectedTab === 'users'" x-cloak>
+                    <div class="grid grid-cols-[repeat(auto-fill,_minmax(180px,_1fr))] gap-4">
+                    
+                        {% for this_user in users %}
+                            {% include '_network/partials/_user_card.html' %}
+                        {% endfor %}
+                        
+                    </div>
+                </div>
             </div>
         {% else %}
             <div class="py-12 text-sm font-medium text-center text-neutral-400 lg:mr-60">

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Count
+from _posts.models import Post
 
 User = get_user_model()
 
@@ -10,6 +11,7 @@ def search(request):
     query = request.GET.get('q', None)
     
     users = User.objects.none()
+    posts = Post.objects.none()
     
     if query and len(query) > 2:
         users = User.objects.filter(
@@ -17,15 +19,21 @@ def search(request):
             Q(name__icontains=query) |
             Q(bio__icontains=query)
         ).order_by('username')
-    
+        
+        posts = Post.objects.filter(
+            Q(body__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct().order_by('-created_at')
+
     context = {
-        'users': users
+        'users': users,
+        'posts': posts,
     }
     
     if request.htmx:
         return render(request, '_search/partials/_search_page.html', context)
     
-    return render(request, '_search/search_page.html')
+    return render(request, '_search/search_page.html', context)
 
 @login_required
 def search_suggestions(request):
