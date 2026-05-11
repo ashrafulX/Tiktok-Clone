@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import PostForm, PostEditForm
-from .models import Post, Comment, Repost
+from .models import Post, Comment, Repost, Tag
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
@@ -63,9 +63,18 @@ def home(request):
 @login_required
 def explore(request):
     posts = Post.objects.order_by('-created_at')
+    
+    tags = Tag.objects.all()[:4]
+    selected_tag = request.GET.get("tag")
+    
+    if selected_tag:
+        posts = posts.filter(tags__name__iexact=selected_tag)
+    
     context = {
         'page' : 'Explore',
-        'posts': posts
+        'posts': posts,
+        'tags': tags,
+        'selected_tag': selected_tag,
     }
     if request.htmx:
         return render(request, '_posts/partials/_explore.html', context)
