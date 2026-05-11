@@ -39,6 +39,13 @@ def search(request):
 def search_suggestions(request):
     query = request.GET.get('q', None)
     
+    hashtags_upload = request.GET.get('tags')
+    if hashtags_upload:
+        if hashtags_upload.endswith(' '):
+            query = ""
+        else:
+            query = hashtags_upload.split()[-1].lstrip('#')
+    
     user_suggestions = User.objects.none()
     tag_suggestions = User.objects.none()
     
@@ -55,5 +62,8 @@ def search_suggestions(request):
         'user_suggestions': user_suggestions,
         'tag_suggestions': tag_suggestions,
     }
+    
+    if hashtags_upload:
+        return render(request, '_search/partials/_hashtag_suggestions.html', context)
     
     return render(request, '_search/partials/_search_suggestions.html', context)

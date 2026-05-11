@@ -36,7 +36,12 @@
                         </div>
                         <div>
                             <div class="font-bold text-neutral-600">Hashtags</div>
-                            <input x-model="hashtag" name="tags" type="text" maxlength="80" placeholder="#tags - separated by a space" class="w-full px-4 py-3 rounded-lg outline-none bg-neutral-100 dark:bg-neutral-900">
+                            <input x-model="hashtag" name="tags" type="text" maxlength="80" placeholder="#tags - separated by a space" 
+                                    hx-get="{% url 'search_suggestions' %}"
+                                    hx-trigger="input delay: 300ms"
+                                    hx-target="#hashtag_suggestions"
+                                    hx-swap="innerHTML"
+                                    class="w-full px-4 py-3 rounded-lg outline-none bg-neutral-100 dark:bg-neutral-900">
                         </div>
                         <div class="flex gap-3">
                             <button type="submit" class="py-2 font-medium text-white rounded-md bg-rose-500 hover:bg-rose-600 px-7">
@@ -46,6 +51,7 @@
                             Discard
                             </button>
                         </div>
+                        <div id="hashtag_suggestions" class="relative"></div>
                         </div>
                     </div>
                     <div class="flex items-center justify-center lg:h-[500px] order-1 lg:order-2 max-h-[500px]">

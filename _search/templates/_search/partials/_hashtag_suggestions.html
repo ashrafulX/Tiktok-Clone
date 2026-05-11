@@ -1,0 +1,14 @@
+{% if tag_suggestions %}
+    <div class="pb-6 mt-3 ml-4 lg:absolute">
+        <p class="mb-2 text-sm font-medium text-neutral-400">
+            Suggested Tags
+        </p>
+        <ul>
+            {% for tag in tag_suggestions %}
+                <li class="py-1">
+                    {{tag}} ({{ tag.count }})
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
