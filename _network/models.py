@@ -9,3 +9,7 @@ class Follow(models.Model):
     class Meta:
         ordering = ['-created_at']
         unique_together = ('follower', 'following')
+        
+    @property
+    def type(self):
+        return 'follow'

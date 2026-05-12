@@ -58,6 +58,21 @@
         {% include '_search/search.html' %}
 
         </div>
+
+        <div x-show="showActivity" class="relative flex flex-col h-screen px-2 py-5">
+            <button id="close-button" @click="showDrawer = false; resetAll()" class="absolute flex items-center justify-center rounded-full cursor-pointer dark:hover:bg-neutral-700 dark:bg-neutral-800 size-7 right-4 top-6 bg-neutral-100 hover:bg-neutral-200">
+                <div class="size-4">
+                <svg viewBox="0 0 48 48">
+                    <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
+                </svg>
+                </div>
+            </button>  
+        
+            <h2 class="pl-3 mb-7">Notifications</h2>
+            <div id="notification-content" class="flex-1 overflow-y-auto overscroll-contain hide-scrollbar"></div>
+
+        </div>
+        
         <div x-show="showMore" class="relative px-2 py-5">
         <button id="close-button" @click="showDrawer = false; resetAll()" class="absolute flex items-center justify-center rounded-full cursor-pointer dark:hover:bg-neutral-700 dark:bg-neutral-800 size-7 right-4 top-6 bg-neutral-100 hover:bg-neutral-200">
             <div class="size-4">
@@ -143,9 +158,11 @@
             searchQuery: '',
             showSearch: false,
             showMore: false,
+            showActivity: false,
             showColorModes: false,
             resetAll(){
                 this.showMore = false,
+                this.showActivity = false,
                 this.showSearch = false,
                 this.showColorModes = false
             }

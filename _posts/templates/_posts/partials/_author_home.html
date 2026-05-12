@@ -5,10 +5,11 @@
             <img src="{{ post.author.avatar }}" alt="" class="object-cover object-center w-full h-full">
         </a>
         {% if post.author != user %}
-        
-            {% with post.author as this_user %}
-            {% include '_network/partials/_follow_round.html' %}
-            {% endwith %}
+            <div class="absolute top-10">
+                {% with post.author as this_user %}
+                {% include '_network/partials/_follow_round.html' %}
+                {% endwith %}
+            </div>
 
         {% endif %}
     </div>
@@ -20,10 +21,11 @@
                 <img src="{{ post.repost_author.avatar }}" alt="" class="object-cover object-center w-full h-full">
             </a>
             {% if post.repost_author != user %}
-        
-                {% with post.repost_author as this_user %}
-                {% include '_network/partials/_follow_round.html' %}
-                {% endwith %}
+                <div class="absolute top-10">
+                    {% with post.repost_author as this_user %}
+                    {% include '_network/partials/_follow_round.html' %}
+                    {% endwith %}
+                </div>
 
             {% endif %}
         </div>

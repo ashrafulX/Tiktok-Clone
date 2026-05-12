@@ -28,6 +28,7 @@ urlpatterns = [
     path('',include('_users.urls')),
     path('following/',include('_network.urls')),
     path('search/',include('_search.urls')),
+    path('notifications/',include('_notifications.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,6 +1,6 @@
 {% load network_tags %}
 
-<button id="follow_round_{{ this_user.username }}" class="absolute top-10"
+<button id="follow_round_{{ this_user.username }}"
         hx-get="{% url 'follow' this_user.username %}?follow_round=true"
         {% if not follow_clicked %}hx-swap="none"{% else %}hx-swap-oob="outerHTML"{% endif %}>
         {% if user|is_following:this_user %}
