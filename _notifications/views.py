@@ -6,9 +6,21 @@ from django.db.models import Q
 from itertools import chain
 from operator import attrgetter
 from .models import NotificationTracker
+from django.utils import timezone
 
 @login_required
 def notifications(request):
+    
+    tracker, created = NotificationTracker.objects.get_or_create(user=request.user)
+    
+    if tracker.activity_last_seen is None:
+        welcome_message = "Welcome! This is where you'll see likes, comments, and follows."
+    else:
+        welcome_message = None
+        
+    tracker.activity_last_seen = timezone.now()
+    tracker.save(update_fields=['activity_last_seen'])
+    
     followers = Follow.objects.filter(
                     following=request.user
                 ).select_related('follower').order_by('-created_at')[:10]
@@ -44,10 +56,11 @@ def notifications(request):
     notifications = combined_notifications[:20]
     
     print("notifications")
-    print(notifications)
+    print(welcome_message)
     
     context = {
         'notifications': notifications,
+        'welcome_message': welcome_message
     }
     
     return render(request, '_notifications/notifications.html', context)

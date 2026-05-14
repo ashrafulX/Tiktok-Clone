@@ -1,3 +1,9 @@
+{% if welcome_message %}
+    <div class="p-4 text-sm font-medium">
+        {{ welcome_message }}
+    </div>
+{% endif %}
+
 {% if notifications %}
 {% for n in notifications %}
 
