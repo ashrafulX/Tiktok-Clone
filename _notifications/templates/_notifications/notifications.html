@@ -103,3 +103,10 @@
 
 {% endfor %}
 {% endif %}
+
+
+<div id="notify-dot" hx-swap-oob="outerHTML" class="absolute top-1 left-6"
+    hx-get="{% url 'new_notifications' %}"
+    hx-trigger="every 3s"
+    hx-swap="outerHTML">
+</div>
