@@ -31,10 +31,13 @@ def conversations(request):
         else:
             receiver = conversation.participants. exclude (pk=request.user.pk).first()
             
+        my_convuser = ConvUser.objects.filter(conversation=conversation, user=request.user).first()
+            
         conversations_extended.append({
             'conversation': conversation,
             'receiver': receiver,
             'is_self': is_self,
+            'my_convuser': my_convuser,
         })
     
     context = {

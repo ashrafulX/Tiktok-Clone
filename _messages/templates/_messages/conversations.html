@@ -12,6 +12,13 @@
             <p class="text-sm text-gray-500 truncate">{{ c.conversation.messages.last.body }}</p>
             <p class="text-sm text-gray-500 truncate">{% if c.is_self %}Message yourself{% else %}{{ c.conversation.updated_at|timesince }} ago{% endif %}</p>
         </div>
+
+        {% if c.my_convuser.unread_count > 0 and not c.is_self %}
+            <span id="unread-badge-{{ c.conversation.id }}" class="px-2 py-1 text-xs text-white bg-red-500 rounded-full min-w-6">
+                {{ c.my_convuser.unread_count }}
+            </span>
+        {% endif %}
+
     </button>
 {% endfor %}
     
