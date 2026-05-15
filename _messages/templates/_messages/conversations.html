@@ -9,8 +9,8 @@
 
         <div class="flex-1 min-w-0 text-left">
             <p class="font-semibold">{{ c.receiver.username }} {% if c.is_self %}(You){% endif %} </p>
-            <p class="text-sm text-gray-500 truncate">{{ c.conversation.message.last.body }}</p>
-            <p class="text-sm text-gray-500 truncate">{% if c.is_self %}Message yourself{% else %}{{ c.conversation.update_at|timesince }} ago{% endif %}</p>
+            <p class="text-sm text-gray-500 truncate">{{ c.conversation.messages.last.body }}</p>
+            <p class="text-sm text-gray-500 truncate">{% if c.is_self %}Message yourself{% else %}{{ c.conversation.updated_at|timesince }} ago{% endif %}</p>
         </div>
     </button>
 {% endfor %}
