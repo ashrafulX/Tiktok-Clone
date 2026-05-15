@@ -1,13 +1,11 @@
-<div x-show="!showActivity">
-    {% if has_new_notifications %}
-        <div id="notify-dot" class="absolute top-1 left-6">
-            <div class="size-3 rounded-full ☐ bg-rose-500"></div>
-        </div>
-    {% else %}
-        <div id="notify-dot" class="absolute top-1 left-6"
-            hx-get="{% url 'new_notifications' %}"
-            hx-trigger="every 3s"
-            hx-swap="outerHTML">
-        </div>
-    {% endif %}
-</div>
+{% if has_new_notifications %}
+    <div id="notify-dot" hx-swap-oob="innerHTML">
+        <div class="size-3 rounded-full ☐ bg-rose-500"></div>
+    </div>
+{% endif %}
+
+{% if has_new_messages %}
+    <div id="messages-dot" hx-swap-oob="innerHTML">
+        <div class="size-3 rounded-full ☐ bg-rose-500"></div>
+    </div>
+{% endif %}

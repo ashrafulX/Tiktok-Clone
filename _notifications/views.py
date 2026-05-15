@@ -6,6 +6,7 @@ from django.db.models import Q
 from itertools import chain
 from operator import attrgetter
 from .models import NotificationTracker
+from _messages.models import ConvUser
 from django.utils import timezone
 
 @login_required
@@ -55,9 +56,6 @@ def notifications(request):
     
     notifications = combined_notifications[:20]
     
-    print("notifications")
-    print(welcome_message)
-    
     context = {
         'notifications': notifications,
         'welcome_message': welcome_message
@@ -100,9 +98,12 @@ def new_notifications(request):
                 created_at__gt=last_seen
             ).exclude(user=request.user).exists()
         )
+        
+    has_new_messages = ConvUser.objects.filter(user=request.user, unread_count__gt=0).exists()
     
     context = {
         'has_new_notifications': has_new_notifications,
+        'has_new_messages': has_new_messages,
     }
     
     

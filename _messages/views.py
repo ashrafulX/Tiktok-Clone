@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .models import Conversation, Message
+from .models import Conversation, Message, ConvUser
 from .utils import get_or_create_conversation, create_message
 from django.http import HttpResponse
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -53,6 +54,8 @@ def chat(request, receiver_id):
         is_self = True
         
     messages = Message.objects.filter(conversation=chat).order_by('created_at')[:100]
+    
+    ConvUser.objects.filter(conversation=chat, user=request.user).update(unread_count=0,last_seen_at=timezone.now())
     
     context = {
         'Page': 'Messages',
