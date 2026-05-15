@@ -44,7 +44,11 @@
                   {% endwith %}
                     
                   
-                  <button class="py-2 rounded-md bg-neutral-200/70 hover:bg-neutral-200 dark:hover:bg-neutral-700 dark:bg-neutral-800 px-7">
+                  <button hx-get="{% url 'chat' profile_user.id %}"
+                          hx-target="#main-content"
+                          hx-swap="innerHTML transition:true"
+                          hx-push-url="{% url 'messages' %}"
+                          class="py-2 rounded-md bg-neutral-200/70 hover:bg-neutral-200 dark:hover:bg-neutral-700 dark:bg-neutral-800 px-7">
                     Message
                   </button>
                   {% endif %}
