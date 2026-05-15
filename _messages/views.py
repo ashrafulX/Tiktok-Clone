@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .models import Conversation, Message
-from .utils import get_or_create_conversation
+from .utils import get_or_create_conversation, create_message
+from django.http import HttpResponse
 
 User = get_user_model()
 
@@ -62,3 +63,34 @@ def chat(request, receiver_id):
     }
     
     return render(request, '_messages/chat.html', context)
+
+@login_required
+def send_message(request, receiver_id):
+    receiver = get_object_or_404(User, id=receiver_id)
+    
+    if request.method == "POST":
+        body = request.POST.get('body', "").strip()
+        
+        if not body:
+            return HttpResponse()
+        
+        Message = create_message(
+            sender=request.user,
+            receiver=receiver,
+            body=body,
+            image=None
+        )
+        
+        context = {
+            'message': Message,
+        }
+        
+        return render(request, '_messages/message.html', context)
+        
+    return HttpResponse()
+
+@login_required
+def delete_message(request, message_id):
+    message = get_object_or_404(Message, id=message_id, sender=request.user)
+    message.delete()
+    return HttpResponse()

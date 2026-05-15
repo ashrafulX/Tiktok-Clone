@@ -21,8 +21,13 @@
                 
         </div>
 
-        <form class="flex items-center gap-3 mt-6 mb-2">
-        {% csrf_token %}
+        <form class="flex items-center gap-3 mt-6 mb-2"
+              hx-post="{% url 'send_message' receiver.id %}"
+              hx-target="#messages-list"
+              hx-swap="beforeend"
+              hx-trigger="submit"
+              hx-on::after-request="this.reset()">
+            {% csrf_token %}
             <div class="relative flex-1">
                 <input type="text" name="body" placeholder="Send a message..." class="w-full px-4 py-2 pr-12 rounded-md outline-none bg-neutral-100 dark:bg-neutral-800" autocomplete="off">
             </div>

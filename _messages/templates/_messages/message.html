@@ -1,0 +1,23 @@
+<div id="message-{{ message.id }}" class="flex justify-end">
+    <div class="flex items-end gap-2 max-w-[70%] group relative">
+
+        <div class="px-4 py-2 text-white bg-blue-500 rounded-br-sm rounded-xl">
+            {{ message.body }}
+        </div>
+
+        <img src="{{ message.sender.avatar }}" class="object-cover rounded-full size-8">
+        
+        {% if message.sender == user %}
+        <button class="bottom-0 items-center justify-center hidden rounded-full abolute -left-3 group-hover:flex size-7 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                hx-delete="{% url 'delete_message' message.id %}"
+                hx-target="#message-{{ message.id }}"
+                hx-swap="outerHTML">
+                <div class="size-4">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
+                    </svg>
+                </div>
+        </button>
+        {% endif %}
+    </div>
+</div>
