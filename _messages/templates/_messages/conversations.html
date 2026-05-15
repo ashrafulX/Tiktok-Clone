@@ -1,0 +1,17 @@
+
+{% for c in conversations %}
+    <button class="flex items-center w-full gap-3 p-3 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-900"
+        hx-get="{% url 'chat' c.receiver.id %}"
+        hx-target="#main-content"
+        hx-swap="innerHTML transition:true"
+        hx-push-url="{% url 'messages' %}">
+        <img src="{{ c.receiver.avatar }}" class="object-cover rounded-full size-12" alt="">
+
+        <div class="flex-1 min-w-0 text-left">
+            <p class="font-semibold">{{ c.receiver.username }} {% if c.is_self %}(You){% endif %} </p>
+            <p class="text-sm text-gray-500 truncate">{{ c.conversation.message.last.body }}</p>
+            <p class="text-sm text-gray-500 truncate">{% if c.is_self %}Message yourself{% else %}{{ c.conversation.update_at|timesince }} ago{% endif %}</p>
+        </div>
+    </button>
+{% endfor %}
+    

@@ -1,0 +1,42 @@
+<div class="h-full p-3 ml-18 lg:ml-110 lg:mr-12">
+    <div class="flex flex-col h-full">
+        <div class="pb-3 mb-5 border-b border-neutral-300 dark:border-neutral-800">
+            <a href="{% url 'profile' receiver.username %}" class="inline-flex items-center gap-3">
+                <img src="{{ receiver.avatar }}" class="object-cover rounded-full size-14" alt="">
+                <div>
+                    <p class="font-medium">{{ receiver.username }} {% if if_self %}(You){% endif %}</p>
+                    <p class="text-xs">{% if if_self %}Message yourself{% elif chat %}Last seen {{ chat.update_at|timesince }} ago{% endif %}</p>
+                </div>
+            </a>
+        </div>
+
+        <div id="messages-list" class="flex flex-col flex-1 gap-4 overflow-y-auto hide-scrollbar"
+            x-data x-init="$nextTick(() => $el.scrollTop = $el.scrollHeight)"
+            hx-on::after-settle="this.scrollTop = this.scrollHeight;">
+
+            
+            {% for message in messages %}
+                {% include '_messages/message.html' %}
+            {% endfor %}
+                
+        </div>
+
+        <form class="flex items-center gap-3 mt-6 mb-2">
+        {% csrf_token %}
+            <div class="relative flex-1">
+                <input type="text" name="body" placeholder="Send a message..." class="w-full px-4 py-2 pr-12 rounded-md outline-none bg-neutral-100 dark:bg-neutral-800" autocomplete="off">
+            </div>
+            <button type="submit" class="py-2 text-white rounded-md bg-rose-500 hover:bg-rose-600 px-7">
+                Send
+            </button>
+        </form>
+
+    </div>
+</div>
+
+
+<title hx-swap-oob="true">Messages - Tiktok</title>
+
+<div hx-swap-oob="innerHTML" id="navigation">
+    {% include "includes/navigation.html" %}
+</div>

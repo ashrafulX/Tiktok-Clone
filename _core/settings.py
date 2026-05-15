@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     '_network',
     '_search',
     '_notifications',
+    '_messages',
     
     # Third party apps
     "django_htmx",
