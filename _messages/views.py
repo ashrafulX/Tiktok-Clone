@@ -5,6 +5,8 @@ from .models import Conversation, Message, ConvUser
 from .utils import get_or_create_conversation, create_message
 from django.http import HttpResponse
 from django.utils import timezone
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 User = get_user_model()
 
@@ -83,18 +85,23 @@ def send_message(request, receiver_id):
         if not body and not image:
             return HttpResponse()
         
-        Message = create_message(
+        message = create_message(
             sender=request.user,
             receiver=receiver,
             body=body,
             image=image
         )
         
-        context = {
-            'message': Message,
-        }
+        channel_layer = get_channel_layer()
+        group_name = f"chat_{message.conversation.id}"
+        async_to_sync(channel_layer.group_send)(
+            group_name,
+            {
+                'type': 'broadcast_message',
+                'message_id': message.id
+            }
+        )
         
-        return render(request, '_messages/message.html', context)
         
     return HttpResponse()
 

@@ -35,6 +35,8 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     '_search',
     '_notifications',
     '_messages',
+    '_channels',
     
     # Third party apps
     "django_htmx",
@@ -90,8 +93,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = '_core.wsgi.application'
+ASGI_APPLICATION = '_core.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
