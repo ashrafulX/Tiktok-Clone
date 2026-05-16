@@ -5,7 +5,11 @@
             hx-swap="innerHTML"
             hx-push-url="true">
         <div class="relative bg-black w-full aspect-[3/4] rounded-lg overflow-hidden">
-            <img src="{{ post.image.url }}" alt="" class="object-cover w-full h-full">
+            {% if post.video %}
+                <video class="object-cover w-full h-full"src="{{ post.video.url }}" autoplay muted loop playsinline></video>
+            {% elif post.image %}
+                <img src="{{ post.image.url }}" alt="" class="object-cover w-full h-full">
+            {% endif %}
             <article-ingo class="absolute bottom-0 left-0 right-0">
                 <div class="w-full rounded-b-lg h-30 bg-gradient-to-t from-black to-transparent opacity-30"></div>
                 <div class="absolute bottom-0 z-10 flex items-center gap-1 p-3">

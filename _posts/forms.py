@@ -3,10 +3,11 @@ from .models import Post
 
 class PostForm(forms.ModelForm):
     tags = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'input-field', 'placeholder': '#tags - separated by a space', 'maxlength' : '80'}))
+    file = forms.FileField()
     
     class Meta:
         model = Post
-        fields = ['image', 'body']
+        fields = ['body']
         
 class PostEditForm(forms.ModelForm):
     tags = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'input-field', 'placeholder': '#tags - separated by a space', 'maxlength' : '80'}))

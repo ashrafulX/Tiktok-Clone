@@ -4,12 +4,12 @@
 {% block meta_tags %}
   <meta property="og:title" content="Post by {{ post.author.username }}">
   <meta property="og:description" content="Check out this post!">
-  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.image.url }}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }} {% if post.image %}{{ post.image.url }}{% endif %} ">
   <meta property="og:type" content="article">
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:title" content="Post by {{ post.author.username }}">
   <meta property="twitter:description" content="Check out this post!">
-  <meta property="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.image.url }}">
+  <meta property="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% if post.image %}{{ post.image.url }}{% endif %}">
 {% endblock %}
 
 {% block content %}

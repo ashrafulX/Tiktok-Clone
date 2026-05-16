@@ -2,7 +2,12 @@
 
 <div id="postpage-content" class="grid lg:grid-cols-[1fr_540px] h-screen">
     <div class="relative flex items-center justify-center bg-black">
-            <img src="{{ post.image.url }}" alt="" class="object-contain max-h-screen">
+
+            {% if post.video %}
+                <video class="object-cover w-full h-screen"src="{{ post.video.url }}" controls autoplay muted loop playsinline></video>
+            {% elif post.image %}
+                <img src="{{ post.image.url }}" alt="" class="object-contain max-h-screen">
+            {% endif %}
             <scroll-bar class="absolute top-0 flex items-center h-full right-5">
                 <div class="flex flex-col gap-4">
                     {% if prev_post %}
@@ -193,7 +198,11 @@
                                 <article>
                                     <a href="{% url 'post_page' post.uuid %}">
                                         <div class="relative bg-black w-full aspect-[3/4] rounded-lg overflow-hidden">
-                                            <img src="{{ post.image.url }}" alt="" class="object-cover w-full h-full">
+                                            {% if post.video %}
+                                                <video class="object-cover w-full h-full"src="{{ post.video.url }}" autoplay muted loop playsinline></video>
+                                            {% elif post.image %}
+                                                <img src="{{ post.image.url }}" alt="" class="object-cover w-full h-full">
+                                            {% endif %}
                                             <article-ingo class="absolute bottom-0 left-0 right-0">
                                                 <div class="w-full rounded-b-lg h-30 bg-gradient-to-t from-black to-transparent opacity-30"></div>
                                                 <div class="absolute bottom-0 z-10 flex items-center gap-1 p-3">

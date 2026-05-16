@@ -39,7 +39,11 @@
                 <p class="text-xs text-neutral-500">{{ n.created_at | timesince }} ago</p>
             </div>
             <div class="pl-2 ml-auto shrink-0">
-                <img src="{{ n.post.image.url }}" class="object-cover rounded-lg size-12" alt="">
+                
+                {% with post=n.post %}
+                    {% include '_notifications/notify_thumbnail.html' %}
+                {% endwith %}
+
             </div>
         </a>
     {% endif %}
@@ -60,7 +64,9 @@
                 <p class="text-xs text-neutral-500">{{ n.created_at | timesince }} ago</p>
             </div>
             <div class="pl-2 ml-auto shrink-0">
-                <img src="{{ n.comment.post.image.url }}" class="object-cover rounded-lg size-12" alt="">
+                {% with post=n.comment.post %}
+                    {% include '_notifications/notify_thumbnail.html' %}
+                {% endwith %}
             </div>
         </a>
     {% endif %}
@@ -81,7 +87,9 @@
                 <p class="text-xs text-neutral-500">{{ n.created_at | timesince }} ago</p>
             </div>
             <div class="pl-2 ml-auto shrink-0">
-                <img src="{{ n.post.image.url }}" class="object-cover rounded-lg size-12" alt="">
+                {% with post=n.post %}
+                    {% include '_notifications/notify_thumbnail.html' %}
+                {% endwith %}
             </div>
         </a>
     {% endif %}
@@ -102,7 +110,9 @@
                 <p class="text-xs text-neutral-500">{{ n.created_at | timesince }} ago</p>
             </div>
             <div class="pl-2 ml-auto shrink-0">
-                <img src="{{ n.post.image.url }}" class="object-cover rounded-lg size-12" alt="">
+                {% with post=n.post %}
+                    {% include '_notifications/notify_thumbnail.html' %}
+                {% endwith %}
             </div>
         </a>
     {% endif %}

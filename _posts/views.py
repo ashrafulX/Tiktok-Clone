@@ -89,6 +89,14 @@ def upload(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            
+            uploaded_file = request.FILES.get('file')
+            if uploaded_file:
+                if uploaded_file.content_type.startswith('image/'):
+                    post.image = uploaded_file
+                elif uploaded_file.content_type.startswith('video/'):
+                    post.video = uploaded_file
+            
             post.save()
             input_tags = request.POST.get('tags','')
             process_tags(post, input_tags)
