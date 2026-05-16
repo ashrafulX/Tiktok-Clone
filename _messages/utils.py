@@ -39,10 +39,11 @@ def create_message(sender, receiver, body, image=None):
         image=image
     )
     
-    if sender != receiver:
+    convuser_receiver = ConvUser.objects.get(conversation=conversation, user=receiver)
+
+    if sender != receiver and not convuser_receiver.is_live:
         ConvUser.objects.filter(
-            conversation=conversation, 
-            user=receiver
+            id=convuser_receiver.id
         ).update(unread_count=F('unread_count') + 1)
         
     ConvUser.objects.filter(

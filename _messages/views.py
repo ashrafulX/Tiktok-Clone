@@ -12,6 +12,7 @@ User = get_user_model()
 
 @login_required
 def messages(request):
+    ConvUser.objects.filter(user=request.user, is_live=True).update(is_live=False)
     context = {
         'page': 'Messages',
     }

@@ -11,6 +11,7 @@ class ConvUser(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     unread_count = models.IntegerField(default=0)
     last_seen_at = models.DateTimeField(null=True, blank=True)
+    is_live = models.BooleanField(default=False)
     
     class Meta:
         unique_together = ("conversation", "user")

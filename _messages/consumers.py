@@ -1,6 +1,7 @@
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from .models import Message
+from .models import Message, ConvUser
+from django.utils import timezone
 from django.template.loader import render_to_string
 
 class ChatConsumer(WebsocketConsumer):
@@ -21,11 +22,21 @@ class ChatConsumer(WebsocketConsumer):
         
         self.accept()
         
+        ConvUser.objects.filter(
+            conversation=self.chat_id, 
+            user=self.user
+        ).update(is_live=True, unread_count=0, last_seen_at=timezone.now())
+        
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
             self.group_name,
             self.channel_name
         )
+        
+        ConvUser.objects.filter(
+            conversation=self.chat_id, 
+            user=self.user
+        ).update(is_live=False, unread_count=0, last_seen_at=timezone.now())
         
     def broadcast_message(self, event):
         message = Message.objects.get(id=event["message_id"])
