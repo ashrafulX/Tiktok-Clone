@@ -21,3 +21,11 @@ class Message(models.Model):
     body = models.TextField()
     image = models.ImageField(upload_to="chat_images/",null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    @property
+    def emoji_only(self):
+        message = self.body.strip()
+        for character in message:
+            if character.isalnum():
+                return False
+        return True

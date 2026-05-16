@@ -28,8 +28,16 @@
               hx-trigger="submit"
               hx-on::after-request="this.reset()">
             {% csrf_token %}
-            <div class="relative flex-1">
-                <input type="text" name="body" placeholder="Send a message..." class="w-full px-4 py-2 pr-12 rounded-md outline-none bg-neutral-100 dark:bg-neutral-800" autocomplete="off">
+            <div x-data="emojiPicker()" class="relative flex-1">
+                <input x-ref="messageInput" type="text" name="body" placeholder="Send a message..." class="w-full px-4 py-2 pr-12 rounded-md outline-none bg-neutral-100 dark:bg-neutral-800" autocomplete="off">
+                <button type="button" @click="emojiToggle" class="absolute -translate-y-1/2 right-3 top-1/2 opacity-70 hover:opacity-100">
+                    <div class="size-6">
+                        <svg viewBox="0 0 48 48">
+                            <path d="M24 6C14.0589 6 6 14.0589 6 24C6 33.9411 14.0589 42 24 42C33.9411 42 42 33.9411 42 24C42 14.0589 33.9411 6 24 6ZM2 24C2 11.8497 11.8497 2 24 2C36.1503 2 46 11.8497 46 24C46 36.1503 36.1503 46 24 46C11.8497 46 2 36.1503 2 24Z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M17 23C18.6569 23 20 21.2091 20 19C20 16.7909 18.6569 15 17 15C15.3431 15 14 16.7909 14 19C14 21.2091 15.3431 23 17 23Z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M31 23C32.6569 23 34 21.2091 34 19C34 16.7909 32.6569 15 31 15C29.3431 15 28 16.7909 28 19C28 21.2091 29.3431 23 31 23Z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M16 28.3431C16 31.4673 19.5817 36 24 36C28.4183 36 32 31.4673 32 28.3431C32 25.219 16 25.219 16 28.3431Z"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div x-show="emojiOpen" @click.outside="emojiOpen = false" x-ref="pickerContainer" class="absolute right-0 z-50 bottom-12"></div>
             </div>
             <button type="submit" class="py-2 text-white rounded-md bg-rose-500 hover:bg-rose-600 px-7">
                 Send
@@ -47,3 +55,23 @@
 </div>
 
 <span id="unread-badge-{{ chat.id }}" hx-swap-oob="true"></span>
+
+<script>
+function emojiPicker() {
+    return {
+        emojiOpen: false,
+        picker: null,
+        emojiToggle() {
+        this.emojiOpen = !this.emojiOpen
+        if (this.emojiOpen && !this.picker) {
+            this.picker = new EmojiMart.Picker({
+            onEmojiSelect: emoji => {
+                this.$refs.messageInput.value += emoji.native;
+            }
+            })
+            this.$refs.pickerContainer.appendChild(this.picker)
+        }
+        }
+    }
+}
+</script>

@@ -1,10 +1,20 @@
 <div id="message-{{ message.id }}" class="flex {% if message.sender == user %} justify-end {% else %} justify-start {% endif %}">
     <div class="flex items-end gap-2 max-w-[70%] group relative">
 
-        <div class="px-4 py-2 rounded-xl {% if message.sender == user %} bg-blue-500 rounded-br-sm text-white order-1{% else %} bg-neutral-200 dark:bg-neutral-800 rounded-bl-sm order-2 {% endif %}">
-            {{ message.body }}
-        </div>
+        {% if message.emoji_only %}
 
+            <div class="text-5xl {% if message.sender == user %}order-1{% else %} order-2 {% endif %}">
+                {{ message.body }}
+            </div>
+            
+        {% else %}
+        
+            <div class="px-4 py-2 rounded-xl {% if message.sender == user %} bg-blue-500 rounded-br-sm text-white order-1{% else %} bg-neutral-200 dark:bg-neutral-800 rounded-bl-sm order-2 {% endif %}">
+                {{ message.body }}
+            </div>
+        
+        {% endif %}
+        
         <img src="{{ message.sender.avatar }}" class="object-cover rounded-full size-8 {% if message.sender == user %} order-2 {% else %} order-1 {% endif %}">
         
         {% if message.sender == user %}
