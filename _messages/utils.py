@@ -26,9 +26,11 @@ def create_message(sender, receiver, body, image=None):
             ConvUser(conversation=conversation, user=sender), 
             ConvUser(conversation=conversation, user=receiver)
         ])
+        is_new_conversation = True
     else:
         conversation.updated_at = timezone.now()
         conversation.save(update_fields=['updated_at'])
+        is_new_conversation = False
         
     message = Message.objects.create(
         sender=sender,
@@ -48,4 +50,4 @@ def create_message(sender, receiver, body, image=None):
         user=sender
     ).update(last_seen_at=timezone.now(), unread_count=0)
     
-    return message
+    return message, is_new_conversation

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .models import Conversation, Message, ConvUser
@@ -85,12 +85,15 @@ def send_message(request, receiver_id):
         if not body and not image:
             return HttpResponse()
         
-        message = create_message(
+        message, is_new_conversation = create_message(
             sender=request.user,
             receiver=receiver,
             body=body,
             image=image
         )
+        
+        if is_new_conversation:
+            return redirect('chat', receiver_id=receiver.id)
         
         channel_layer = get_channel_layer()
         group_name = f"chat_{message.conversation.id}"
