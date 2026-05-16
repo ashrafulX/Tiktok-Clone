@@ -6,7 +6,7 @@
                 <img src="{{ receiver.avatar }}" class="object-cover rounded-full size-14" alt="">
                 <div>
                     <p class="font-medium">{{ receiver.username }} {% if if_self %}(You){% endif %}</p>
-                    <p class="text-xs">{% if if_self %}Message yourself{% elif chat %}Last seen {{ chat.update_at|timesince }} ago{% endif %}</p>
+                    <p class="text-xs">{% if if_self %}Message yourself{% elif chat %}Last seen {{ chat.updated_at|timesince }} ago{% endif %}</p>
                 </div>
             </a>
         </div>
