@@ -11,8 +11,8 @@
         </div>
 
         <div id="messages-list" class="flex flex-col flex-1 gap-4 overflow-y-auto hide-scrollbar"
-            x-data x-init="$nextTick(() => $el.scrollTop = $el.scrollHeight)"
-            hx-on::after-settle="this.scrollTop = this.scrollHeight;">
+            x-data x-init="$nextTick(() => scrollMessagesToBottom())"
+            hx-on::after-settle="scrollMessagesToBottom()">
 
             
             {% for message in messages %}
@@ -26,10 +26,19 @@
               hx-target="#messages-list"
               hx-swap="beforeend"
               hx-trigger="submit"
-              hx-on::after-request="this.reset()">
+              hx-on::after-request="this.reset()"
+              enctype="multipart/form-data">
             {% csrf_token %}
             <div x-data="emojiPicker()" class="relative flex-1">
                 <input x-ref="messageInput" type="text" name="body" placeholder="Send a message..." class="w-full px-4 py-2 pr-12 rounded-md outline-none bg-neutral-100 dark:bg-neutral-800" autocomplete="off">
+                <input x-ref="imageInput" type="file" name="image" accept="image/*" class="hidden" @change="$el.closest('form').requestSubmit()"/>
+                <button type="button" @click="$refs.imageInput.click()" class="absolute -translate-y-1/2 right-11 top-1/2 opacity-70 hover:opacity-100">
+                    <div class="size-6">
+                        <svg viewBox="0 0 48 48">
+                            <path d="M16.8 8c-2.3 0-3.8 0-4.93.1a4.56 4.56 0 0 0-1.69.34 4 4 0 0 0-1.74 1.74c-.1.2-.26.6-.34 1.7C8 13 8 14.48 8 16.8v8.68l.87-.86c.76-.76 1.42-1.4 2-1.9a6.12 6.12 0 0 1 2.1-1.23 6 6 0 0 1 3.76.05c.81.28 1.47.75 2.07 1.29.57.5 1.2 1.17 1.95 1.95l14.6 15.17.78-.05a4.56 4.56 0 0 0 1.69-.34 4 4 0 0 0 1.74-1.74c.1-.2.26-.6.34-1.7.1-1.12.1-2.61.1-4.92V16.8c0-2.3 0-3.8-.1-4.93a4.56 4.56 0 0 0-.34-1.69 4 4 0 0 0-1.74-1.74c-.2-.1-.6-.26-1.7-.34C35 8 33.52 8 31.2 8H16.8ZM8 31.11v.09c0 2.3 0 3.8.1 4.93.08 1.09.24 1.49.34 1.69a4 4 0 0 0 1.74 1.74c.2.1.6.26 1.7.34 1.12.1 2.61.1 4.92.1h13.07L17.9 27.6a34.4 34.4 0 0 0-1.77-1.78 2.29 2.29 0 0 0-.71-.5 2 2 0 0 0-1.25-.02c-.11.04-.31.12-.74.48-.44.37-.98.9-1.81 1.73L8 31.11ZM4 16.8c0-4.48 0-6.72.87-8.43a8 8 0 0 1 3.5-3.5C10.07 4 12.32 4 16.8 4h14.4c4.48 0 6.72 0 8.43.87a8 8 0 0 1 3.5 3.5c.87 1.7.87 3.95.87 8.43v14.4c0 4.48 0 6.72-.87 8.43a8 8 0 0 1-3.5 3.5c-1.7.87-3.95.87-8.43.87H16.8c-4.48 0-6.72 0-8.43-.87a8 8 0 0 1-3.5-3.5C4 37.93 4 35.68 4 31.2V16.8ZM31 12a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"></path>
+                        </svg>
+                    </div>
+                </button>
                 <button type="button" @click="emojiToggle" class="absolute -translate-y-1/2 right-3 top-1/2 opacity-70 hover:opacity-100">
                     <div class="size-6">
                         <svg viewBox="0 0 48 48">
@@ -74,4 +83,29 @@ function emojiPicker() {
         }
     }
 }
+
+function scrollMessagesToBottom() {
+  const el = document.getElementById("messages-list");
+    if (!el) return;
+
+  const images = el.querySelectorAll("img");
+  const scroll = () => el.scrollTop = el.scrollHeight;
+
+  if (!images.length) return scroll();
+
+  let loaded = 0;
+  images.forEach(img => {
+    if (img.complete) {
+      loaded++;
+    } else {
+      img.addEventListener("load", () => {
+        loaded++;
+        if (loaded === images.length) scroll();
+      }, { once: true });
+    }
+  });
+
+  if (loaded === images.length) scroll();
+}
+
 </script>

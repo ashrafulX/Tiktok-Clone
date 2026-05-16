@@ -76,15 +76,18 @@ def send_message(request, receiver_id):
     
     if request.method == "POST":
         body = request.POST.get('body', "").strip()
+        image = request.FILES.get("image")
+        print("image")
+        print(image)
         
-        if not body:
+        if not body and not image:
             return HttpResponse()
         
         Message = create_message(
             sender=request.user,
             receiver=receiver,
             body=body,
-            image=None
+            image=image
         )
         
         context = {
