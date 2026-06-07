@@ -1,0 +1,39 @@
+# Secrets — never bake into the image
+.env
+.env.*
+!.env.example
+
+# Virtualenv and Python artifacts
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Node — reinstalled inside the image
+node_modules/
+
+# Git / editor
+.git/
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+
+# Build output (rebuilt inside the image)
+staticfiles/
+static/css/style.css
+
+# Local SQLite (we use Postgres)
+db.sqlite3
+
+# Local media uploads — these belong on S3, not in the image
+media/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Docs / scratch files (not needed at runtime)
+text.txt

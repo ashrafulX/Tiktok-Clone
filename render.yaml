@@ -1,0 +1,78 @@
+# Render Blueprint — one-click deploy for the full stack.
+# Docs: https://render.com/docs/blueprint-spec
+
+databases:
+  - name: tiktok-db
+    plan: free
+    databaseName: tiktok
+    user: tiktok
+
+services:
+  # Redis for the Django Channels WebSocket layer
+  - type: keyvalue
+    name: tiktok-redis
+    plan: free
+    ipAllowList: []   # private — only the web service can reach it
+
+  # The Django app (Dockerfile-based)
+  - type: web
+    name: tiktok-clone
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: SECRET_KEY
+        generateValue: true   # Render generates a strong random key
+
+      # Set these manually in the dashboard after first deploy
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: CLOUDINARY_URL
+        sync: false
+
+      # Email via Brevo SMTP
+      - key: EMAIL_HOST
+        value: smtp-relay.brevo.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        sync: false   # set in dashboard (your-id@smtp-brevo.com)
+      - key: EMAIL_HOST_PASSWORD
+        sync: false   # SMTP key from Brevo dashboard
+      - key: DEFAULT_FROM_EMAIL
+        sync: false   # verified sender, e.g. "TikTok <no-reply@yourdomain.com>"
+
+      # Database — auto-wired from the tiktok-db service above
+      - key: DB_HOST
+        fromDatabase:
+          name: tiktok-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: tiktok-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: tiktok-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: tiktok-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: tiktok-db
+          property: password
+
+      # Redis — auto-wired from the tiktok-redis service above
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: tiktok-redis
+          property: connectionString
