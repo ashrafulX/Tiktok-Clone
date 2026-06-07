@@ -202,14 +202,17 @@ if DEBUG:
 AUTH_USER_MODEL= '_users.CustomUser'
 
 if ENVIRONMENT == "production":
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = env("EMAIL_HOST")
-    EMAIL_PORT = env("EMAIL_PORT")
-    EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+    # SMTP via Brevo (https://www.brevo.com) — 300 free emails/day.
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = env("EMAIL_HOST", default="smtp-relay.brevo.com")
+    EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+    EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+    EMAIL_HOST_USER = env("EMAIL_HOST_USER")          # <login>@smtp-brevo.com
+    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")  # SMTP key from Brevo dashboard
+    DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")    # must be a verified sender in Brevo
+    SERVER_EMAIL = DEFAULT_FROM_EMAIL
 else:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
