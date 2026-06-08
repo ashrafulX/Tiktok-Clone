@@ -119,4 +119,4 @@ package.json
 package-lock.json
 static/css/style.css
 input.postcss
-staticfiles/static/css/style.css
+staticfiles/
