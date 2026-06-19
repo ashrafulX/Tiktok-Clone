@@ -115,8 +115,5 @@ Only for Development only
 # !**/migrations/__init__.py
 
 node_modules/
-package.json
-package-lock.json
 static/css/style.css
-input.postcss
 staticfiles/
