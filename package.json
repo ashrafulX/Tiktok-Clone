@@ -1,0 +1,17 @@
+{
+  "name": "tik-tok-clone",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "css": "tailwindcss -i ./static/css/tailwind.css -o ./static/css/style.css --watch",
+    "minify": "tailwindcss -i ./static/css/tailwind.css -o ./static/css/style.css --minify"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "tailwindcss": "^4.1.18"
+  }
+}
