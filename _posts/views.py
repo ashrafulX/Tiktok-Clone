@@ -40,7 +40,23 @@ def home(request):
         key = attrgetter('created_at'),
         reverse=True
     )
-    
+
+    # Cold-start "For You" fallback: when the follow feed is empty (new account,
+    # or followed accounts haven't posted) show the most-engaging posts instead
+    # of an empty page so there is always something to watch.
+    if not feed:
+        feed = list(
+            Post.objects
+            .exclude(author=request.user)
+            .select_related('author')
+            .annotate(
+                engagement=Count('likes', distinct=True)
+                + Count('comments', distinct=True)
+                + Count('reposts', distinct=True)
+            )
+            .order_by('-engagement', '-created_at')
+        )
+
     paginator = Paginator(feed, 1)
     page_number = int(request.GET.get('page_number', 1))
     posts_page = paginator.get_page(page_number)
