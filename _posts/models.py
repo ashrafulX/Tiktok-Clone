@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 import uuid
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 
 class Post(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -15,7 +16,7 @@ class Post(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', through='LikedPost')
     bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='bookmarkedposts', through='BookmarkedPost')
     reposts = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='repostedposts', through='Repost')
-    image = models.ImageField(upload_to='posts/', null=True, blank=True)
+    image = models.ImageField(upload_to='posts/', null=True, blank=True, storage=VideoMediaCloudinaryStorage(),)
     video = models.FileField(upload_to='posts/videos/', null=True, blank=True)
     body = models.CharField(max_length=80, null=True, blank=True)
     tags = models.ManyToManyField('Tag', blank=True, null=True, related_name='posts')
