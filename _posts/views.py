@@ -15,6 +15,7 @@ from django.db.models import Count
 from itertools import chain
 from operator import attrgetter
 from .utils import process_tags
+from django.conf import settings
 
 User = get_user_model()
 
@@ -165,7 +166,7 @@ def verification_code(request):
     cache.set(f"verification_code_{email}", code, timeout=300)
     subject = "Your TikTok Verification Code"
     message = f"Use this code to sign up: {code}. It expires in 5 minutes."
-    sender = "no-reply@tiktok-clone.com"
+    sender = settings.DEFAULT_FROM_EMAIL
     recipients = [email]
 
     email_thread = threading.Thread(target=send_mail_async, args=(subject, message, sender, recipients))
