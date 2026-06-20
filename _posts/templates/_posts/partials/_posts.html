@@ -71,7 +71,7 @@
             </div>
             <div class="w-full h-64 opacity-30 bg-linear-to-t from-black to-transparent rounded-b-2xl"></div>
         </article-info>
-        <article-buttons class="absolute bottom-0 flex flex-col gap-2 -right-17">
+        <article-buttons class="absolute z-30 flex flex-col gap-2 bottom-2 right-2 lg:bottom-0 lg:-right-17">
             
             <div id="author_home_{{ post.uuid }}">
             {% include '_posts/partials/_author_home.html' %}
@@ -188,6 +188,10 @@ function videoPlayer(src) {
                         window.currentlyPlayingVideo.pause();
                     }
                     window.currentlyPlayingVideo = video;
+                    // Carry the global sound preference onto the newly focused
+                    // video, so unmuting one keeps sound on as you scroll.
+                    this.muted = !window.userWantsSound;
+                    video.muted = this.muted;
                     video.play().catch(() => {});
                 } else if (!entry.isIntersecting) {
                     if (window.currentlyPlayingVideo === video) {

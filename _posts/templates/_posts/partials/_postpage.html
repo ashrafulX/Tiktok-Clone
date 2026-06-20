@@ -1,12 +1,12 @@
 {% load static %}
 
-<div id="postpage-content" class="grid lg:grid-cols-[1fr_540px] h-screen">
+<div id="postpage-content" class="grid lg:grid-cols-[1fr_540px] lg:h-screen">
     <div class="relative flex items-center justify-center bg-black">
 
             {% if post.video %}
-                <video class="object-cover w-full h-screen"src="{{ post.video.url }}" controls autoplay muted loop playsinline></video>
+                <video class="object-cover w-full h-[70vh] lg:h-screen"src="{{ post.video.url }}" controls autoplay muted loop playsinline></video>
             {% elif post.image %}
-                <img src="{{ post.image.url }}" alt="" class="object-contain max-h-screen">
+                <img src="{{ post.image.url }}" alt="" class="object-contain max-h-[70vh] lg:max-h-screen">
             {% endif %}
             <scroll-bar class="absolute top-0 flex items-center h-full right-5">
                 <div class="flex flex-col gap-4">
@@ -43,7 +43,7 @@
                 </div>
             </scroll-bar>
     </div>
-    <div class="hidden bg-white dark:bg-black lg:block">
+    <div class="bg-white dark:bg-black">
             <div class="flex flex-col h-screen gap-5">
                 <article-info class="block mx-4 mt-4">
                     <div class="p-4 bg-neutral-100 dark:bg-neutral-900 rounded-xl">
