@@ -1,0 +1,168 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import get_user_model, logout
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from .forms import ProfileForm, EmailForm, BirthdayForm
+from allauth.account.models import EmailAddress
+from django.core.cache import cache
+from django.http import HttpResponse
+from django.db.models import Count
+
+User = get_user_model()
+
+def index_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    return render(request, 'users/index.html')
+
+@login_required
+def profile_view(request, username=None):
+    if not username:
+        return redirect('profile', request.user.username)
+    
+    profile_user = get_object_or_404(User, username=username)
+    
+    if request.GET.get('link'):
+        urlpath = reverse('profile', kwargs={'username': username})
+        return render(request, 'users/partials/profile_link.html', {'urlpath': urlpath})
+    
+    if request.GET.get('following'):
+        accounts = User.objects.filter(is_followed__follower=profile_user)
+        return render(request, 'users/partials/profile_following.html', {"accounts": accounts})
+    
+    if request.GET.get('followers'):
+        accounts = User.objects.filter(is_follower__following=profile_user)
+        return render(request, 'users/partials/profile_following.html', {"accounts": accounts, 'followers': True})
+    
+    if request.GET.get('reposted'):
+        profileposts_reposted = profile_user.repostedposts.all().order_by('-repost__created_at')
+        return render(request, 'users/partials/profileposts_reposted.html', {"profileposts_reposted": profileposts_reposted})
+    
+    if request.GET.get('liked'):
+        profileposts_liked = profile_user.likedposts.all().order_by('-likedpost__created_at')
+        return render(request, 'users/partials/profileposts_liked.html', {"profileposts_liked": profileposts_liked})
+    
+    profileposts = profile_user.posts.order_by('-created_at')
+    if request.GET.get('sort'):
+        sort_order = request.GET.get('sort','')
+        if sort_order == 'oldest':
+            profileposts = profile_user.posts.order_by('created_at')
+        elif sort_order == 'popular':
+            profileposts = profile_user.posts.annotate(likes_count=Count('likes')).order_by('-likes_count', '-created_at')
+        else:
+            profileposts = profile_user.posts.order_by('-created_at')
+        return render(request, 'users/partials/profileposts.html', {"profileposts": profileposts})
+    
+    if request.GET.get('bookmarked'):
+        profileposts_bookmarked = {}
+        if request.user == profile_user:
+            profileposts_bookmarked = profile_user.bookmarkedposts.all().order_by('-bookmarkedpost__created_at')
+        return render(request, 'users/partials/profileposts_bookmarked.html', {"profileposts_bookmarked": profileposts_bookmarked})
+        
+    profile_user_likes = profile_user.posts.aggregate(total_likes=Count('likes'))['total_likes']
+    
+    context = {
+        'page' : 'Profile',
+        'profile_user': profile_user,
+        'profile_user_likes': profile_user_likes,
+        'profileposts': profileposts
+    }
+    
+    if request.htmx:
+        return render(request, 'users/partials/profile.html', context)
+    return render(request, 'users/profile.html', context)
+
+@login_required
+def profile_edit(request):
+    form = ProfileForm(instance=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', request.user.username)
+        
+    context = {
+        'form': form
+    }
+    
+    if request.htmx:
+        return render(request, 'users/partials/profile_edit.html', context=context)
+    return redirect('profile', request.user.username)
+
+@login_required
+def settings_view(request):
+    
+    form = EmailForm(instance=request.user)
+    
+    if request.GET.get('email'):
+        return render(request, 'users/partials/settings_email.html', {'form':form})
+    
+    if request.POST.get('email'):
+        form = EmailForm(request.POST, instance=request.user)
+        current_email = request.user.email
+        
+        if form.is_valid():
+            new_email = form.cleaned_data['email']
+            if new_email != current_email:
+                form.save()
+                email_obj = EmailAddress.objects.get(user=request.user, primary=True)
+                email_obj.email = new_email
+                email_obj.verified = False
+                email_obj.save()
+                return redirect('settings')
+            
+    if request.GET.get('verification'):
+        return render(request, 'users/partials/settings_verification.html', {'form':form})
+    
+    if request.POST.get('code'):
+        code = request.POST.get('code')
+        email = request.user.email
+        cached_code = cache.get(f"verification_code_{email}")
+        if cached_code and cached_code == code:
+            email_obj = EmailAddress.objects.get(user=request.user, primary=True)
+            email_obj.verified = True
+            email_obj.save()
+            return redirect('settings')
+        
+    if request.GET.get('birthday'):
+        birthdayForm = BirthdayForm(instance=request.user)
+        return render(request, 'users/partials/settings_birthday.html', {'form':birthdayForm})
+    
+    if request.POST.get('birthday'):
+        birthdayForm = BirthdayForm(request.POST, instance=request.user)
+        
+        if birthdayForm.is_valid():
+            birthdayForm.save()
+            return redirect('settings')
+    
+    if request.POST.get("notifications"):
+        print(request.POST.get("notifications"))
+        if request.POST.get("notifications") == 'on':
+            request.user.notifications = True
+        else:
+            request.user.notifications = False
+        request.user.save()
+        return HttpResponse('')
+    
+    if request.GET.get("darkmode"):
+        if request.GET.get("darkmode") == 'true':
+            request.user.darkmode = True
+        else:
+            request.user.darkmode = False
+        request.user.save()
+        return HttpResponse('')
+    
+    if request.htmx:
+        return render(request, 'users/partials/settings.html', {'form':form})
+    return render(request, 'users/settings.html', {'form':form})
+
+@login_required
+def delete_account(request):
+    user = request.user 
+    if request.method == "POST":
+        logout(request)
+        user.delete()
+        return redirect('home')
+        
+    return render(request, 'users/profile_delete.html')

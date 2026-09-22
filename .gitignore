@@ -5,6 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
+.kolo/
 
 # Distribution / packaging
 .Python
@@ -115,5 +116,4 @@ Only for Development only
 # !**/migrations/__init__.py
 
 node_modules/
-static/css/style.css
 staticfiles/

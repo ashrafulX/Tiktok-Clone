@@ -12,9 +12,9 @@ services:
   - type: keyvalue
     name: tiktok-redis
     plan: free
-    ipAllowList: []   # private — only the web service can reach it
+    ipAllowList: []
 
-  # The Django app (Dockerfile-based)
+  # The Django app (Docker-based)
   - type: web
     name: tiktok-clone
     runtime: docker
@@ -24,17 +24,13 @@ services:
       - key: ENVIRONMENT
         value: production
       - key: SECRET_KEY
-        generateValue: true   # Render generates a strong random key
-
-      # Set these manually in the dashboard after first deploy
+        generateValue: true
       - key: ALLOWED_HOSTS
         sync: false
       - key: CSRF_TRUSTED_ORIGINS
         sync: false
       - key: CLOUDINARY_URL
         sync: false
-
-      # Email via Brevo SMTP
       - key: EMAIL_HOST
         value: smtp-relay.brevo.com
       - key: EMAIL_PORT
@@ -42,13 +38,11 @@ services:
       - key: EMAIL_USE_TLS
         value: "True"
       - key: EMAIL_HOST_USER
-        sync: false   # set in dashboard (your-id@smtp-brevo.com)
+        sync: false
       - key: EMAIL_HOST_PASSWORD
-        sync: false   # SMTP key from Brevo dashboard
+        sync: false
       - key: DEFAULT_FROM_EMAIL
-        sync: false   # verified sender, e.g. "TikTok <no-reply@yourdomain.com>"
-
-      # Database — auto-wired from the tiktok-db service above
+        sync: false
       - key: DB_HOST
         fromDatabase:
           name: tiktok-db
@@ -69,8 +63,6 @@ services:
         fromDatabase:
           name: tiktok-db
           property: password
-
-      # Redis — auto-wired from the tiktok-redis service above
       - key: REDIS_URL
         fromService:
           type: keyvalue

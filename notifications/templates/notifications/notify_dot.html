@@ -1,0 +1,11 @@
+{% if has_newnotifications %}
+    <div id="notify-dot" hx-swap-oob="innerHTML">
+        <div class="size-3 rounded-full ☐ bg-rose-500"></div>
+    </div>
+{% endif %}
+
+{% if has_newmessages %}
+    <div id="messages-dot" hx-swap-oob="innerHTML">
+        <div class="size-3 rounded-full ☐ bg-rose-500"></div>
+    </div>
+{% endif %}

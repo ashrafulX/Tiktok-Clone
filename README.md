@@ -85,7 +85,7 @@ A full-stack social video platform built with **Django**, **HTMX**, **Tailwind C
 
 **WebSockets for chat.** Django Channels with an in-memory layer in development and `channels_redis` in production. Each conversation joins a per-chat group; sending a message broadcasts a rendered HTML fragment to every connected client, which HTMX swaps into the message list.
 
-**Modular Django apps.** Each domain lives in its own app — `_users`, `_posts`, `_network`, `_search`, `_notifications`, `_messages`, `_channels` — owning its own models, views, templates, and consumers.
+**Modular Django apps.** Each domain lives in its own app — `users`, `posts`, `network`, `search`, `notifications`, `messages`, `realtime` — owning its own models, views, templates, and consumers.
 
 **Performance.**
 - `select_related` / `prefetch_related` on hot paths (notifications feed, conversations list, profile tabs)
@@ -167,14 +167,14 @@ Open <http://127.0.0.1:8000/>.
 
 ```
 .
-├── _core/           Project settings, ASGI/WSGI, URLs, middleware
-├── _channels/       WebSocket URL routing
-├── _users/          CustomUser, profile, allauth integration
-├── _posts/          Post, Tag, Comment, LikedPost, BookmarkedPost, Repost
-├── _network/        Follow model, friends and following discovery
-├── _search/         User, post, and tag search with live suggestions
-├── _notifications/  Aggregated activity feed and unread tracking
-├── _messages/       Direct messages, Channels consumer, conversations
+├── core/           Project settings, ASGI/WSGI, URLs, middleware
+├── realtime/       WebSocket URL routing
+├── users/          CustomUser, profile, allauth integration
+├── posts/          Post, Tag, Comment, LikedPost, BookmarkedPost, Repost
+├── network/        Follow model, friends and following discovery
+├── search/         User, post, and tag search with live suggestions
+├── notifications/  Aggregated activity feed and unread tracking
+├── messages/       Direct messages, Channels consumer, conversations
 ├── templates/       Base layout, sidebar, navigation, modals
 ├── static/css/      Tailwind source and build output
 └── manage.py
