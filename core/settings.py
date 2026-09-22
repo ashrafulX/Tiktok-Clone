@@ -112,27 +112,44 @@ LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
+# SOCIALACCOUNT_PROVIDERS = {
+#     "google": {
+#         "SCOPE": ["profile", "email"],
+#         "AUTH_PARAMS": {"access_type": "online"},
+#         "APP": {
+#             "client_id": env("GOOGLE_CLIENT_ID", default=""),
+#             "secret": env("GOOGLE_CLIENT_SECRET", default=""),
+#             "key": "",
+#         },
+#     },
+#     "facebook": {
+#         "METHOD": "oauth2",
+#         "SCOPE": ["email", "public_profile"],
+#         "FIELDS": ["id", "email", "name"],
+#         "VERIFIED_EMAIL": False,
+#         "VERSION": "v21.0",
+#         "APP": {
+#             "client_id": env("FACEBOOK_CLIENT_ID", default=""),
+#             "secret": env("FACEBOOK_CLIENT_SECRET", default=""),
+#             "key": "",
+#         },
+#     },
+# }
+
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],
-        "AUTH_PARAMS": {"access_type": "online"},
-        "APP": {
-            "client_id": env("GOOGLE_CLIENT_ID", default=""),
-            "secret": env("GOOGLE_CLIENT_SECRET", default=""),
-            "key": "",
+        "AUTH_PARAMS": {
+            "access_type": "online",
         },
     },
+
     "facebook": {
         "METHOD": "oauth2",
         "SCOPE": ["email", "public_profile"],
         "FIELDS": ["id", "email", "name"],
         "VERIFIED_EMAIL": False,
         "VERSION": "v21.0",
-        "APP": {
-            "client_id": env("FACEBOOK_CLIENT_ID", default=""),
-            "secret": env("FACEBOOK_CLIENT_SECRET", default=""),
-            "key": "",
-        },
     },
 }
 
