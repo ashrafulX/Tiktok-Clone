@@ -1,32 +1,51 @@
-# TikTok Clone
+<div align="center">
 
-A full-stack social video platform built with Django, HTMX, and Django Channels. Users can upload videos/images, follow each other, comment, chat in real time, and get live notifications — all server-rendered, no SPA framework.
+# 🎬 TikTok Clone
 
-**Live Demo:** https://tiktok-clone-r9pl.onrender.com
+**A full-stack, server-rendered social video platform** — built with Django, HTMX, and Django Channels.
 
-## Features
+[![Django](https://img.shields.io/badge/Django-5.2-092E20?style=flat&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![HTMX](https://img.shields.io/badge/HTMX-1.9-3D72D7?style=flat&logo=htmx&logoColor=white)](https://htmx.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Redis](https://img.shields.io/badge/Redis-Channels-DC382D?style=flat&logo=redis&logoColor=white)](https://redis.io/)
+[![Tailwind](https://img.shields.io/badge/TailwindCSS-4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Deployed on Render](https://img.shields.io/badge/Deployed-Render-46E3B7?style=flat&logo=render&logoColor=white)](https://render.com/)
 
-- Video/image posts with likes, comments, bookmarks, and reposts
-- Personalized feed with infinite scroll
-- Nested comments with replies and mentions
-- Follow system (followers, following, mutual friends)
-- Real-time direct messaging via WebSockets
-- Live notifications
-- User search and hashtag search
-- Profile pages with editable info and post tabs
-- Email-based authentication (signup, login, password reset)
+**[🔗 Live Demo](https://tiktok-clone-r9pl.onrender.com)**
 
-## Tech Stack
+</div>
 
-- **Backend:** Django, Django Channels, Daphne (ASGI)
-- **Frontend:** HTMX, Tailwind CSS
+---
+
+## ✨ Overview
+
+Users can upload videos and images, follow each other, comment, chat in real time, and get live notifications — all rendered server-side with HTMX, no SPA framework required.
+
+## 🚀 Features
+
+| Category | Highlights |
+|---|---|
+| 📹 **Posts** | Video/image uploads, likes, bookmarks, reposts |
+| 🏠 **Feed** | Personalized feed, infinite scroll |
+| 💬 **Comments** | Nested replies, @mentions |
+| 👥 **Social** | Follow/unfollow, followers, mutual friends |
+| 💌 **Messaging** | Real-time DMs over WebSockets |
+| 🔔 **Notifications** | Live activity feed |
+| 🔍 **Search** | Users and hashtags |
+| 👤 **Profile** | Editable info, post tabs |
+| 🔐 **Auth** | Email signup, login, password reset |
+
+## 🛠️ Tech Stack
+
+- **Backend:** Django · Django Channels · Daphne (ASGI)
+- **Frontend:** HTMX · Tailwind CSS
 - **Database:** PostgreSQL
-- **Real-time:** Redis (Channels layer)
+- **Real-time:** Redis
 - **Auth:** django-allauth
-- **Media Storage:** Cloudinary
+- **Media:** Cloudinary
 - **Deployment:** Render
 
-## Getting Started
+## 📦 Getting Started
 
 ### Prerequisites
 
@@ -49,11 +68,11 @@ npm install
 
 ### Configuration
 
-Copy the example environment file and fill in your own values:
-
 ```bash
 cp .env.example .env
 ```
+
+Fill in your own values (database, secret key, etc.) inside `.env`.
 
 ### Run
 
@@ -63,8 +82,12 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Visit `http://127.0.0.1:8000`.
+Visit `http://127.0.0.1:8000` 🎉
 
-## Author
+---
 
-**Ashraful** — [GitHub](https://github.com/ashrafulX)
+<div align="center">
+
+**Author:** [Ashraful](https://github.com/ashrafulX)
+
+</div>
