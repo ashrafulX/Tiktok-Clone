@@ -1,5 +1,8 @@
 # TikTok Clone
 
+# Contributing
+This project is maintained solely by @ashrafulX. All contributions are made by the owner.
+
 A full-stack social video platform built with **Django**, **HTMX**, **Tailwind CSS**, and **Django Channels**. Personalized feed, video uploads, nested comments, follows, real-time DMs over WebSockets, and live notifications — entirely server-rendered, no SPA framework.
 
 **[Live demo →](https://your-live-demo.example.com)** · Demo login: `demo@tiktok-clone.com` / `demopass123`
