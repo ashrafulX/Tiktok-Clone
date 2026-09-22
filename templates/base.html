@@ -24,7 +24,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
 
-  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/output.css' %}" rel="stylesheet" />
 </head>
 
 <body x-data="{ modalPage: false, modalBox: false }" class="dark:bg-black dark:text-white dark:fill-white" :class="{ 'dark': darkMode }" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>

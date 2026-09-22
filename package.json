@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "css": "npx @tailwindcss/cli -i ./static/css/tailwind.css -o ./static/css/style.css --watch",
-    "minify": "npx @tailwindcss/cli -i ./static/css/tailwind.css -o ./static/css/style.css --minify"
+    "css": "npx @tailwindcss/cli -i ./src/css/tailwind.css -o ./static/css/output.css --watch",
+    "minify": "npx @tailwindcss/cli -i ./src/css/tailwind.css -o ./static/css/output.css --minify"
   },
   "author": "Ashrafulx <ashrafulwho@gmail.com>",
   "license": "ISC",

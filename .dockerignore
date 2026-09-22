@@ -19,6 +19,7 @@ node_modules/
 
 staticfiles/
 static/css/style.css
+static/css/output.css
 
 db.sqlite3
 

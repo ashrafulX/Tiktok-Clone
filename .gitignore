@@ -117,3 +117,4 @@ Only for Development only
 
 node_modules/
 staticfiles/
+static/css/output.css
