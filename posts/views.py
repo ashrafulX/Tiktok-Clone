@@ -20,34 +20,46 @@ from django.conf import settings
 User = get_user_model()
 
 
-@login_required
 def home(request):
-    following_user_ids = request.user.is_follower.values_list('following', flat=True)
-    user_ids = list(following_user_ids) + [request.user.id]
-    posts = Post.objects.filter(author__in=user_ids).order_by('-created_at')
-    reposts = Repost.objects.filter(user__in=user_ids).select_related('post', 'user')
-    
-    repostedposts = []
-    for repost in reposts:
-        post = repost.post
-        post.created_at = repost.created_at
-        post.repost_author = repost.user
-        post.is_repost = True
-        repostedposts.append(post)
-    
-    feed = sorted(
-        chain(posts, repostedposts),
-        key = attrgetter('created_at'),
-        reverse=True
-    )
+    if request.user.is_authenticated:
+        following_user_ids = request.user.is_follower.values_list('following', flat=True)
+        user_ids = list(following_user_ids) + [request.user.id]
+        posts = Post.objects.filter(author__in=user_ids).order_by('-created_at')
+        reposts = Repost.objects.filter(user__in=user_ids).select_related('post', 'user')
+        
+        repostedposts = []
+        for repost in reposts:
+            post = repost.post
+            post.created_at = repost.created_at
+            post.repost_author = repost.user
+            post.is_repost = True
+            repostedposts.append(post)
+        
+        feed = sorted(
+            chain(posts, repostedposts),
+            key = attrgetter('created_at'),
+            reverse=True
+        )
 
-    # Cold-start "For You" fallback: when the follow feed is empty (new account,
-    # or followed accounts haven't posted) show the most-engaging posts instead
-    # of an empty page so there is always something to watch.
-    if not feed:
+        # Cold-start "For You" fallback: when the follow feed is empty (new account,
+        # or followed accounts haven't posted) show the most-engaging posts instead
+        # of an empty page so there is always something to watch.
+        if not feed:
+            feed = list(
+                Post.objects
+                .exclude(author=request.user)
+                .select_related('author')
+                .annotate(
+                    engagement=Count('likes', distinct=True)
+                    + Count('comments', distinct=True)
+                    + Count('reposts', distinct=True)
+                )
+                .order_by('-engagement', '-created_at')
+            )
+    else:
+        # Guest / unauthenticated visitor feed: show engaging public posts
         feed = list(
             Post.objects
-            .exclude(author=request.user)
             .select_related('author')
             .annotate(
                 engagement=Count('likes', distinct=True)
@@ -77,7 +89,6 @@ def home(request):
         return render(request, 'posts/partials/home.html', context)
     return render(request, 'posts/home.html', context)
 
-@login_required
 def explore(request):
     posts = Post.objects.order_by('-created_at')
     

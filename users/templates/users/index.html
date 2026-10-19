@@ -74,6 +74,17 @@
             Continue with Google
         </a>
 
+        <!-- Explore as a Guest -->
+        <a href="{% url 'home' %}"
+           class="relative block p-3 text-sm font-medium text-center transition border rounded-lg border-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            <div class="absolute w-5 h-5 left-4">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+            </div>
+            Explore as a guest
+        </a>
+
     </div>
 </div>
 {% endblock %}

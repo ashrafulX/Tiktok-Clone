@@ -80,11 +80,13 @@
     </span>
     </button>
     <div class="relative">
+        {% if user.is_authenticated %}
         <div id="notification-poller"
              hx-get="{% url 'newnotifications' %}"
              hx-trigger="load, every 10s"
              hx-swap="none">
         </div>
+        {% endif %}
         <button id="activity" @click="showDrawer = !showDrawer ; showActivity = true"
                 hx-get="{% url 'notifications' %}"
                 hx-target="#notification-content"
@@ -127,7 +129,7 @@
             {% if user.is_authenticated %}
                 hx-get="{% url 'profile' user.username %}"
             {% else %}
-                hx-get="{% url 'home' %}"
+                hx-get="{% url 'index' %}"
             {% endif %}
             >
     <div class="flex-shrink-0 size-8 {% if page == 'Profile' %} fill-rose-500 {% endif %}">
@@ -140,7 +142,7 @@
         </div>
     </div>
     <span class=" {% if page == 'Profile' %} text-rose-500 {% endif %}" :class="{ '!opacity-0': showDrawer }">
-        Profile
+        {% if user.is_authenticated %}Profile{% else %}Log in{% endif %}
     </span>
     </button>
     <button id="more" class="button-nav" @click="showDrawer = !showDrawer ; showMore = true">
