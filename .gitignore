@@ -116,5 +116,5 @@ Only for Development only
 # !**/migrations/__init__.py
 
 node_modules/
-staticfiles/
-static/css/output.css
+# staticfiles/
+# static/css/output.css
