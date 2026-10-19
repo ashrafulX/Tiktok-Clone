@@ -30,16 +30,23 @@ DEBUG = ENVIRONMENT == "development"
 
 ALLOWED_HOSTS = env.list(
     "ALLOWED_HOSTS",
-    default=["localhost", "127.0.0.1"],
+    default=["localhost", "127.0.0.1", ".vercel.app"],
 )
+
+if ".vercel.app" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(".vercel.app")
 
 CSRF_TRUSTED_ORIGINS = env.list(
     "CSRF_TRUSTED_ORIGINS",
     default=[
         "http://localhost",
         "http://127.0.0.1",
+        "https://*.vercel.app",
     ],
 )
+
+if "https://*.vercel.app" not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append("https://*.vercel.app")
 
 RENDER_EXTERNAL_HOSTNAME = env(
     "RENDER_EXTERNAL_HOSTNAME",
@@ -52,10 +59,22 @@ if RENDER_EXTERNAL_HOSTNAME:
         f"https://{RENDER_EXTERNAL_HOSTNAME}"
     )
 
+VERCEL_URL = env(
+    "VERCEL_URL",
+    default=None,
+)
+
+if VERCEL_URL:
+    ALLOWED_HOSTS.append(VERCEL_URL)
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{VERCEL_URL}"
+    )
+
 
 
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     "daphne",
     "channels",
     "django.contrib.admin",
@@ -112,38 +131,11 @@ LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     "google": {
-#         "SCOPE": ["profile", "email"],
-#         "AUTH_PARAMS": {"access_type": "online"},
-#         "APP": {
-#             "client_id": env("GOOGLE_CLIENT_ID", default=""),
-#             "secret": env("GOOGLE_CLIENT_SECRET", default=""),
-#             "key": "",
-#         },
-#     },
-#     "facebook": {
-#         "METHOD": "oauth2",
-#         "SCOPE": ["email", "public_profile"],
-#         "FIELDS": ["id", "email", "name"],
-#         "VERIFIED_EMAIL": False,
-#         "VERSION": "v21.0",
-#         "APP": {
-#             "client_id": env("FACEBOOK_CLIENT_ID", default=""),
-#             "secret": env("FACEBOOK_CLIENT_SECRET", default=""),
-#             "key": "",
-#         },
-#     },
-# }
-
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
+        "AUTH_PARAMS": {"access_type": "online"},
     },
-
     "facebook": {
         "METHOD": "oauth2",
         "SCOPE": ["email", "public_profile"],
@@ -152,6 +144,41 @@ SOCIALACCOUNT_PROVIDERS = {
         "VERSION": "v21.0",
     },
 }
+
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="").strip()
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="").strip()
+if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET:
+    SOCIALACCOUNT_PROVIDERS["google"]["APP"] = {
+        "client_id": GOOGLE_CLIENT_ID,
+        "secret": GOOGLE_CLIENT_SECRET,
+        "key": "",
+    }
+
+FACEBOOK_CLIENT_ID = env("FACEBOOK_CLIENT_ID", default="").strip()
+FACEBOOK_CLIENT_SECRET = env("FACEBOOK_CLIENT_SECRET", default="").strip()
+if FACEBOOK_CLIENT_ID and FACEBOOK_CLIENT_SECRET:
+    SOCIALACCOUNT_PROVIDERS["facebook"]["APP"] = {
+        "client_id": FACEBOOK_CLIENT_ID,
+        "secret": FACEBOOK_CLIENT_SECRET,
+        "key": "",
+    }
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     "google": {
+#         "SCOPE": ["profile", "email"],
+#         "AUTH_PARAMS": {
+#             "access_type": "online",
+#         },
+#     },
+
+#     "facebook": {
+#         "METHOD": "oauth2",
+#         "SCOPE": ["email", "public_profile"],
+#         "FIELDS": ["id", "email", "name"],
+#         "VERIFIED_EMAIL": False,
+#         "VERSION": "v21.0",
+#     },
+# }
 
 ACCOUNT_LOGIN_METHODS = {"username", "email"}
 
@@ -184,29 +211,24 @@ TEMPLATES = [
 
 
 # =========================================================
-# ASGI / CHANNELS
+# WSGI / ASGI
 # =========================================================
 
+WSGI_APPLICATION = "core.wsgi.application"
 ASGI_APPLICATION = "core.asgi.application"
 
-if ENVIRONMENT == "production":
+REDIS_URL = env("REDIS_URL", default=None)
 
+if ENVIRONMENT == "production" and REDIS_URL:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [
-                    env(
-                        "REDIS_URL",
-                        default="redis://localhost:6379/0",
-                    )
-                ],
+                "hosts": [REDIS_URL],
             },
         }
     }
-
 else:
-
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels.layers.InMemoryChannelLayer",
@@ -218,16 +240,28 @@ else:
 # DATABASE
 # =========================================================
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
+DATABASE_URL = env("DATABASE_URL", default=None)
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": env.db("DATABASE_URL")
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DB_NAME", default="tiktok"),
+            "USER": env("DB_USER", default="postgres"),
+            "PASSWORD": env("DB_PASSWORD", default="password"),
+            "HOST": env("DB_HOST", default="localhost"),
+            "PORT": env("DB_PORT", default="5432"),
+        }
+    }
+
+# Enable SSL for remote PostgreSQL databases (e.g. Supabase)
+if DATABASES["default"].get("HOST") not in ["localhost", "127.0.0.1", None, ""]:
+    DATABASES["default"].setdefault("OPTIONS", {})
+    DATABASES["default"]["OPTIONS"]["sslmode"] = "require"
 
 
 # =========================================================
@@ -299,19 +333,23 @@ MEDIA_ROOT = BASE_DIR / "media"
 # STORAGE
 # =========================================================
 
-if ENVIRONMENT == "production":
+CLOUDINARY_STORAGE = {
+    "CLOUDINARY_URL": env("CLOUDINARY_URL", default=None),
+}
+
+if ENVIRONMENT == "production" or env("CLOUDINARY_URL", default=None):
 
     STORAGES = {
         "default": {
             "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
         },
         "staticfiles": {
-            "BACKEND": (
-                "whitenoise.storage."
-                "CompressedManifestStaticFilesStorage"
-            ),
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
         },
     }
+
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 else:
 
@@ -326,8 +364,8 @@ else:
             ),
         },
     }
-if ENVIRONMENT == "development":
-    WHITENOISE_USE_FINDERS = True
+
+WHITENOISE_USE_FINDERS = True
 
 # =========================================================
 # DEVELOPMENT TOOLS
@@ -389,6 +427,6 @@ else:
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True
